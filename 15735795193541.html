@@ -1,0 +1,501 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  使用 Script Editor.app - Sttot Stack
+  
+  </title>
+  
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>使用 Script Editor.app</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/11/13 01:25 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>目前可以支持 AppleScript 、 JavaScript 、 Objective-C 三种语言来实现自动化，这里暂时介绍 AppleScript。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>Script Editor 中带有文档库和模板，用起来还是比较方便的。</p>
+
+<h2 id="toc_0">Library</h2>
+
+<p><strong>并不是所有应用程序都可以和 AppleScript 连通，需要应用程序开发者有意地留出一套供给 AppleScript 的接口才可以。</strong>，如何知道某个程序是否支持 AppleScript 以及具体提供了怎样的 API 规范，请使用 ScriptEditor.app 的 Library 来查看程序的字典 Dictionary）：</p>
+
+<ul>
+<li>方法一：菜单 [File] - [Opne Dictionary] 查看所有已知的应用程序字典。</li>
+<li>方法二：将应用程序拖放到<code>Script Editor</code>图标上。</li>
+<li>方法三：
+<ol>
+<li>菜单 [Window] - [Library]</li>
+<li>可以看到已经导入的支持 AppleScript 接口的应用程序的接口文档，双击查看。</li>
+<li>点击 [+] ，选定某个 <code>.app</code> 应用文件，如果支持，文档的字典将被导入；如果不支持，将会提示。</li>
+</ol></li>
+</ul>
+
+<h2 id="toc_1">字典(Dictionary)</h2>
+
+<p>字典是文档接口规范的说明，打开字典后，会出现以下界面：</p>
+
+<p><img src="media/15735795193541/20191112000939.png" alt="字典界面"/></p>
+
+<p>字典上边是三列，和Finder的列视图一样，自左向右展开；选中一项，下半面的文档就会跳到对应的对象的说明上。</p>
+
+<p>先看上三列，</p>
+
+<ul>
+<li>最左边是套件列，列出了该应用字典包含的套件(一般都会包含Standard Suite，里面是一些程序的基本操作例如打开关闭文件、操作程序的窗口等)。</li>
+<li>中间列显示选中的套件的内容，其中包含了若干<code>命令</code>(圆形的 C 图标)和<code>类</code>(方形的 C 图标)。</li>
+<li>最右边的列显示选中的类的内容，包含了若干<code>元素</code>(E图标)和<code>属性</code>(P 图标)。</li>
+</ul>
+
+<p>要理解这些东西是怎样工作的，就应当先明白<a href="15735825376552.html">AppleScript的语言逻辑</a>。</p>
+
+<hr/>
+
+<p>理解过逻辑后，来解释说明文档该如何用。AppleScript具有英语的一些特点，所以字典看起来还真像一本英语字典。</p>
+
+<h3 id="toc_2">动词</h3>
+
+<p>先看”动词“：</p>
+
+<p><img src="media/15735795193541/20191112142040.png" alt="动词"/></p>
+
+<p>单词用法部分，最上面的主体 <strong>make</strong> 肯定要写上，后面相当于是这个动词的“参数”，每一行列出一个参数，<code>:</code>之前的为参数格式说明，<code>:</code>之后的为对参数的说明。</p>
+
+<p>参数有必选参数和可选参数，被<code>[]</code>括起来的是可选参数(使用的时候不加<code>[]</code>)。使用时，参数之间用空格分开。<code>:</code>之前，<strong>粗体</strong>内容按原样写上，非粗体则替换为对应的对象。</p>
+
+<p>可以注意到非粗体部分的名称是不一样的，不同的名称说明可以充当参数的对象是不同的，有这么几种：</p>
+
+<ul>
+<li>数据类型<code>number</code>、<code>text</code>、<code>boolean</code>、<code>date</code>、<code>list</code>、<code>record</code>或者类名：可以使用这些类型的变量或者常量作为参数。</li>
+<li><code>any</code>：可以用任何对象作参数。</li>
+<li><code>type</code>：类型名、类名。</li>
+<li><code>specifier</code>或者<code>xxx specifier</code>：某个对象实例(变量名或者返回值)，<code>xxx</code>是某个类名，代表这个实例应当是某种类型的。</li>
+<li><p>还有一种特殊的，例如 [<strong>saving</strong> yes/no/ask] 是说只能写<code>yes</code>、<code>no</code>和<code>ask</code>三种，这是一种枚举类型的参数，一般枚举参数上会有链接，点击会调到对应的枚举类型上去：</p>
+<p><img src="media/15735795193541/20191112145218.png" alt="枚举说明"/></p></li>
+</ul>
+<br/>
+<h3 id="toc_3">名词</h3>
+
+<p><img src="media/15735795193541/20191112161103.png" alt="名词"/></p>
+
+<p>比较有意思的是第一行方括号中的内容，见过两种：</p>
+
+<ul>
+<li><code>[see also xxx]</code> 是指，这个名词(类)还在其他 Suit 中被定义过，那么下方就会展示另一处定义的内容(箭头所指)；</li>
+<li><code>[inh. xxx]</code> 是指，这个类继承于另外一个类。如果是 <code>[inh. A &gt; B]</code> 就说明该类继承于A类，而A类又继承于B类，那么下方就会展示基类的内容。</li>
+</ul>
+<br/>
+<p><code>元素(ELEMENT)</code>：一个类中的某元素不一定只有一个(从图中的<code>documents</code>和<code>windows</code>的<code>s</code>就可以看出来，毕竟第三列中是<code>document</code>和<code>window</code>)，很好理解， appliction 可以有很多个 window ，每一个都是其元素。</p>
+
+<pre><code class="language-text">* 使用 `(the) count of [元素名]` 确定同类型元素有几个；
+* 使用 `[元素名] [序号(可以是integer变量)]` 来获取某一个元素；`the last of`、`the first of` 也可以，`item xxx of`则是不可以的——因为这不是`item`而是`element`。
+</code></pre>
+<br/>
+<p>具体来看一下 <code>属性(PROPERTIES)</code>：</p>
+
+<ul>
+<li><strong>粗体</strong> 是属性的名称；</li>
+<li>括号内第一项是属性的类型；</li>
+<li>括号内第二项是属性的读写权限；</li>
+<li><code>:</code> 后面是属性的解释。</li>
+</ul>
+
+<h2 id="toc_4">编辑器</h2>
+
+<p>创建脚本、调试这些是基本操作，略。</p>
+
+<p>当你在编辑器内完成输入上面的代码后，按下上面的 <code>Compile</code> 铁锤图标。如果你的语法是正确的话，你所输入的代码会被自动格式化并改变颜色。如果你输入的时候出现了错误，当你编译的时候编辑器会告诉你哪一块出错了，并尝试告诉你它认为错误是什么。下面是编辑器默认的一些颜色分别代表什么，你可以在菜单栏的 [AppleScript Editor] - [Preferences] 里看到并修改。</p>
+
+<p>你的代码成功编译后，再按 <code>Run</code> 图标，会运行脚本。在运行一脚本时，编辑器会告诉你运行的结果是什么，或者什么被返回了。脚本编辑器会将结果显示在下半部分的结果区中。</p>
+
+<hr/>
+
+<h2 id="toc_5">其他窍门</h2>
+
+<ul>
+<li>按下 esc 键，会出现代码补全菜单</li>
+<li>在编辑区点击右键（或按住 control 键再点击左键）呼出上下文菜单：在上下文菜单中我们可以将 AppleScript 语句快速地插入到编辑区中</li>
+</ul>
+
+<h3 id="toc_6">编辑器支持代码补全和缩写：</h3>
+
+<p>你可以输入：</p>
+
+<pre><code class="language-applescript">tell app &quot;Finder&quot;
+end
+</code></pre>
+
+<p>在编译后将被替换为：</p>
+
+<pre><code class="language-applescript">tell application &quot;Finder&quot;
+end tell
+</code></pre>
+
+<p>在编写 AppleScript 脚本时，是不区分大小写的，当然在编译过后也会被替换成正确的大小写形式。</p>
+
+<p>其他例子有：</p>
+
+<ul>
+<li>application 简写为 app</li>
+<li>end tell/repeat/try 简写为 end</li>
+<li>through 简写为 thru</li>
+<li>if 语句 可省略 then</li>
+</ul>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15735824358278.html" 
+          title="Previous Post: AppleScript">&laquo; AppleScript</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15583370060570.html" 
+          title="Next Post: B+树(B+ Tree)">B+树(B+ Tree) &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15735830719694.html">AppleScript样例</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830027400.html">tell 结构</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735829601096.html">Record 记录</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735828924204.html">List 列表</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

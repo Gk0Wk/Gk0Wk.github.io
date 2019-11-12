@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  物理实验步骤 - Sttot Stack
+  AppleScript基本数据类型 - Sttot Stack
   
   </title>
+  
   
   
   <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
@@ -81,15 +82,15 @@
     <li><label>Categories</label></li>
 
         
-            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
         
             <li><a href="SiteStory.html">建站那些事</a></li>
         
             <li><a href="Personal_Wiki.html">个人维基构建</a></li>
         
-            <li><a href="PhyLab.html">PhyLab</a></li>
-        
             <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
          
 
       </ul>
@@ -112,14 +113,14 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>物理实验步骤</h1>
+          <h1>AppleScript基本数据类型</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2018/11/16 9:53 AM</span>
+          <span class="date">2019/11/13 02:17 AM</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='PhyLab.html'>PhyLab</a></span>
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
            
          
           <span class="comments">
@@ -132,78 +133,93 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h2 id="toc_0">课前预习报告</h2>
-
-<ul>
-<li>写好实验目的、主要原理、公式（要注明式中各量的意义）、电路图或光路图及关键步骤。</li>
-<li>在草表一栏画好原始数据表格。</li>
-</ul>
-
-<blockquote>
-<p>预习报告要求字迹端正，简明扼要，重点明确，切忌照抄教材，未写预习报告者不能进行实验。</p>
-
-<blockquote>
-<p>预习报告成绩为20分，其中原理和内容占主要，原理10分，内容和其他10分。</p>
+      <p>AppleScript 有多种数据类型：</p>
 
 <ol>
-<li>原理中缺少有关公式和说明扣5分；</li>
-<li>无主要的图示扣5分；</li>
-<li>全文抄袭教材扣5分；</li>
-<li>抄袭别人的内容分别不给分。</li>
-</ol>
-</blockquote>
-</blockquote>
-
-<p><span id="more"></span><!-- more --></p>
-
-<h2 id="toc_1">实验</h2>
-
-<p>到实验室在动手前先了解仪器的使用方法和规则 尤其是，人身和仪器的安全。实验中要仔细观察和记录。分析实验过程的合理性与规律。</p>
-
-<ul>
-<li>阅读有关资料、调整仪器、观察现象、记录数据。在此过程中要认真和事实求是地做好实验，重视自己的实验能力的培养。</li>
-<li>强调<strong>不可用铅笔记录数据</strong>。原始数据必须记录在草表内。数据完整、仪器还原后，经老师签字后方才有效。</li>
-</ul>
-
-<blockquote>
-<p>学生要认真作好实验的整体布局，仔细阅读有关仪器使用说明书，正确使用和调节仪器设备，操作规范、读数正确、实验结束后数据经老师签字、整理好仪器，方可离开实验室。</p>
-
-<blockquote>
-<p>实验操作分为30分</p>
-
-<ol>
-<li>违反操作规程。损坏仪器以至无法实验者30分不给；</li>
-<li>抄袭和伪造数据30分不给；</li>
-<li>操作中对仪器故障能自己排除，可适当加分；</li>
-<li>对仪器误差或缺陷有自己的见解和提出改进的意见可加分。</li>
+<li><a href="15735826951271.html">Boolean 布尔型</a></li>
+<li><a href="15735827313345.html">Date 日期型</a></li>
+<li><a href="15735827612332.html">Number 数字</a></li>
+<li><a href="15735827866089.html">String 字符串、Text 文本型</a></li>
+<li><a href="15735828924204.html">List 列表</a></li>
+<li><a href="15735829601096.html">Record 记录</a></li>
 </ol>
 
-<p>上述两项加分不超过10分</p>
-</blockquote>
-</blockquote>
+<span id="more"></span><!-- more -->
 
-<h2 id="toc_2">完成报告</h2>
+<p>在 AppleScript 中声明一个变量使用 <code>set xxx to xxx</code>的语法：</p>
 
-<p>认真写好实验报告。它是你这次实验的总结。要求字迹清楚、图表正确，完整、误差分析定量、有效数字正确等。</p>
+<pre><code class="language-applescript">set theString to &quot;Hello World&quot;
+</code></pre>
 
-<blockquote>
-<p>评分办法：这部分总分50分。其中数据处理和结果30分，误差分析10分，实验心得及思考题解答10分。</p>
+<p>可以使用 <code>class of</code> 语句确定一个变量的类型：</p>
 
-<ol>
-<li>结果有效数字严重错误扣5分；</li>
-<li>不确定度计算及表示错误扣5分；</li>
-<li>结果计算错误或违背了理论值和公认值（非仪器本身引起的）扣20分；</li>
-<li>抄袭和伪造数据与结果者扣30分。</li>
-</ol>
+<pre><code class="language-applescript">-- 这是注释
+set str to &quot;string&quot;
+class of str -- 返回 &quot;text&quot;
+</code></pre>
 
-<p>下述情况可加分：</p>
+<hr/>
 
-<ol>
-<li>对产生的误差分析合理，有独到的见解；</li>
-<li>对整个实验提出改进意见和合理人建议；</li>
-<li>报告整体规范，书写整洁、清楚。以上加分每次不超出10分。</li>
-</ol>
-</blockquote>
+<h2 id="toc_0">强制类型转换</h2>
+
+<p>AppleScript 拥有类型对齐功能(比如<a href="AppleScript%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/List%20%E5%88%97%E8%A1%A8">List 和 String 的拼接</a>)，但有时候无法完成转换或者转换结果与我们预期设想不同，就需要显式的强制类型转换(Coercion)。</p>
+
+<p>使用 <code>as</code> 关键字强制类型转换：</p>
+
+<pre><code class="language-applescript">&quot;1.99&quot; as real    -- 1.99 (real)
+&quot;1.99&quot; as integer -- 2 (integer) 精度丢失
+&quot;1&quot; as real       -- 1.0  (real)
+
+&quot;text&quot; as list    -- { &quot;text&quot; }
+
+{ a: 1, b: 2 } as list -- { 1, 2 } 精度丢失(标识符丢失)
+</code></pre>
+
+<p>不是所有的数据都能够强制类型转换，不要纠结于此，做有意义的事：</p>
+
+<pre><code class="language-applescript">&quot;text2&quot; as number -- 错误! Text 中包含了无法转换成数字的字符。
+1 as record -- 错误! 无法获得标识符。
+{1, 2} as record -- 错误! 无法获得标识符。
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_1">使用 <code>copy</code> 进行深拷贝</h2>
+
+<p><code>Boolean</code>、<code>Number</code>、<code>String</code>、<code>Date</code>在使用<code>set to</code>的时候，是将实际的数据拷贝一份给另一个变量。但是对于<code>List</code>和<code>Record</code>，则是创建一份原对象的应用。</p>
+
+<p>例如以下指令：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+set B to A
+set A to {4, 5, 6}
+</code></pre>
+
+<p>过程为：A指向数据<code>{1, 2, 3}</code>；B指向A所指向的数据<code>{1, 2, 3}</code>；A指向新的数据<code>{4, 5, 6}</code>。</p>
+
+<p>最后的结果为 A = <code>{4, 5, 6}</code>, B = <code>{1, 2, 3}</code>。</p>
+<br/>
+<p>再看一个例子：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+set B to A
+set item 2 of A to 20
+</code></pre>
+
+<p>过程为：A指向数据<code>{1, 2, 3}</code>；B指向A所指向的数据<code>{1, 2, 3}</code>；修改A所指向的数据的第二项为20。</p>
+
+<p>最后的结果为 A = B = <code>{1, 20, 3}</code>。</p>
+<br/>
+<p>所以 <code>List</code> 的变量理解为指针或者引用会更好一些， <code>Record</code> 同理。</p>
+
+<p>如果想要进行深层拷贝，就要用到<code>copy</code>：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+copy B to A
+set item 2 of A to 20
+</code></pre>
+
+<p>最后的结果为 A = <code>{1, 20, 3}</code>, B = <code>{1, 2, 3}</code>。</p>
 
 
     
@@ -214,16 +230,16 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15423704846032.html" 
-          title="Previous Post: 使用 MWeb+GitHub Page 搭建静态博客 - 上">&laquo; 使用 MWeb+GitHub Page 搭建静态博客 - 上</a>
+          <a href="15735826951271.html" 
+          title="Previous Post: Boolean 布尔型">&laquo; Boolean 布尔型</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="15423332269346.html" 
-          title="Next Post: 数据处理">数据处理 &raquo;</a>
+          <a  href="15735825376552.html" 
+          title="Next Post: AppleScript的语言逻辑">AppleScript的语言逻辑 &raquo;</a>
       
       </p>
         </div>
@@ -261,10 +277,10 @@ var disqus_config = function () {
     <div id="sidebar" class="sidebar">
           <div id="site-info" class="site-info">
             
-                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
             
                 <h1>Sttot Stack</h1>
-                <div class="site-des"></div>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
                 <div class="social">
 
 
@@ -275,7 +291,7 @@ var disqus_config = function () {
 
 
 
-<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
 <a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
   <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
                 
@@ -292,15 +308,15 @@ var disqus_config = function () {
 
       	<p class="cat-list">
         
-            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
         
             <a href="SiteStory.html"><strong>建站那些事</strong></a>
         
             <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
         
-            <a href="PhyLab.html"><strong>PhyLab</strong></a>
-        
             <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
          
         </p>
 
@@ -317,33 +333,35 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			        <a href="15735830719694.html">AppleScript样例</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			        <a href="15735830027400.html">tell 结构</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583362803987.html">动态查找树</a>
+			        <a href="15735829601096.html">Record 记录</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			        <a href="15735828924204.html">List 列表</a>
 			      </li>
 		     
+		  
+		      
 		  
 		      
 		  
@@ -414,7 +432,7 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
      
     </script>
 
-    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+    
 
 <!--换成KaTeX渲染-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">

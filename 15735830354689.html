@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  数据处理 - Sttot Stack
+  AppleScript一些默认指令 - Sttot Stack
   
   </title>
+  
   
   
   <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
@@ -81,15 +82,15 @@
     <li><label>Categories</label></li>
 
         
-            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
         
             <li><a href="SiteStory.html">建站那些事</a></li>
         
             <li><a href="Personal_Wiki.html">个人维基构建</a></li>
         
-            <li><a href="PhyLab.html">PhyLab</a></li>
-        
             <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
          
 
       </ul>
@@ -112,14 +113,14 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>数据处理</h1>
+          <h1>AppleScript一些默认指令</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2018/11/16 9:53 AM</span>
+          <span class="date">2019/11/13 02:23 AM</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='PhyLab.html'>PhyLab</a></span>
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
            
          
           <span class="comments">
@@ -132,94 +133,126 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h2 id="toc_0">数据整理的重要步骤 —— 列表法</h2>
+      <span id="more"></span><!-- more -->
 
-<p>在原始数据记录以及整理数据时，都要进行正规列表。将各量的关系有序地排列成表格形式。既有利于一目了然地表示各物理量之间的关系，又便于发现实验中的问题。</p>
+<h2 id="toc_0">beep</h2>
 
-<span id="more"></span><!-- more -->
+<pre><code class="language-applescript">beep 发声次数
+</code></pre>
 
-<h2 id="toc_1">数据处理的表格法 —— 逐差法</h2>
+<p>让 Mac 系统发出咚的声音，发声次数决定了咚出现的次数，例如 <code>beep 2</code> 那么 Mac 会咚两次。发声次数缺省为 1。</p>
 
-<p>在有些实验中，我们连续取得一些数据。如果依次相减，就会发现中间许多数据并未发挥作用，而影响到实验的可靠性。</p>
+<h2 id="toc_1">say</h2>
 
-<p>例如：金属杨氏弹性模量实验和等厚干涉的牛顿环实验。</p>
+<p>语音转文字并输出</p>
 
-<p>在金属杨氏弹性模量实验中，连续测量钢丝的伸长位置为： \(A_1, A_2, A_3, A_4, A_5, A_6, A_7, A_8, A_9, A_{10}\) 10个数据。若为求钢丝的伸长，依次相减，则伸长量\(\Delta A\)有：</p>
+<pre><code class="language-applescript">say &quot;说话的内容&quot; (using &quot;指定人的嗓音&quot;)
+</code></pre>
 
-<p>\[\Delta A=\frac{(A_2-A_1)+(A_3-A_2)+\cdots +(A_{10}-A_9)}{9}=\frac{A_{10}-A_1}{9}\]</p>
+<hr/>
 
-<p>中间各次测量均未起到作用。为发挥多次测量的优越性，将数据分成前后两组：</p>
+<h2 id="toc_2">消息对话框 dialog</h2>
 
-<p>\[A_1, A_2, A_3, A_4, A_5\]<br/>
-\[A_6, A_7, A_8, A_9, A_{10}\]</p>
+<p>使用<code>display dialog</code>弹出一个消息对话框：</p>
 
-<p>将这两组对应相减，得出5组，且每一组相减间距是原来临近间距的5倍，这样有：</p>
+<pre><code class="language-applescript">display dialog &quot;消息文字&quot; (buttons {&quot;按钮1&quot;, &quot;按钮2&quot;, ...} (default button &quot;按钮名&quot;))
+</code></pre>
 
-<p>\[\Delta A=\frac{(A_6-A_1)+(A_7-A_2)+\cdots +(A_{10}-A_5)}{5\times 5}\]</p>
+<p>括号内为可省略部分。默认情况下按钮列表为 <code>取消</code> 和 <code>好</code> ，默认按钮为 <code>好</code>。</p>
 
-<p>这种处理数据的方法称为 <strong>逐差法</strong>。此法的优点是充分利用所测的数据，有利于减少测量的随机误差和仪器带来的误差。是实验中常用的处理数据的方法。为了直观和便于处理，也常用列表格方法来表示。</p>
+<p>对话框关闭后，该行脚本返回一个Record，可以用 <strong>result</strong> 变量来获取，也可以用 <code>set xxx to dispkay ...</code> 来接。</p>
 
-<h2 id="toc_2">作图法</h2>
+<p>在没有文本输入的对话框中，Record内容为：</p>
 
-<h3 id="toc_3">图示法</h3>
+<pre><code class="language-applescript">{button returned: [按钮文字]}
+</code></pre>
+<br/>
+<p>添加一个<code>default answer</code>让对话框具有文本输入框，如：</p>
 
-<p>是用图形来表达物理量的变化。如静电场模拟实验中就是采用此法。</p>
+<pre><code class="language-applescript">display dialog &quot;emmm&quot; defalut answer &quot;&quot; -- 字符串可留空
+</code></pre>
 
-<p>从图示法中，有时也能得出定量的结果。</p>
+<p>返回的Record内容为：</p>
 
-<h3 id="toc_4">图解法处理实验数据</h3>
+<pre><code class="language-applescript">{button returned: [按钮文字], text returned: [输入的字符串]}
+</code></pre>
+<br/>
+<h2 id="toc_3">警告对话框 alert</h2>
 
-<p>图解法可形象、直观地显示出物理量之间的函数关系，也可用来求某些物理参数，因此它是一种重要的数据处理方法。作图时要<strong>先整理出数据表格</strong>，并要用<strong>坐标纸作图</strong>。</p>
+<p>使用<code>display alert</code>弹出一个消息对话框：</p>
 
-<p>作图六点要求：</p>
+<pre><code class="language-applescript">display alert &quot;标题&quot; (message &quot;内容&quot;) (buttons {&quot;按钮1&quot;, &quot;按钮2&quot;, ...} (default button &quot;按钮名&quot;)) (as warning)
+</code></pre>
+<br/>
+<h2 id="toc_4">列表选择对话框</h2>
 
-<ol>
-<li>选择合适的坐标分度值，确定坐标纸的大小坐标分度值的选取应能反映测量值的有效位数，一般以 1～2mm对应于测量仪表的最小分度值或对应于测量值的次末位数）。</li>
-<li>标明坐标轴：用粗实线画坐标轴，用箭头标轴方向，标坐标轴的名称或符号、单位,再按顺序标出坐标轴整分格上的量值。</li>
-<li>标实验点：实验点可用“+”、“*”、“。”等符号标出（同一坐标系下不同曲线用不同的符号）。</li>
-<li>连成图线：用直尺、曲线板等把点连成直线、光滑曲线。一般不强求直线或曲线通过每个实验点，应使图线两边的实验点与图线最为接近且分布大体均匀。图线正穿过实验点时可以在点处断开。</li>
-<li>标出图线特征：在图上空白位置标明实验条件或从图上得出的某些参数。利用所绘直线可给出被测电阻R大小：从所绘直线上读取两点 A、B 的坐标就可求出 R 值。</li>
-<li>标出图名：在图线下方或空白位置写出图线的名称及某些必要的说明。</li>
-</ol>
+<pre><code class="language-applescript">choose from list {&quot;选项1&quot;, &quot;选项2&quot;, &quot;选项3&quot;} with title &quot;选择框&quot; with prompt &quot;请选择选项&quot;
+</code></pre>
 
-<p><img src="media/15423332269346/31.png" alt="31" style="width:500px;"/></p>
-
-<p>注意问题：</p>
-
-<ul>
-<li>曲线太粗，不均匀，不光滑。应该用直尺、曲线板等工具把实验点连成光滑、均匀的细实线。</li>
-<li>横轴坐标分度选取不当。横轴以3 cm 代表1 V，使作图和读图都很困难。实际在选择坐标分度值时，应既满足有效数字的要求又便于作图和读图，一般以1 mm 代表的量值是10的整数次幂或是其2倍或5倍。</li>
-<li>图纸使用不当。实际作图时，坐标原点的读数可以不从零开始。</li>
-</ul>
-
-<h3 id="toc_5">数据的直线拟合(最小二乘法)</h3>
-
-<p>设此两物理量 x、y 满足线性关系，且假定实验误差主要出现在\(y_i\)上，设拟合直线公式为 y =f(x)=a+bx，当所测各yi值与拟合直线上各估计值 \(f(x_i)=a+bx_i\)之间偏差的平方和最小，即</p>
-
-<p>\[s=\sum\left[y_i-f(x_i)\right]^2=\sum\left[y_i-(a+bx_i)\right]^2\rightarrow min\]</p>
-
-<p>时，所得拟合公式即为最佳经验公式。据此有</p>
-
-<p>\[\frac{\partial s}{\partial a}=-2\sum(y_i-a-bx_i)=0,\quad \frac{\partial s}{\partial b}=-2\sum(y_i-a-bx_i)x_i=0\]</p>
-
-<p>\[\therefore \quad a=\frac{\sum x_iy_i\sum x_i -\sum y_i\sum x_i^2}{(\sum x_i)^2-n\sum x_i^2},\quad b=\frac{\sum x_i\sum y_i -n\sum x_iy_i}{(\sum x_i)^2-n\sum x_i^2}\]</p>
-
-<p>相关系数r：最小二乘法处理数据除给出a、b外，还应给出相关系数r，r定义为:</p>
-
-<p>\[r\frac{\sum(x_i-\overline{x})-\sum(y_i-\overline{y})}{\sqrt{\sum(x_i-\overline{x})^2\sum(y_i-\overline{y})^2}},\qquad \overline{x}=\frac{\sum x_i}{n},\quad y=\frac{\sum y_i}{n}\]</p>
-
-<p>r表示两变量之间的函数关系与线性的符合程度，\(r\in[-1，1]\)。</p>
+<p>参数：</p>
 
 <ul>
-<li>\(|r|\rightarrow 1\)，x、y间线性关系好;</li>
-<li>\(|r|\rightarrow 0\)，x、y间无线性关系，拟合无意义。</li>
+<li>  <strong>title</strong> 紧跟 text，指定对话框的标题</li>
+<li>  <strong>prompt</strong> 紧跟 text，指定提示信息</li>
+<li>  <strong>default items</strong> 紧跟 list，指定默认选择的项目</li>
+<li>  <strong>empty selection allowed</strong> 后紧跟 true 表示允许不选</li>
+<li>  <strong>multiple selections allowed</strong> 后紧跟 true 表示允许多选</li>
 </ul>
+<br/>
+<h2 id="toc_5">文件选择对话框</h2>
 
-<p>物理实验中一般要求r绝对值达到0.999以上。</p>
+<pre><code class="language-applescript">-- 选取文件名称Choose File Name
+choose file name with prompt &quot;指定提示信息&quot;
 
-<blockquote>
-<p>用计算机Excel 程序中的 intercept、slope、correl 函数也可直接求得 a、b、r</p>
-</blockquote>
+-- 选取文件夹Choose Folder
+choose folder with prompt &quot;指定提示信息&quot; default location file &quot;Macintosh HD:Users&quot; with invisibles, multiple selections allowed and showing package contents
+
+-- 选取文件Choose File
+choose file of type {&quot;txt&quot;}
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_6">文件读写</h2>
+
+<p>文件读取用 read，允许直接读取，但是写入文件之前必须先打开文件；</p>
+
+<p>打开文件是 <code>open for access FileName</code></p>
+
+<p>写入文件用 <code>write...to</code> 语句；</p>
+
+<p>最后记得关闭文件 <code>close access filePoint</code></p>
+
+<p>例子：</p>
+
+<pre><code class="language-applescript">set myFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:example.txt&quot;
+read myFile
+set aFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:example.txt&quot;
+set fp to open for access aFile with write permission
+write &quot;AppleScript写入文本&quot; to fp
+close access fp
+
+
+--在桌面上创建一个文件,内部包含一个txt文件,并向txt内插入文件
+on createMyTxt()
+    tell application &quot;Finder&quot;
+        make new folder at desktop with properties {name:&quot;star&quot;}
+        make new file at folder &quot;star&quot; of desktop with properties {name:&quot;star.txt&quot;}
+    end tell
+end createMyTxt
+
+--向txt文件内写入内容
+on writeTextToFile()
+    set txtFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:star:star.txt&quot;
+    set fp to open for access txtFile with write permission
+    write &quot;你好,这是一个txt文件&quot; to fp as «class utf8»
+    close access fp
+end writeTextToFile
+
+createMyTxt()
+
+writeTextToFile()
+</code></pre>
 
 
     
@@ -230,16 +263,16 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15423332361636.html" 
-          title="Previous Post: 物理实验步骤">&laquo; 物理实验步骤</a>
+          <a href="15735830719694.html" 
+          title="Previous Post: AppleScript样例">&laquo; AppleScript样例</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="15423332157827.html" 
-          title="Next Post: 物理实验的误差和不确定度 - 下">物理实验的误差和不确定度 - 下 &raquo;</a>
+          <a  href="15735830027400.html" 
+          title="Next Post: tell 结构">tell 结构 &raquo;</a>
       
       </p>
         </div>
@@ -277,10 +310,10 @@ var disqus_config = function () {
     <div id="sidebar" class="sidebar">
           <div id="site-info" class="site-info">
             
-                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
             
                 <h1>Sttot Stack</h1>
-                <div class="site-des"></div>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
                 <div class="social">
 
 
@@ -291,7 +324,7 @@ var disqus_config = function () {
 
 
 
-<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
 <a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
   <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
                 
@@ -308,15 +341,15 @@ var disqus_config = function () {
 
       	<p class="cat-list">
         
-            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
         
             <a href="SiteStory.html"><strong>建站那些事</strong></a>
         
             <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
         
-            <a href="PhyLab.html"><strong>PhyLab</strong></a>
-        
             <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
          
         </p>
 
@@ -333,33 +366,35 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			        <a href="15735830719694.html">AppleScript样例</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			        <a href="15735830027400.html">tell 结构</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583362803987.html">动态查找树</a>
+			        <a href="15735829601096.html">Record 记录</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			        <a href="15735828924204.html">List 列表</a>
 			      </li>
 		     
+		  
+		      
 		  
 		      
 		  
@@ -430,7 +465,7 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
      
     </script>
 
-    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+    
 
 <!--换成KaTeX渲染-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">

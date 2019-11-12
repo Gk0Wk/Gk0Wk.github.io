@@ -4,13 +4,1222 @@
   <title><![CDATA[Sttot Stack]]></title>
   <link href="https://gk0wk.github.io/atom.xml" rel="self"/>
   <link href="https://gk0wk.github.io/"/>
-  <updated>2019-11-13T00:46:29+08:00</updated>
+  <updated>2019-11-13T02:31:54+08:00</updated>
   <id>https://gk0wk.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript样例]]></title>
+    <link href="https://gk0wk.github.io/15735830719694.html"/>
+    <updated>2019-11-13T02:24:31+08:00</updated>
+    <id>https://gk0wk.github.io/15735830719694.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">使用 mac 的邮件系统</h2>
+
+<pre><code class="language-applescript">--Variables
+set recipientName to &quot; 小红&quot;
+set recipientAddress to &quot;aliyunzixun@xxx.com&quot;
+set theSubject to &quot;AppleScript Automated Email&quot;
+set theContent to &quot;This email was created and sent using AppleScript!&quot;
+--Mail Tell Block
+tell application &quot;Mail&quot;
+--Create the message
+set theMessage to make new outgoing message with properties {subject:theSubject, content:theContent, visible:true}
+--Set a recipient
+tell theMessage
+    make new to recipient with properties {name:recipientName, address:recipientAddress}
+    --Send the Message
+    send
+end tell
+end tell
+</code></pre>
+
+<h2 id="toc_1">让浏览器打开网页</h2>
+
+<pre><code class="language-applescript">set urlMyBlog to &quot;https://blog.csdn.net/sodaslay&quot;
+set urlChinaSearch to &quot;http://www.chinaso.com&quot;
+set urlBiying to &quot;https://cn.bing.com&quot;
+
+--使用Chrome浏览器
+tell application &quot;Google Chrome&quot;
+--新建一个chrome窗口
+set window1 to make new window
+tell window1
+    --当前标签页加载必应,就是不用百度哈哈
+    set currTab to active tab of window1
+    set URL of currTab to urlBiying
+    --打开csdn博客,搜索
+    make new tab with properties {URL:urlMyBlog}
+    make new tab with properties {URL:urlChinaSearch}
+    --将焦点由最后一个打开的标签页还给首个标签页
+    set active tab index of window1 to 1
+end tell
+end tell
+</code></pre>
+
+<h2 id="toc_2">让你的电脑说话</h2>
+
+<pre><code class="language-applescript">-- You can use any of the voices from the System Voice pop-up on the Text to Speech tab in the Speech preferences pane.
+-- Default Value:
+-- The current System Voice (set in the Speech panel in System Preferences.
+
+tell current application
+say &quot;My name is LiMei. Nice to meet you. How are you?&quot; using &quot;Veena&quot;
+say &quot;Fine, thanks. And you?&quot; using &quot;Victoria&quot;
+say &quot;滚&quot;
+say &quot;我跟你说&quot; using &quot;Sin-Ji&quot;
+end tell
+
+beep
+</code></pre>
+
+<h2 id="toc_3">调用 mac 的通知中心</h2>
+
+<blockquote>
+<p>crontab + AppleScript + 通知中心 可以做很多定制的提醒工具</p>
+</blockquote>
+
+<pre><code class="language-applescript">display notification &quot;message&quot; with title &quot;title&quot; subtitle &quot;subtitle&quot;
+
+display notification &quot;message&quot; sound name &quot;Bottle.aiff&quot;
+-- 声音文件都在 ~/Library/Sounds 和 /System/Library/Sounds 下面
+</code></pre>
+
+<h2 id="toc_4">清理废纸篓</h2>
+
+<pre><code class="language-applescript">tell application &quot;Finder&quot;
+empty the trash
+beep
+-- 打开启动磁盘
+open the startup disk
+end tell
+</code></pre>
+
+<h2 id="toc_5">模拟键盘按键消息</h2>
+
+<pre><code class="language-applescript">launch application &quot;System Events&quot;
+launch application &quot;TextMate&quot;
+tell application &quot;System Events&quot;
+set frontmost of process &quot;TextMate&quot; to true
+keystroke &quot;input string from applescript&quot;
+keystroke &quot;a&quot; using command down
+keystroke &quot;c&quot; using command down
+keystroke &quot;a&quot; using command down
+key code 124 using command down
+keystroke &quot;
+&quot;
+keystroke &quot;v&quot; using command down
+end tell
+</code></pre>
+
+<p>&lt;&lt;&lt;<br/>
+其中 using command 可以使用组合，例如：key code 53 using {command down, option down}<br/>
+其中的 key code 对照表如下<br/>
+&lt;&lt;&lt;</p>
+
+<pre><code class="language-applescript">apple key code list:
+
+0 0x00 ANSI_A
+1 0x01 ANSI_S
+2 0x02 ANSI_D
+3 0x03 ANSI_F
+4 0x04 ANSI_H
+5 0x05 ANSI_G
+6 0x06 ANSI_Z
+7 0x07 ANSI_X
+8 0x08 ANSI_C
+9 0x09 ANSI_V
+10 0x0A ISO_Section
+11 0x0B ANSI_B
+12 0x0C ANSI_Q
+13 0x0D ANSI_W
+14 0x0E ANSI_E
+15 0x0F ANSI_R
+16 0x10 ANSI_Y
+17 0x11 ANSI_T
+18 0x12 ANSI_1
+19 0x13 ANSI_2
+20 0x14 ANSI_3
+21 0x15 ANSI_4
+22 0x16 ANSI_6
+23 0x17 ANSI_5
+24 0x18 ANSI_Equal
+25 0x19 ANSI_9
+26 0x1A ANSI_7
+27 0x1B ANSI_Minus
+28 0x1C ANSI_8
+29 0x1D ANSI_0
+30 0x1E ANSI_RightBracket
+31 0x1F ANSI_O
+32 0x20 ANSI_U
+33 0x21 ANSI_LeftBracket
+34 0x22 ANSI_I
+35 0x23 ANSI_P
+36 0x24 Return
+37 0x25 ANSI_L
+38 0x26 ANSI_J
+39 0x27 ANSI_Quote
+40 0x28 ANSI_K
+41 0x29 ANSI_Semicolon
+42 0x2A ANSI_Backslash
+43 0x2B ANSI_Comma
+44 0x2C ANSI_Slash
+45 0x2D ANSI_N
+46 0x2E ANSI_M
+47 0x2F ANSI_Period
+48 0x30 Tab
+49 0x31 Space
+50 0x32 ANSI_Grave
+51 0x33 Delete
+53 0x35 Escape
+55 0x37 Command
+56 0x38 Shift
+57 0x39 CapsLock
+58 0x3A Option
+59 0x3B Control
+60 0x3C RightShift
+61 0x3D RightOption
+62 0x3E RightControl
+63 0x3F Function
+64 0x40 F17
+65 0x41 ANSI_KeypadDecimal
+67 0x43 ANSI_KeypadMultiply
+69 0x45 ANSI_KeypadPlus
+71 0x47 ANSI_KeypadClear
+72 0x48 VolumeUp
+73 0x49 VolumeDown
+74 0x4A Mute
+75 0x4B ANSI_KeypadDivide
+76 0x4C ANSI_KeypadEnter
+78 0x4E ANSI_KeypadMinus
+79 0x4F F18
+80 0x50 F19
+81 0x51 ANSI_KeypadEquals
+82 0x52 ANSI_Keypad0
+83 0x53 ANSI_Keypad1
+84 0x54 ANSI_Keypad2
+85 0x55 ANSI_Keypad3
+86 0x56 ANSI_Keypad4
+87 0x57 ANSI_Keypad5
+88 0x58 ANSI_Keypad6
+89 0x59 ANSI_Keypad7
+90 0x5A F20
+91 0x5B ANSI_Keypad8
+92 0x5C ANSI_Keypad9
+93 0x5D JIS_Yen
+94 0x5E JIS_Underscore
+95 0x5F JIS_KeypadComma
+96 0x60 F5
+97 0x61 F6
+98 0x62 F7
+99 0x63 F3
+100 0x64 F8
+101 0x65 F9
+102 0x66 JIS_Eisu
+103 0x67 F11
+104 0x68 JIS_Kana
+105 0x69 F13
+106 0x6A F16
+107 0x6B F14
+109 0x6D F10
+111 0x6F F12
+113 0x71 F15
+114 0x72 Help
+115 0x73 Home
+116 0x74 PageUp
+117 0x75 ForwardDelete
+118 0x76 F4
+119 0x77 End
+120 0x78 F2
+121 0x79 PageDown
+122 0x7A F1
+123 0x7B LeftArrow
+124 0x7C RightArrow
+125 0x7D DownArrow
+126 0x7E UpArrow
+</code></pre>
+
+<h2 id="toc_6">切换程序前台、设置焦点窗口</h2>
+
+<pre><code class="language-applescript">-- 前提是当前 iTerm app 中打开了两个窗口，其中有个窗口名字叫 &quot;2. bash&quot; 并且该窗口中第一个 tab 中含有三个 session，本脚本的作用是让 &quot;2. bash&quot; 窗口中第一个 tab 中的第三个 session 变为焦点。
+tell the application &quot;iTerm&quot;
+activate
+
+set theWindow to the first item of ¬
+    (get the windows whose name is &quot;2. bash&quot;)
+if index of theWindow is not 1 then
+    set index of theWindow to 1
+
+    set visible of theWindow to false
+    set visible of theWindow to true
+end if
+
+tell theWindow
+    set theTab to the first item of theWindow&#39;s tabs
+
+    select theTab
+
+    select the third session of theTab
+end tell
+end tell
+</code></pre>
+
+<pre><code class="language-applescript">-- 下面是上面的逻辑的另一种实现
+tell the application &quot;iTerm&quot;
+activate
+
+set theWindow to the first item of ¬
+    (get the windows whose name is &quot;2. bash&quot;)
+if the index of theWindow is not 1 then
+    set the index of theWindow to 2
+    tell application &quot;System Events&quot; to ¬
+        tell application process &quot;iTerm2&quot; to ¬
+            keystroke &quot;`&quot; using command down
+end if
+end tell
+</code></pre>
+
+<h2 id="toc_7">粘贴板操作</h2>
+
+<pre><code class="language-applescript">set the clipboard to &quot;Add this sentence at the end.&quot;
+tell application &quot;TextEdit&quot;
+activate --make sure TextEdit is running
+make new paragraph at end of document 1 with data (return &amp; (the clipboard))
+end tell
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript一些默认指令]]></title>
+    <link href="https://gk0wk.github.io/15735830354689.html"/>
+    <updated>2019-11-13T02:23:55+08:00</updated>
+    <id>https://gk0wk.github.io/15735830354689.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">beep</h2>
+
+<pre><code class="language-applescript">beep 发声次数
+</code></pre>
+
+<p>让 Mac 系统发出咚的声音，发声次数决定了咚出现的次数，例如 <code>beep 2</code> 那么 Mac 会咚两次。发声次数缺省为 1。</p>
+
+<h2 id="toc_1">say</h2>
+
+<p>语音转文字并输出</p>
+
+<pre><code class="language-applescript">say &quot;说话的内容&quot; (using &quot;指定人的嗓音&quot;)
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_2">消息对话框 dialog</h2>
+
+<p>使用<code>display dialog</code>弹出一个消息对话框：</p>
+
+<pre><code class="language-applescript">display dialog &quot;消息文字&quot; (buttons {&quot;按钮1&quot;, &quot;按钮2&quot;, ...} (default button &quot;按钮名&quot;))
+</code></pre>
+
+<p>括号内为可省略部分。默认情况下按钮列表为 <code>取消</code> 和 <code>好</code> ，默认按钮为 <code>好</code>。</p>
+
+<p>对话框关闭后，该行脚本返回一个Record，可以用 <strong>result</strong> 变量来获取，也可以用 <code>set xxx to dispkay ...</code> 来接。</p>
+
+<p>在没有文本输入的对话框中，Record内容为：</p>
+
+<pre><code class="language-applescript">{button returned: [按钮文字]}
+</code></pre>
+<br/>
+<p>添加一个<code>default answer</code>让对话框具有文本输入框，如：</p>
+
+<pre><code class="language-applescript">display dialog &quot;emmm&quot; defalut answer &quot;&quot; -- 字符串可留空
+</code></pre>
+
+<p>返回的Record内容为：</p>
+
+<pre><code class="language-applescript">{button returned: [按钮文字], text returned: [输入的字符串]}
+</code></pre>
+<br/>
+<h2 id="toc_3">警告对话框 alert</h2>
+
+<p>使用<code>display alert</code>弹出一个消息对话框：</p>
+
+<pre><code class="language-applescript">display alert &quot;标题&quot; (message &quot;内容&quot;) (buttons {&quot;按钮1&quot;, &quot;按钮2&quot;, ...} (default button &quot;按钮名&quot;)) (as warning)
+</code></pre>
+<br/>
+<h2 id="toc_4">列表选择对话框</h2>
+
+<pre><code class="language-applescript">choose from list {&quot;选项1&quot;, &quot;选项2&quot;, &quot;选项3&quot;} with title &quot;选择框&quot; with prompt &quot;请选择选项&quot;
+</code></pre>
+
+<p>参数：</p>
+
+<ul>
+<li>  <strong>title</strong> 紧跟 text，指定对话框的标题</li>
+<li>  <strong>prompt</strong> 紧跟 text，指定提示信息</li>
+<li>  <strong>default items</strong> 紧跟 list，指定默认选择的项目</li>
+<li>  <strong>empty selection allowed</strong> 后紧跟 true 表示允许不选</li>
+<li>  <strong>multiple selections allowed</strong> 后紧跟 true 表示允许多选</li>
+</ul>
+<br/>
+<h2 id="toc_5">文件选择对话框</h2>
+
+<pre><code class="language-applescript">-- 选取文件名称Choose File Name
+choose file name with prompt &quot;指定提示信息&quot;
+
+-- 选取文件夹Choose Folder
+choose folder with prompt &quot;指定提示信息&quot; default location file &quot;Macintosh HD:Users&quot; with invisibles, multiple selections allowed and showing package contents
+
+-- 选取文件Choose File
+choose file of type {&quot;txt&quot;}
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_6">文件读写</h2>
+
+<p>文件读取用 read，允许直接读取，但是写入文件之前必须先打开文件；</p>
+
+<p>打开文件是 <code>open for access FileName</code></p>
+
+<p>写入文件用 <code>write...to</code> 语句；</p>
+
+<p>最后记得关闭文件 <code>close access filePoint</code></p>
+
+<p>例子：</p>
+
+<pre><code class="language-applescript">set myFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:example.txt&quot;
+read myFile
+set aFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:example.txt&quot;
+set fp to open for access aFile with write permission
+write &quot;AppleScript写入文本&quot; to fp
+close access fp
+
+
+--在桌面上创建一个文件,内部包含一个txt文件,并向txt内插入文件
+on createMyTxt()
+    tell application &quot;Finder&quot;
+        make new folder at desktop with properties {name:&quot;star&quot;}
+        make new file at folder &quot;star&quot; of desktop with properties {name:&quot;star.txt&quot;}
+    end tell
+end createMyTxt
+
+--向txt文件内写入内容
+on writeTextToFile()
+    set txtFile to alias &quot;Macintosh HD:Users:xiaxuqiang:Desktop:star:star.txt&quot;
+    set fp to open for access txtFile with write permission
+    write &quot;你好,这是一个txt文件&quot; to fp as «class utf8»
+    close access fp
+end writeTextToFile
+
+createMyTxt()
+
+writeTextToFile()
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[tell 结构]]></title>
+    <link href="https://gk0wk.github.io/15735830027400.html"/>
+    <updated>2019-11-13T02:23:22+08:00</updated>
+    <id>https://gk0wk.github.io/15735830027400.html</id>
+    <content type="html"><![CDATA[
+<p>之前讲过，我们执行命令、访问对象，都需要有所面向，需要确定是让哪一个程序去执行命令、操作哪一个程序的对象。不同的应用程序所支持的命令和类不同，需要查看<a href="%E4%BD%BF%E7%94%A8%20Script%20Editor.app">字典</a>。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>脚本执行初始，我们所做的工作都是交给执行脚本的程序(比如 Script Editor.app)来做的，事实上，内置的变量、命令都是执行解析程序所拥有和执行的。</p>
+
+<p>我们需要用 tell 模块将特定的任务交付给 Mac 中特定的程序，去访问他们的对象、执行他们的命令。</p>
+
+<p>tell 模块的语法为：</p>
+
+<pre><code class="language-text">tell application &quot;[应用程序名称]&quot;
+    ...
+end tell
+</code></pre>
+
+<p>注：tell结构支持嵌套。</p>
+
+<p>例如我们想让 Finder 程序清空垃圾篓然后打开磁盘，可以这样写：</p>
+
+<pre><code class="language-text">tell application &quot;Finder&quot;
+    empty the trash
+    beep
+    open the startup disk
+end tell
+</code></pre>
+
+<p>可以发现 <code>beep</code> 命令还是可以用的，无论tell了什么程序，脚本执行程序的功能和对象都可用；实际上，整个脚本都默认包含在</p>
+
+<pre><code class="language-applescript">tell current application
+    ...
+end tell
+</code></pre>
+
+<p>这个结构中，<code>say</code>、<code>beep</code>、<code>display</code>等指令一只可用。</p>
+
+<p>不过，<code>current application</code>是个特例，在其他嵌套tell结构中，只允许使用当前tell层应用所拥有的对象和指令，例如以下脚本会报错：</p>
+
+<pre><code class="language-applescript">tell application &quot;Finder&quot;
+    tell application &quot;OmniFocus&quot;
+        open startup disk -- no such startup disk
+    end tell
+end tell
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Record 记录]]></title>
+    <link href="https://gk0wk.github.io/15735829601096.html"/>
+    <updated>2019-11-13T02:22:40+08:00</updated>
+    <id>https://gk0wk.github.io/15735829601096.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">形式</h2>
+
+<p>Record 的格式：</p>
+
+<pre><code class="language-applescript">{name1: value1, name2: value2, name3: value3}
+</code></pre>
+
+<span id="more"></span><!-- more -->
+
+<p>其中 name 相当于字典中的 key，value 相当于字典中的 value。一对 <code>name: value</code> 成为一个<code>属性(Property)</code></p>
+<br/>
+<h2 id="toc_1">赋值</h2>
+
+<p>使用 <code>set to</code> 语句赋值：</p>
+
+<pre><code class="language-applescript">set aRecord to {name1:100, name2:&quot;This is a record&quot;}
+</code></pre>
+<br/>
+<h2 id="toc_2">获取属性/修改属性</h2>
+
+<p><strong>记录中的单元叫做<code>属性（property）</code>，不是<code>元素（item）</code>。不能通过 <code>item</code> 来取出数据。</strong></p>
+
+<p>可以通过 <code>name</code> 获取 <code>record</code> 中对应的 <code>value</code>：</p>
+
+<pre><code class="language-applescript">set tempValOfName to the name1 of aRecord
+</code></pre>
+<br/>
+<h2 id="toc_3">获取 Record 的 name/value 对数目</h2>
+
+<p>用 <code>(the) count of</code> 获取 record 中的属性数目：</p>
+
+<pre><code class="language-applescriptq">set numberOfProperties to the count of aRecord
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[List 列表]]></title>
+    <link href="https://gk0wk.github.io/15735828924204.html"/>
+    <updated>2019-11-13T02:21:32+08:00</updated>
+    <id>https://gk0wk.github.io/15735828924204.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">形式</h2>
+
+<p>以大括号括起来，逗号分割，元素的类型无限制。如：</p>
+
+<pre><code class="language-applescript">{&quot;hello&quot;, 123, &quot;world&quot;}
+</code></pre>
+
+<span id="more"></span><!-- more -->
+<br/>
+<h2 id="toc_1">赋值</h2>
+
+<p>使用 <code>set to</code> 语句赋值</p>
+
+<pre><code class="language-applescript">set firstList to {100, 200.0, &quot;Number&quot;, -10}
+set emptyList to {}
+</code></pre>
+
+<p>list 中也可以包含 list，例如：</p>
+
+<pre><code class="language-applescript">set listOfList to {1, &quot;2&quot;, firstList}
+</code></pre>
+<br/>
+<h2 id="toc_2">获取/更改值</h2>
+
+<p>获取和更改列表中的元素:</p>
+
+<ol>
+<li><p>获取 list 中指定序号的元素有多种方法：</p>
+<pre><code class="language-applescript">get item 2 of arr3  -- 获取第二个元素，即123
+get 2nd item of arr3<br/>
+get the second item of arr3 --该种方式只能用到tenth<br/>
+set the 2nd item of modifiedList to &quot;2nd&quot;<br/>
+get item -1 of arr3 -- -1表示最后一个，-2表示倒数第2个<br/>
+get items 2 through 5 of arr3 -- 获取第2到第5个元素
+</code></pre>
+<p>可以用 <code>the last item</code> 关键字来获取列表中的最后一个元素；貌似没有 <code>the first item</code> 关键字。</p>
+<p><strong>注：list 的序号从 1 开始</strong>，没有<code>item 0</code>。</p></li>
+<li><p>使用<code>some item of</code>选择列表中的随机元素赋值</p></li>
+</ol>
+<br/>
+<h2 id="toc_3">添加元素</h2>
+
+<p>使用 <code>set the end of 列表名 to 元素</code> 添加元素到列表末尾</p>
+
+<pre><code class="language-applescript">set the end of arr3 to &quot;new&quot;  --在最后添加一个元素 &quot;new&quot;
+</code></pre>
+<br/>
+<h2 id="toc_4">合并</h2>
+
+<p>使用 &amp; 运算符可以直接将若干个列表中的元素合并并形成一个新的列表：</p>
+
+<pre><code class="language-applescript">set arr3 to arr1 &amp; arr2  -- 合并
+</code></pre>
+<br/>
+<h2 id="toc_5">获取元素个数</h2>
+
+<p>使用 <code>(the) length</code> 或 <code>(the) count</code> 关键字获取列表的元素个数</p>
+
+<pre><code class="language-applescript">get the length of arr3
+get the count of arr3
+</code></pre>
+<br/>
+<h2 id="toc_6">获取逆序后的列表</h2>
+
+<p>要逆向获取子列表，需要用到 <code>reverse</code> 关键字</p>
+
+<pre><code class="language-applescript">get reverse of arr3
+</code></pre>
+<br/>
+<h2 id="toc_7">类型转换</h2>
+
+<pre><code class="language-applescript">set arr3 to {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;}
+get arr3 as string --将数组的元素凭借成一个字符串
+</code></pre>
+<br/>
+<h2 id="toc_8">获取子列表</h2>
+
+<p>获取子列表:<br/>
+使用 <code>items 开始序号 through 结束序号 of</code> 可以获取 list 中的子列表：</p>
+
+<pre><code class="language-applescript">set longList to {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+set shortList to items 6 through 10 of longList
+</code></pre>
+
+<p>结果输出为：<code>{6, 7, 8, 9, 10}</code></p>
+
+<p>注：从结束序号取到开始序号的方式获取的子列表是相同的，例如：</p>
+
+<pre><code class="language-applescript">set shortList to items 10 through 6 of longList
+</code></pre>
+
+<p>结果输出为：<code>{6, 7, 8, 9, 10}</code></p>
+
+<p>要逆向获取子列表，需要用到 <code>reverse</code> 关键字，例如：</p>
+
+<pre><code class="language-applescript">set reversedList to reverse of longList
+</code></pre>
+
+<p>结果输出为：<code>{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}</code></p>
+
+<hr/>
+
+<h2 id="toc_9">String 与 List</h2>
+
+<p>将 String 转换为 List，方法就是在 <code>set to</code> 语句后加一个 <code>as list</code> ：</p>
+
+<pre><code class="language-applescript">-- string to list
+set stringNotConvert to &quot;string&quot;
+set convertStringToList to stringNotConvert as list
+</code></pre>
+
+<p>输出结果为：<code>{&quot;string&quot;}</code></p>
+<br/>
+<p>使用 <code>&amp;</code> 可以连接 string 和 list 变量，结果的类型由 <code>&amp;</code> 运算符之前的变量类型决定，例如：</p>
+
+<pre><code class="language-applescript">set stringBeforeAnd to &quot;string&quot;
+set listBeforeAnd to {&quot;list&quot;}
+set stringAndList to stringBeforeAnd &amp; listBeforeAnd -- &amp;之前的变量是一个string
+</code></pre>
+
+<p>输出结果为：<code>&quot;stringlist&quot;</code></p>
+
+<p>另一种情况：</p>
+
+<pre><code class="language-applescript">-- string &amp; list or list &amp; string
+set stringBeforeAnd to &quot;string&quot;
+set listBeforeAnd to {&quot;list&quot;}
+-- set stringAndList to stringBeforeAnd &amp; listBeforeAnd -- 注释掉这段代码
+set listAndString to listBeforeAnd &amp; stringBeforeAnd -- &amp;之前的变量是一个list
+</code></pre>
+
+<p>输出结果为：<code>{&quot;list&quot;, &quot;string&quot;}</code></p>
+
+<p>这样的写法不够明确，将上面的代码改进如下：</p>
+
+<pre><code class="language-applescript">-- A better way
+set stringAndList to (listBeforeAnd as string) &amp; stringBeforeAnd
+set listAndString to (stringBeforeAnd as list) &amp; listBeforeAnd
+</code></pre>
+
+<p>更好的做法是使用 <code>as</code> 关键字做出变量类型的显式声明。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[String 字符串、Text 文本型]]></title>
+    <link href="https://gk0wk.github.io/15735827866089.html"/>
+    <updated>2019-11-13T02:19:46+08:00</updated>
+    <id>https://gk0wk.github.io/15735827866089.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>String 类和未提及的 Unicode Text 类是 AppleScript 2.0 的概念，现在已经被 Text 类完全替代。但是为了向下兼容，保留了这两个类。</p>
+
+<p>text, string, and Unicode text will all compare as equal<br/>
+————《AppleScript Language Guide》2008 年 3 月版</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+<br/>
+<h2 id="toc_0">使用 set to 语句赋值</h2>
+
+<pre><code class="language-applescript">set emptyString to &quot;&quot;
+set aSpaceString to &quot; &quot;
+set helloString to &quot;Hello&quot;
+set AppleScriptString to &quot;AppleScript&quot;
+</code></pre>
+
+<ul>
+<li>字符串用双引号括起来</li>
+<li>转义字符<code>\&quot;</code>输出双引号</li>
+<li>转义字符<code>\\</code>输出反斜杠</li>
+</ul>
+<br/>
+<h2 id="toc_1">使用 <code>&amp;</code> 运算符连接字符串</h2>
+
+<p>可以使用 “&amp;” 运算符将几个字符串连结在一起：</p>
+
+<pre><code class="language-applescript">set stringAndString to (helloString &amp; aSpaceString &amp; AppleScriptString)
+</code></pre>
+<br/>
+<h2 id="toc_2">获取字符串变量的长度</h2>
+
+<p>使用关键字 <code>the length of</code> 来获取字符串变量的长度：</p>
+
+<pre><code class="language-applescript">get the length of stringAndString
+</code></pre>
+
+<p>输出结果为17。</p>
+<br/>
+<h2 id="toc_3">将字符串分割成字符组成的列表(list)</h2>
+
+<p>使用 <code>every character of</code> 或 <code>characters of</code>：</p>
+
+<pre><code class="language-applescript">set charList to every character of strXY
+set charList to characters of strXY
+</code></pre>
+<br/>
+<h2 id="toc_4">将字符串分割成单词(以空格分隔)组成的列表(list)</h2>
+
+<p>使用 <code>every word of</code> 或 <code>words of</code>：</p>
+
+<pre><code class="language-applescript">set wordList to every word of strXY
+set wordList to words of strXY
+</code></pre>
+
+<p>可以设置其他的分割符来分割单词：</p>
+
+<pre><code class="language-applescript">set strXY to &quot;Hello AppleScript&quot;
+
+-- 通过 AppleScript&#39;s text item delimiters 来指定分隔号，然后通过 every text item of 来实现分割
+-- 注意要首先保存 AppleScript&#39;s text item delimiters，在分割字符串完成后记得要将其还原
+set defaultDelimiters to AppleScript&#39;s text item delimiters
+set AppleScript&#39;s text item delimiters to &quot; &quot;
+set listAfterDelimiter to every text item of strXY
+set AppleScript&#39;s text item delimiters to defaultDelimiters
+</code></pre>
+
+<p>结果为：<code>{&quot;Hello&quot;,&quot;AppleScript&quot;}</code></p>
+
+<p>注：使用 &quot;&quot; 分割字符串结果为：<code>{&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;, &quot;&quot;,&quot;A&quot;,&quot;p&quot;,&quot;p&quot;,&quot;l&quot;,&quot;e&quot;,&quot;S&quot;,&quot;c&quot;,&quot;r&quot;,&quot;i&quot;,&quot;p&quot;,&quot;t&quot;}</code></p>
+
+<p>可以将分割后的 list 恢复为一个 string。恢复过程是一个逆向的过程，方法如下：</p>
+
+<pre><code class="language-applescript">-- Restore list after delimiter to string
+-- 这里也要保存和还原 AppleScript&#39;s text item delimiters。
+set defaultDelimiters to AppleScript&#39;s text item delimiters
+set AppleScript&#39;s text item delimiters to&quot; &quot;
+set restoredString to listAfterDelimiter as string
+set AppleScript&#39;s text item delimiters to defaultDelimiters
+get restoredString
+</code></pre>
+<br/>
+<h2 id="toc_5">提取指定位置的字符、单词</h2>
+
+<p>提取指定未知的几个字符或单词，结果为 List ：</p>
+
+<pre><code class="language-applescript">characters 3 through 5 of &quot;A String&quot; -- 结果:{&quot;S&quot;, &quot;t&quot;, &quot;r&quot;}
+words 3 through 5 of &quot;我的名字叫张三&quot; -- 结果:{&quot;名字&quot;, &quot;叫&quot;, &quot;张三&quot;}
+</code></pre>
+
+<p>提取特定位置的一个字符或单词，结果为 Text ：</p>
+
+<pre><code class="language-applescript">word 2 of &quot;This is a text&quot;
+character 3 of &quot;This is a text&quot;
+ninth character of &quot;This is a text&quot;
+</code></pre>
+
+<ul>
+<li>第一个字符的位置是1，而不是0；</li>
+<li><code>through</code> 可以缩写为 <code>thru</code>；</li>
+<li>不推荐用序数词方法获得一个单词或字符；</li>
+<li>不推荐对于中文引用 “word” 相关语句。</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_6">字符串比较</h2>
+
+<p>在对字符串进行某种比较(<code>=</code>、<code>&gt;</code>等)时，可以设置忽略或者考虑某种特性，特性可以是：</p>
+
+<ol>
+<li><strong>case</strong> 大小写</li>
+<li><strong>diacriticals</strong> 字母变调符号 (如 e 和 é)</li>
+<li><strong>hyphens</strong> 连字符 (-)</li>
+<li><strong>numeric strings</strong> 数字化字符串 (默认是忽略的)，用于比较版本号时启用它。</li>
+<li><strong>punctuation</strong> 标点符号 (,.?! 等等, 包括中文标点)</li>
+<li><strong>white space</strong> 空格</li>
+</ol>
+
+<p>使用<code>considering</code>开启考虑某种特性：</p>
+
+<pre><code class="language-applescript">considering numeric strings
+    if &quot;10.3&quot; &gt; &quot;9.3&quot; then
+        display alert &quot;10.3 &gt; 9.3&quot;
+    end if
+end considering
+</code></pre>
+
+<p>使用<code>ignoring</code>关闭考虑某种特性：</p>
+
+<pre><code class="language-applescript">ignoring case
+    if &quot;AAA&quot; = &quot;aaa&quot; then
+        display alert &quot;AAA equal aaa when ignoring case&quot;
+    end if
+end ignoring
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Number 数字]]></title>
+    <link href="https://gk0wk.github.io/15735827612332.html"/>
+    <updated>2019-11-13T02:19:21+08:00</updated>
+    <id>https://gk0wk.github.io/15735827612332.html</id>
+    <content type="html"><![CDATA[
+<p>分为整数(integer)和实数(real)两大类，二者都可以是负数，赋值的时候将自动判断是整数还是实数，二者运算会自动对齐类型；所以一般情况下不用在意到底是整数还是实数，只要知道它们都是 Number 就可以了。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>Number 类型变量之间可以进行四则运算(<code>+-*/</code>)和乘方(<code>^</code>)运算等</p>
+
+<pre><code class="language-applescript">set x to 2
+get x
+set y to 3.33223
+get y
+set xy to x * y
+set x3 to y ^ 3
+</code></pre>
+
+<p>最终 xy = 6.66446，x ^ 3 = 37.000271431361。输出结果可以在运行结果区中看到（只看到最后一行的变量值）。</p>
+
+<hr/>
+
+<h2 id="toc_0">Number 和 String 之间的类型互换</h2>
+
+<p>使用 <code>as</code> 来相互转换 Number 和 String：</p>
+
+<pre><code class="language-applescript">set numberToString to 100 as string
+set stringToNumber to &quot;10&quot; as number
+set a to &quot;1.99&quot; as integer -- 精度丢失
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Date 日期型]]></title>
+    <link href="https://gk0wk.github.io/15735827313345.html"/>
+    <updated>2019-11-13T02:18:51+08:00</updated>
+    <id>https://gk0wk.github.io/15735827313345.html</id>
+    <content type="html"><![CDATA[
+<p>如: <code>date &quot;2009 年 8 月 30 日星期日 下午 12:31:34&quot;</code></p>
+
+<span id="more"></span><!-- more -->
+
+<p>此格式的具体形式由 “系统偏好设置 - 语言与文本” 的相关设置决定。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Boolean 布尔型]]></title>
+    <link href="https://gk0wk.github.io/15735826951271.html"/>
+    <updated>2019-11-13T02:18:15+08:00</updated>
+    <id>https://gk0wk.github.io/15735826951271.html</id>
+    <content type="html"><![CDATA[
+<p>仅仅包含两个值: <code>True</code> 和 <code>False</code> （不区分大小写）</p>
+
+<span id="more"></span><!-- more -->
+
+<pre><code class="language-applescript">set a to true
+set b to false
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript基本数据类型]]></title>
+    <link href="https://gk0wk.github.io/15735826629445.html"/>
+    <updated>2019-11-13T02:17:42+08:00</updated>
+    <id>https://gk0wk.github.io/15735826629445.html</id>
+    <content type="html"><![CDATA[
+<p>AppleScript 有多种数据类型：</p>
+
+<ol>
+<li><a href="15735826951271.html">Boolean 布尔型</a></li>
+<li><a href="15735827313345.html">Date 日期型</a></li>
+<li><a href="15735827612332.html">Number 数字</a></li>
+<li><a href="15735827866089.html">String 字符串、Text 文本型</a></li>
+<li><a href="15735828924204.html">List 列表</a></li>
+<li><a href="15735829601096.html">Record 记录</a></li>
+</ol>
+
+<span id="more"></span><!-- more -->
+
+<p>在 AppleScript 中声明一个变量使用 <code>set xxx to xxx</code>的语法：</p>
+
+<pre><code class="language-applescript">set theString to &quot;Hello World&quot;
+</code></pre>
+
+<p>可以使用 <code>class of</code> 语句确定一个变量的类型：</p>
+
+<pre><code class="language-applescript">-- 这是注释
+set str to &quot;string&quot;
+class of str -- 返回 &quot;text&quot;
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_0">强制类型转换</h2>
+
+<p>AppleScript 拥有类型对齐功能(比如<a href="AppleScript%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/List%20%E5%88%97%E8%A1%A8">List 和 String 的拼接</a>)，但有时候无法完成转换或者转换结果与我们预期设想不同，就需要显式的强制类型转换(Coercion)。</p>
+
+<p>使用 <code>as</code> 关键字强制类型转换：</p>
+
+<pre><code class="language-applescript">&quot;1.99&quot; as real    -- 1.99 (real)
+&quot;1.99&quot; as integer -- 2 (integer) 精度丢失
+&quot;1&quot; as real       -- 1.0  (real)
+
+&quot;text&quot; as list    -- { &quot;text&quot; }
+
+{ a: 1, b: 2 } as list -- { 1, 2 } 精度丢失(标识符丢失)
+</code></pre>
+
+<p>不是所有的数据都能够强制类型转换，不要纠结于此，做有意义的事：</p>
+
+<pre><code class="language-applescript">&quot;text2&quot; as number -- 错误! Text 中包含了无法转换成数字的字符。
+1 as record -- 错误! 无法获得标识符。
+{1, 2} as record -- 错误! 无法获得标识符。
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_1">使用 <code>copy</code> 进行深拷贝</h2>
+
+<p><code>Boolean</code>、<code>Number</code>、<code>String</code>、<code>Date</code>在使用<code>set to</code>的时候，是将实际的数据拷贝一份给另一个变量。但是对于<code>List</code>和<code>Record</code>，则是创建一份原对象的应用。</p>
+
+<p>例如以下指令：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+set B to A
+set A to {4, 5, 6}
+</code></pre>
+
+<p>过程为：A指向数据<code>{1, 2, 3}</code>；B指向A所指向的数据<code>{1, 2, 3}</code>；A指向新的数据<code>{4, 5, 6}</code>。</p>
+
+<p>最后的结果为 A = <code>{4, 5, 6}</code>, B = <code>{1, 2, 3}</code>。</p>
+<br/>
+<p>再看一个例子：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+set B to A
+set item 2 of A to 20
+</code></pre>
+
+<p>过程为：A指向数据<code>{1, 2, 3}</code>；B指向A所指向的数据<code>{1, 2, 3}</code>；修改A所指向的数据的第二项为20。</p>
+
+<p>最后的结果为 A = B = <code>{1, 20, 3}</code>。</p>
+<br/>
+<p>所以 <code>List</code> 的变量理解为指针或者引用会更好一些， <code>Record</code> 同理。</p>
+
+<p>如果想要进行深层拷贝，就要用到<code>copy</code>：</p>
+
+<pre><code class="language-applescript">set A to {1, 2, 3}
+copy B to A
+set item 2 of A to 20
+</code></pre>
+
+<p>最后的结果为 A = <code>{1, 20, 3}</code>, B = <code>{1, 2, 3}</code>。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript的语言逻辑]]></title>
+    <link href="https://gk0wk.github.io/15735825376552.html"/>
+    <updated>2019-11-13T02:15:37+08:00</updated>
+    <id>https://gk0wk.github.io/15735825376552.html</id>
+    <content type="html"><![CDATA[
+<p>AppleScript是一门面向对象的语言，同时也是仿照英语书写的语言，所以结合了二者的一些性质，形成以下逻辑：</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li><p>AppleScript是<a href="%E5%BD%A2%E5%BC%8F%E8%AF%AD%E8%A8%80">形式语言</a>，其基本的<a href="%E6%96%87%E6%B3%95%E8%AE%B0%E5%8F%B7">文法记号</a>(也就相当于文章的单词，最小语法单位)有四类：名词、动词、运算附和修饰词。<br/>
+<strong>名词</strong><br/>
+被动词操作，名词对应着<code>对象</code>，是类、属性、元素或基本类型变量。</p>
+<p><strong>动词</strong><br/>
+操作名词，或者被承接动词的结果，对应着<code>命令</code>。动词操作名词会返回到一个结果。</p>
+<p><strong>运算符</strong><br/>
+操作名词或者动词的结果，如逻辑和算术运算、赋值运算(set、copy)、class of等。返回到一个结果。</p>
+<p><strong>修饰词</strong><br/>
+修饰名词、动词，或者组成特定的流程控制结构。</p></li>
+<li><p>名词(对象)中<br/>
+基本类型变量<a href="AppleScript%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">有若干种</a>，可以组成<code>类</code>；<br/>
+类中包含有基本类型变量(作为<code>属性</code>)，也可以包含另一个类(作为<code>元素</code>)。</p></li>
+<li><p>名词只能与特定的某些动词相搭配才具有意义。</p></li>
+<li><p>修饰词需要与特定的名词动词搭配才具有意义。</p></li>
+<li><p>运算符需要与特定的名词动搭配才具有意义。</p></li>
+<li><p>类和命令分别属于不同的<code>套件</code>，构成一类用途；套件属于某个应用程序。套件中某个对象属于该程序，套件中某个命令是该程序的行为。</p></li>
+<li><p>类可以继承，可以被定义多次。</p></li>
+</ul>
+
+<p>AppleScript是脚本语言，可以定义函数，但是是逐行执行的，每一行执行之后都会得到一个执行结果，存在预定义变量 <strong>result</strong> 中；脚本完全结束后，将输出当前 <strong>result</strong> 的结果(最后一行执行的结果)。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript]]></title>
+    <link href="https://gk0wk.github.io/15735824358278.html"/>
+    <updated>2019-11-13T02:13:55+08:00</updated>
+    <id>https://gk0wk.github.io/15735824358278.html</id>
+    <content type="html"><![CDATA[
+<p><a href="AppleScript">AppleScript</a> 是 Mac OS X 内置的一种功能强大的脚本语言，能够帮你在 mac 上实现自动化。其语法和英语自然语法很像。</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li><a href="AppleScript">AppleScript</a> 的采用 <a href="Unicode">Unicode</a> 文字编码，并且不区分大小写。</li>
+</ul>
+
+<p><a href="AppleScript">AppleScript</a> 本身是一门<a href="%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AF%AD%E8%A8%80">面向对象语言</a>，它拥有三个重要的 OO 术语: <code>对象(Object)</code>、<code>属性(Property)</code> 和 <code>命令(Command)</code>。命令又称方法（Method）。</p>
+
+<p>其核心为通过访问应用程序提供出来的一系列消息动作API来获取数据和对应用程序进行某种操作，OO的性质很强。<a href="AppleScript">AppleScript</a> 本身具有的功能很少，有必要的数据类型、流程控制和一些简单的输入输出，剩下的都是依靠和应用程序的通信来完成的。</p>
+
+<hr/>
+
+<p>AppleScript 包括如下三部分：</p>
+
+<ul>
+<li>  AppleScript 语言</li>
+<li>  AppleScript 脚本文件</li>
+<li>  AppleScript 脚本解释器</li>
+</ul>
+<br/>
+<h2 id="toc_0">关于 AppleScript 的编写与执行</h2>
+
+<ul>
+<li>在 mac 中自带 <code>Automator.app</code> 和 <code>Script Editor.app</code> 均可以编写脚本。</li>
+<li>其中 <code>Automator.app</code> 是可视化的，但是功能很简单。而 <code>Script Editor.app</code> 很全面。</li>
+<li>也可以用 <code>Xcode</code> 编写 <code>Cocoa - AppleScript Application</code>。<a href="https://github.com/BenXia/AppleScriptStudy/tree/master/5_%E5%BF%AB%E5%8F%91%E9%82%AE%E4%BB%B6OC%E7%89%88%E6%9C%AC">比如这个</a></li>
+<li>Alfred 也可以用。</li>
+<li>命令行直接使用 <code>osascript [脚本文件的路径]</code>来执行，配合<a href="%E8%BE%93%E5%87%BA%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91">输出流重定向</a>和其他脚本(如<a href="Python">Python</a>和<a href="Linux%20Shell">Linux Shell</a>)可以实现更多自动化功能。</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_1">更多参考</h2>
+
+<ol>
+<li><a href="https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html">AppleScript Language Guide 官方文档</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/MakeaSystem-WideService.html#//apple_ref/doc/uid/TP40016239-CH46-SW1">Mac Automation Scripting Guide</a></li>
+<li><a href="https://support.apple.com/zh-cn/guide/terminal/trml1003/mac">AppleScript 与 Shell 的互相调用</a></li>
+<li><a href="https://blog.csdn.net/SysProgram/article/details/46817917">Objective-C 运行 AppleScript 脚本</a></li>
+<li><a href="https://www.aliyun.com/jiaocheng/376240.html?spm=5176.100033.2.11.2a7d9a70mlzSWR">如何让 Cocoa App 支持 AppleScript</a></li>
+<li><a href="http://www.docin.com/p-515251458.html">AppleScript for Absolute Starters</a></li>
+<li><a href="http://ishare.iask.sina.com.cn/f/33325750.html">Apple Automator with AppleScript</a></li>
+<li><a href="https://developer.apple.com/library/archive/releasenotes/InterapplicationCommunication/RN-JavaScriptForAutomation/Articles/Introduction.html#//apple_ref/doc/uid/TP40014508-CH111-SW1">JavaScript for Automation</a></li>
+<li><a href="https://github.com/JXA-Cookbook/JXA-Cookbook/wiki/Foreword">JXA-Cookbook</a></li>
+<li><a href="https://wenku.baidu.com/view/41c783c3aa00b52acfc7ca09.html">Mac 的自动化 AppleScript 终极入门手册</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Script Editor.app]]></title>
+    <link href="https://gk0wk.github.io/15735795193541.html"/>
+    <updated>2019-11-13T01:25:19+08:00</updated>
+    <id>https://gk0wk.github.io/15735795193541.html</id>
+    <content type="html"><![CDATA[
+<p>目前可以支持 AppleScript 、 JavaScript 、 Objective-C 三种语言来实现自动化，这里暂时介绍 AppleScript。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>Script Editor 中带有文档库和模板，用起来还是比较方便的。</p>
+
+<h2 id="toc_0">Library</h2>
+
+<p><strong>并不是所有应用程序都可以和 AppleScript 连通，需要应用程序开发者有意地留出一套供给 AppleScript 的接口才可以。</strong>，如何知道某个程序是否支持 AppleScript 以及具体提供了怎样的 API 规范，请使用 ScriptEditor.app 的 Library 来查看程序的字典 Dictionary）：</p>
+
+<ul>
+<li>方法一：菜单 [File] - [Opne Dictionary] 查看所有已知的应用程序字典。</li>
+<li>方法二：将应用程序拖放到<code>Script Editor</code>图标上。</li>
+<li>方法三：
+<ol>
+<li>菜单 [Window] - [Library]</li>
+<li>可以看到已经导入的支持 AppleScript 接口的应用程序的接口文档，双击查看。</li>
+<li>点击 [+] ，选定某个 <code>.app</code> 应用文件，如果支持，文档的字典将被导入；如果不支持，将会提示。</li>
+</ol></li>
+</ul>
+
+<h2 id="toc_1">字典(Dictionary)</h2>
+
+<p>字典是文档接口规范的说明，打开字典后，会出现以下界面：</p>
+
+<p><img src="media/15735795193541/20191112000939.png" alt="字典界面"/></p>
+
+<p>字典上边是三列，和Finder的列视图一样，自左向右展开；选中一项，下半面的文档就会跳到对应的对象的说明上。</p>
+
+<p>先看上三列，</p>
+
+<ul>
+<li>最左边是套件列，列出了该应用字典包含的套件(一般都会包含Standard Suite，里面是一些程序的基本操作例如打开关闭文件、操作程序的窗口等)。</li>
+<li>中间列显示选中的套件的内容，其中包含了若干<code>命令</code>(圆形的 C 图标)和<code>类</code>(方形的 C 图标)。</li>
+<li>最右边的列显示选中的类的内容，包含了若干<code>元素</code>(E图标)和<code>属性</code>(P 图标)。</li>
+</ul>
+
+<p>要理解这些东西是怎样工作的，就应当先明白<a href="15735825376552.html">AppleScript的语言逻辑</a>。</p>
+
+<hr/>
+
+<p>理解过逻辑后，来解释说明文档该如何用。AppleScript具有英语的一些特点，所以字典看起来还真像一本英语字典。</p>
+
+<h3 id="toc_2">动词</h3>
+
+<p>先看”动词“：</p>
+
+<p><img src="media/15735795193541/20191112142040.png" alt="动词"/></p>
+
+<p>单词用法部分，最上面的主体 <strong>make</strong> 肯定要写上，后面相当于是这个动词的“参数”，每一行列出一个参数，<code>:</code>之前的为参数格式说明，<code>:</code>之后的为对参数的说明。</p>
+
+<p>参数有必选参数和可选参数，被<code>[]</code>括起来的是可选参数(使用的时候不加<code>[]</code>)。使用时，参数之间用空格分开。<code>:</code>之前，<strong>粗体</strong>内容按原样写上，非粗体则替换为对应的对象。</p>
+
+<p>可以注意到非粗体部分的名称是不一样的，不同的名称说明可以充当参数的对象是不同的，有这么几种：</p>
+
+<ul>
+<li>数据类型<code>number</code>、<code>text</code>、<code>boolean</code>、<code>date</code>、<code>list</code>、<code>record</code>或者类名：可以使用这些类型的变量或者常量作为参数。</li>
+<li><code>any</code>：可以用任何对象作参数。</li>
+<li><code>type</code>：类型名、类名。</li>
+<li><code>specifier</code>或者<code>xxx specifier</code>：某个对象实例(变量名或者返回值)，<code>xxx</code>是某个类名，代表这个实例应当是某种类型的。</li>
+<li><p>还有一种特殊的，例如 [<strong>saving</strong> yes/no/ask] 是说只能写<code>yes</code>、<code>no</code>和<code>ask</code>三种，这是一种枚举类型的参数，一般枚举参数上会有链接，点击会调到对应的枚举类型上去：</p>
+<p><img src="media/15735795193541/20191112145218.png" alt="枚举说明"/></p></li>
+</ul>
+<br/>
+<h3 id="toc_3">名词</h3>
+
+<p><img src="media/15735795193541/20191112161103.png" alt="名词"/></p>
+
+<p>比较有意思的是第一行方括号中的内容，见过两种：</p>
+
+<ul>
+<li><code>[see also xxx]</code> 是指，这个名词(类)还在其他 Suit 中被定义过，那么下方就会展示另一处定义的内容(箭头所指)；</li>
+<li><code>[inh. xxx]</code> 是指，这个类继承于另外一个类。如果是 <code>[inh. A &gt; B]</code> 就说明该类继承于A类，而A类又继承于B类，那么下方就会展示基类的内容。</li>
+</ul>
+<br/>
+<p><code>元素(ELEMENT)</code>：一个类中的某元素不一定只有一个(从图中的<code>documents</code>和<code>windows</code>的<code>s</code>就可以看出来，毕竟第三列中是<code>document</code>和<code>window</code>)，很好理解， appliction 可以有很多个 window ，每一个都是其元素。</p>
+
+<pre><code class="language-text">* 使用 `(the) count of [元素名]` 确定同类型元素有几个；
+* 使用 `[元素名] [序号(可以是integer变量)]` 来获取某一个元素；`the last of`、`the first of` 也可以，`item xxx of`则是不可以的——因为这不是`item`而是`element`。
+</code></pre>
+<br/>
+<p>具体来看一下 <code>属性(PROPERTIES)</code>：</p>
+
+<ul>
+<li><strong>粗体</strong> 是属性的名称；</li>
+<li>括号内第一项是属性的类型；</li>
+<li>括号内第二项是属性的读写权限；</li>
+<li><code>:</code> 后面是属性的解释。</li>
+</ul>
+
+<h2 id="toc_4">编辑器</h2>
+
+<p>创建脚本、调试这些是基本操作，略。</p>
+
+<p>当你在编辑器内完成输入上面的代码后，按下上面的 <code>Compile</code> 铁锤图标。如果你的语法是正确的话，你所输入的代码会被自动格式化并改变颜色。如果你输入的时候出现了错误，当你编译的时候编辑器会告诉你哪一块出错了，并尝试告诉你它认为错误是什么。下面是编辑器默认的一些颜色分别代表什么，你可以在菜单栏的 [AppleScript Editor] - [Preferences] 里看到并修改。</p>
+
+<p>你的代码成功编译后，再按 <code>Run</code> 图标，会运行脚本。在运行一脚本时，编辑器会告诉你运行的结果是什么，或者什么被返回了。脚本编辑器会将结果显示在下半部分的结果区中。</p>
+
+<hr/>
+
+<h2 id="toc_5">其他窍门</h2>
+
+<ul>
+<li>按下 esc 键，会出现代码补全菜单</li>
+<li>在编辑区点击右键（或按住 control 键再点击左键）呼出上下文菜单：在上下文菜单中我们可以将 AppleScript 语句快速地插入到编辑区中</li>
+</ul>
+
+<h3 id="toc_6">编辑器支持代码补全和缩写：</h3>
+
+<p>你可以输入：</p>
+
+<pre><code class="language-applescript">tell app &quot;Finder&quot;
+end
+</code></pre>
+
+<p>在编译后将被替换为：</p>
+
+<pre><code class="language-applescript">tell application &quot;Finder&quot;
+end tell
+</code></pre>
+
+<p>在编写 AppleScript 脚本时，是不区分大小写的，当然在编译过后也会被替换成正确的大小写形式。</p>
+
+<p>其他例子有：</p>
+
+<ul>
+<li>application 简写为 app</li>
+<li>end tell/repeat/try 简写为 end</li>
+<li>through 简写为 thru</li>
+<li>if 语句 可省略 then</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[B+树(B+ Tree)]]></title>
@@ -634,2798 +1843,6 @@
     <id>https://gk0wk.github.io/15438144922083.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[1.1 初步配置空模板]]></title>
-    <link href="https://gk0wk.github.io/15438144277084.html"/>
-    <updated>2018-12-03T13:20:27+08:00</updated>
-    <id>https://gk0wk.github.io/15438144277084.html</id>
-    <content type="html"><![CDATA[
-<p>一个干净的模板已经是一个健全的维基系统了，但是如果我们还需要更加丰富的功能，或者更换想要的主题的话，就可以添加一些东西。</p>
-
-<p>如果认为现在的空白模板已经够用，那么可以直接跳过看 <a href="15438144922083.html">2.1 TiddlyWiki使用教程</a>。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">简单设定</h2>
-
-<p>打开文档后，大概长这个样子(可能有些不一样，没关系)：</p>
-
-<p><img src="media/15438144277084/15438146117675.jpg" alt=""/></p>
-
-<p>TiddlyWiki是左右分栏设计，如果窗口够窄，侧栏就会跑到上面去(手机上往往会这样)。左边是词条(知识卡片)，右边呢主要是各种辅助功能和导航条等。</p>
-
-<p>先不用管 <code>GettingStarted</code> 页面，我们的任务是造一个足够满意的定制模板，以后使用这个模板就可以。</p>
-
-<h2 id="toc_1">侧栏和工具栏调整</h2>
-
-<p>点击右侧边栏的<code>Tools</code>，选中以下几项：</p>
-
-<ul>
-<li>home</li>
-<li>new tiddler</li>
-<li>import</li>
-<li>save changes</li>
-<li>more</li>
-</ul>
-
-<p>多选的项去掉，我感觉这样摆，放在外面的都是常用的，剩下的点击“更多”也能很方便的找到。</p>
-
-<hr/>
-
-<p>需要中文？点击 <code>more</code> 图标里面的 <code>open control panel</code> ，选择 <code>Plugins</code> - <code>Get more plugins</code> - <code>Open plugin library</code> - <code>languages</code>，找到 <code>Chinese (Simplified)</code>，安装。</p>
-
-<p><img src="media/15438144277084/15438154561672.jpg" alt=""/></p>
-
-<p>随后到这里：<br/>
-<img src="media/15438144277084/15438155207377.jpg" alt=""/></p>
-
-<p>下拉找到 <code>Hello! Current language:</code> 选择。</p>
-
-<p><img src="media/15438144277084/15438155006875.jpg" alt=""/></p>
-
-<p>按提示保存并刷新即可。</p>
-
-<p>TiddlyWiki 是一个“我写我自己”的网页，每次作出更改，需要保存更改，有时候需要刷新才能看到效果。</p>
-
-<h2 id="toc_2">视觉外观</h2>
-
-<p>之后的配置就不讲这么详细了，如何安装插件以及有哪些插件后面都会讲到，这里只说结果。</p>
-
-<h3 id="toc_3">调色板</h3>
-
-<p>改用 <code>Vanilla</code> ，自定义配色以后再说。</p>
-
-<h3 id="toc_4">工具栏</h3>
-
-<p>编辑器工具栏都选。</p>
-
-<p>查看工具栏勾选：</p>
-
-<ul>
-<li>更多</li>
-<li>信息</li>
-<li>导出此条目</li>
-<li>编辑</li>
-<li>关闭</li>
-</ul>
-
-<h3 id="toc_5">主题调整</h3>
-
-<p>侧边栏布局 选 <code>浮动故事，固定侧边栏</code><br/>
-代码字型添加<code>&quot;Source Code Pro&quot;,&quot;Source Code Pro for powerline&quot;</code></p>
-
-<h2 id="toc_6">保存</h2>
-
-<h3 id="toc_7">通用</h3>
-
-<p>设置自动保存。</p>
-
-<h3 id="toc_8">下载保存模块</h3>
-
-<p>允许。</p>
-
-<h3 id="toc_9">TiddlySpot</h3>
-
-<p>输入网址、密码。</p>
-
-<h2 id="toc_10">插件</h2>
-
-<p>安装：</p>
-
-<ul>
-<li>CodeMirror KeyMap: Sublime Text</li>
-<li>CodeMirror Mode: Markdown Highlighting</li>
-<li>Highlighting.js: syntax highlighting 语法高亮</li>
-<li>Markdown parser 让词条编辑可以使用 Markdown</li>
-<li><del>KaTeX: mathematical typography 数学公式输入和排版</del></li>
-<li><a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa">MathJax</a> 不必多说，<a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa#gistcomment-1885438">需要做一些小的修正才能更好使用</a></li>
-<li>tw5-checklist</li>
-<li>ToDoNow 很好的一个</li>
-<li>Listreveal ToDoNow依赖</li>
-<li>Reminders ToDoNow提醒</li>
-<li>EditorCounter &amp; Autosaver 为编辑器添加字数统计和一定字数更改后自动保存 (原生自带了条目修改确认和删除操作时自动保存功能，去设置里开启即可)</li>
-<li>TiddlyMap 这个必须装！记得按照官方的安装教程来，否则容易翻车。</li>
-</ul>
-
-<h2 id="toc_11">成果</h2>
-
-<p><a href="media/15438144277084/empty.html">点这里下载成果</a>，这是一个较大，用于单个胜任复杂工作。较为精简轻便的版本稍后放出。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[1.0 搞到一个空模板并开始使用]]></title>
-    <link href="https://gk0wk.github.io/15438000016364.html"/>
-    <updated>2018-12-03T09:20:01+08:00</updated>
-    <id>https://gk0wk.github.io/15438000016364.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">下载</h2>
-
-<p>去官网下载一个空模板 <code>empty.html</code> 。emmmm没啥好说的。</p>
-
-<p>但是请注意一个普通的浏览器如Chrome，如果直接打开这个文件可能会出现一些js错误，而且在保存的时候会直接变成下载。所以需要使用一定的附加手段。具体有哪些手段，官方文档里有说。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_1">打开</h2>
-
-<p>我们在这里使用的是 <code>TiddlyDesktop.app</code> ，一款桌面端 TiddlyWiki 浏览器，内置 TiddlyWiki 服务。</p>
-
-<p>打开  <code>TiddlyDesktop</code> 图标如下，是一只小猫。 </p>
-
-<p><img src="media/15438000016364/15438087113949.jpg" alt="" class="mw_img_center" style="display: block; clear:both; margin: 0 auto;"/></p>
-
-<p>点击界面上的 <code>Add a TiddlyWiki file</code> 选择刚才的 <code>empty.html</code> 就成功添加了，现在这个界面应该长这样：</p>
-
-<p><img src="media/15438000016364/15438080984972.jpg" alt=""/></p>
-
-<p>对界面做一些说明：</p>
-
-<ul>
-<li><strong>Add a TiddlyWiki file</strong> 导入一个 TiddlyWiki 的文件。</li>
-<li><strong>Add a TiddlyWiki folder</strong> 添加一个包含 TiddlyWiki 的路径(库)，这个功能尚不稳定，大家可以自己试试看。</li>
-<li><strong>Settings</strong> 设置里可以设置备份路径，并且可以进入内部设置路径。</li>
-<li><strong>Help</strong> TiddlyDesktop 的帮助。里面告诉你这个软件内置了服务，可以通过修改配置的方法让网络上的计算机利用浏览器访问打开的 Wiki 文件(需要安装插件)。</li>
-<li><strong>Backstage</strong> TiddlyDesktop 本身也是基于 TiddlyWiki 的，这里可以进入 TiddlyDesktop 的后台进行 Hack 。</li>
-<li><strong>open</strong> 打开。</li>
-<li><strong>reveal</strong> 定位文件位置。</li>
-<li><strong>remove</strong> 删除，只是从库中删除，原文件还在。</li>
-<li><strong>advanced</strong> 高级选项，现在只有文件备份选项。</li>
-</ul>
-
-<p>为了方便管理，我把 <code>TiddlyDesktop</code> 的备份设置改为了</p>
-
-<pre><code class="language-plain">/Users/&lt;myUserName&gt;/Documents/TiddlyWiki_Backups⁩/$filename$_backup/
-</code></pre>
-
-<p>统一放在一块会显得更整齐一些(把 <code>&lt;myUserName&gt;</code> 改成自己的用户名，Windows和Linux上同理)。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[0.1 介绍下 TiddlyWiki]]></title>
-    <link href="https://gk0wk.github.io/15437998674113.html"/>
-    <updated>2018-12-03T09:17:47+08:00</updated>
-    <id>https://gk0wk.github.io/15437998674113.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>TiddlyWiki ，按官方说法是一个「非线性个人 Web 笔记本」。相比其他笔记和 Wiki 系统，其最大的特点之一是程序本体和数据全部都在一个单 html 文件内，与此同时仍然有着非常强大的功能和插件系统。在我看来，管理以文字、代码和数学公式为主的个人知识库， TiddlyWiki 可谓是最好的选择之一。<br/>
-—— <a href="http://im.dimpurr.com/">Dimpurr Cheny</a></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<p>暂时犯懒，不想写这一节了，干脆发一篇别人的博文吧：<br/>
-<a href="http://blog.dimpurr.com/tiddly-wiki/">http://blog.dimpurr.com/tiddly-wiki/</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[0.0 我所使用的个人 Wiki 系统]]></title>
-    <link href="https://gk0wk.github.io/15437986117902.html"/>
-    <updated>2018-12-03T08:56:51+08:00</updated>
-    <id>https://gk0wk.github.io/15437986117902.html</id>
-    <content type="html"><![CDATA[
-<p>从接触电子化知识管理体系开始，我陆续尝试过 OmniOutline+OmniGraffle 、 Evernote 、 OneNote 、 Youdao Note 、 Scrivener 、 MarginNote 、 Old M&amp;C System(MindNode+PDF Expert+Markdown) 、 Notability 、 Notion 等解决方案，但是总有一些不尽人意，而现在逐渐喜欢上了个人 Wiki 这样的解决方案。</p>
-
-<span id="more"></span><!-- more -->
-
-<p>在使用以上的各种方式时遇到了很多问题(需求)：</p>
-
-<ul>
-<li>我需要一个能够稳定存储、同步方便、最好是跨平台编辑和查看的工具。
-<ul>
-<li>很多优秀的软件，虽然真的很牛，但是只在一两个平台上被支持， MarginNote 和 Scrivener 只支持苹果家，Old M&amp;C System 脱离了macOS 也会很不好使用(感觉 macOS 上对 PDF 和 MindMap 的编辑是最丝滑的)。</li>
-<li>一个很理想的解决方案是 OneNote ， 但是这款软件更适合作为课堂笔记本，最好买一个 iPad 或者 Surface 配合手写笔使用，能涂能画能打字能拍照能插文件，做前期的笔记收集，或者后期的媒体资料仓库。但是OneNote没有标签系统，分层也有限制，但最大的硬伤还是同步问题，不挂梯子只能等到天荒地老...</li>
-<li>Scrivener 是一款用于长期写作收集的软件，不是一款知识管理软件，而且只有苹果家。</li>
-<li>DEVONthink 听说很强但不大会用，而且只有苹果家。</li>
-</ul></li>
-<li>这个工具对知识的整理方式应当是多元的、可以相互联系的，可以运用链接、标签、搜索等快速相互关联和搜索，而不会在寻找上浪费时间。
-<ul>
-<li>OmniOutliner 组织方式太单一，有时候知识之间的关联真的不止“主干-分支”那么简单，这是多少层级都无法解决的问题。</li>
-<li>有道云笔记还是当成仓库和收件箱比较好，不吹不黑。</li>
-<li>Notability 最好还是当成一个课堂笔记的工具，还是要转移给别的软件做整理的。</li>
-</ul></li>
-<li>这个软件还需要能存储足够多的东西，形式不必太过丰富但至少能满足需求、具有一定的拓展性，可以定制、<strong>而且易于编辑和重新修改</strong>。
-<ul>
-<li>OmniOutline 是富文本格式，支持的知识形式不大丰富而且修改起来还是很繁琐的。当年写 LaTeX 公式，写错了只好重新打，后来只好把公式代码贴在备注上。更不要说什么思维导图、流程图、代码高亮一类的了，都是手动上色或者利用 OmniGraffle 续命的。其他几款类似于富文本的应用也同理。</li>
-<li>当年甚至还想过用 TeX 来记笔记，后来想想还是不要折磨自己了。同样 Markdown 也有很多不丰富不方便的地方，比如图片存哪的问题——存网上考虑离线使用不方便、存本地乱的一批、转成 base64 文件乱的一批。</li>
-<li>光用思维导图，根本没法做知识仓库，我认为思维导图还是不要去添加太多的文字内容，每一个节点就是一个关键词，这样才能发挥伯赞先生“联系、梳理”的初衷。但是这样，具体知识就只能放在每一个节点的备注里，而备注又是富文本格式，同上。</li>
-</ul></li>
-<li>方便、方便、方便 | 稳定、稳定、稳定</li>
-</ul>
-
-<blockquote>
-<p>在 Wiki 之前我做使用的方案是用 PDF 把每一个知识点做成知识卡片(强烈推荐 PDF Expert )，然后利用 macOS 的 <code>Automator</code> 创建一些工作流并在 <code>Alfred</code> 里增加快捷入口，能够一键以给定的时间戳格式新建知识卡片并存在 iCloud 指定的路径下(另外后来又新增加了 Markdown 格式的知识卡片)。</p>
-
-<p>然后复制这个时间戳到思维导图的对应知识点的备注里，然后用思维导图把每一个知识点关联起来做成一张网图(MindNode 允许一张图里有多个思维树根目录，所以可以被用作一个操作丝滑的节点拓扑联系图软件而不一定非是传统的思维导图)。</p>
-
-<p>这样的话，我看笔记会直接打开这张图看节点，哪个节点不明白就直接去复制时间戳利用 <code>Alfred</code> 快速打开对应的 PDF 知识卡片。</p>
-
-<p>这个思维导图+卡片的思路用起来还是很舒服的，基本上实现了我对知识管理的要求：多元、联系、直观。下面是一个我用这个方法做的微积分笔记的 Map :</p>
-
-<p><img src="media/15437986117902/15438111043191.jpg" alt=""/></p>
-
-<p>通过工作流就可以快速定位卡片：</p>
-
-<p><img src="media/15437986117902/15438113346742.jpg" alt=""/></p>
-</blockquote>
-
-<ul>
-<li>这虽然已经是一个很好很酷的方案了，但是还是有我不满意的地方——如果满意我就不会在寻找了。
-<ul>
-<li>这个方案能很好地解决“节点”的组织问题，而且它足够直观，而且理论上可以连接各种形式的文件(因为连接本身只是一个时间戳，我只需要修改工作流就好)所以足够丰富，而且这个方案利用 MindNode 画的图让我非常满意，<del>拿出去也很有逼格，</del>完成这样一个“艺术品”让我感觉的确对知识的整理和消化又提升了一个境界。</li>
-<li>但是，我没有办法很好的做到“方便”，从思维导图的一个节点到复制时间戳到打开工作流到预览总共需要四步，PDF的没有排版不支持丰富的媒体，修改用 LaTeX 写的公式依旧需要重新再写一遍，而 Markdown 也是同理。完成这样一份笔记还是会消耗很多额外的时间，有时候会显得不值。而在手机上，打开一张知识卡片的成本就更大了。</li>
-<li>我也没有做到“联系”，思维导图只能让我连一层，我没法给知识卡片贴上标签(局部的，不希望用 macOS 的标签，那样会破坏移植性和便携性)，也没办法做到像维基百科那样一个词能调到对应的词条去，顶多里面再放一下另一个卡片的时间戳，然后再做“那四步”。</li>
-<li>这样的体系实际上是臃肿的，实际使用过程中，像上面微积分这样的大型知识图已经变得卡顿，而且有时还会出现无法正常保存的bug。同时，由于数学公式和图表等只能转化成图片，所以体积又进一步增大。而大量的知识卡片也难于管理，同时其实 PDF 做出来的知识卡片，如果不加精修是很不美观的，但是我没有那个时间。</li>
-</ul></li>
-</ul>
-
-<p>基于以上这些原因，虽然这一套系统很让我满意，但是我要是觉得需要一个更好的方案，然后我找到了个人Wiki系统，满足了我的这些需求。</p>
-
-<h2 id="toc_0">比较与结果</h2>
-
-<p>在网上比较了众多的 Wiki 实现方式，最终纠结于以下三个：</p>
-
-<ul>
-<li>TiddlyWiki</li>
-<li>DokuWiki</li>
-<li>MediaWiki</li>
-</ul>
-
-<p>三者的功能都很强大，面向分别为个人-小团体-大群体，功能都很丰富，但是从部署难度和复杂度来讲逐渐增高，但越后者具有越好的协作编辑能力。</p>
-
-<p>其实说实话，如果 TiddlyWiki 不是单文件系统而是分页式的包、可以加载数据库；同时支持历史版本管理和多人协作，我就不必这么纠结了。毕竟 TiddlyWiki 有非常好的便携性、跨平台型和扩展性。但是这暂时是不可以兼得的，或许以后可以参与 TiddlyWiki 的开发。 <a href="https://github.com/Jermolene/TiddlyWiki5">TIddlyWiki5 在 GitHub 上的仓库</a></p>
-
-<p>在 <a href="https://www.wikimatrix.org/">https://www.wikimatrix.org/</a> 可以比较多种 Wiki 系统，找到合适自己的方案。</p>
-
-<p>经过对比和思想斗争之后，我决定暂时割舍 DokuWiki 和 MediaWiki ，先用 TiddlyWiki 构建个人的够我一个人用，以后等到成熟了、需要多人开发的时候去买服务器搭建 DokuWiki / MediaWiki 。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Hugo+Github Page 搭建个人静态博客]]></title>
-    <link href="https://gk0wk.github.io/15423706234911.html"/>
-    <updated>2018-11-16T20:17:03+08:00</updated>
-    <id>https://gk0wk.github.io/15423706234911.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 MWeb+GitHub Page 搭建静态博客 - 上]]></title>
-    <link href="https://gk0wk.github.io/15423704846032.html"/>
-    <updated>2018-11-16T20:14:44+08:00</updated>
-    <id>https://gk0wk.github.io/15423704846032.html</id>
-    <content type="html"><![CDATA[
-<p>之前使用Hugo搭建的博客，但是由于Hugo的模板都不太用的来，插件安装也出了问题，而Hugo本身对Markdown的支持以及对中文文件名的支持都有些奇怪，再加上不太喜欢这种太过零散的博客生成方式，想要一个一体化又易用的工具，所以就选择了MWeb。</p>
-
-<span id="more"></span><!-- more -->
-
-<p>MWeb是2017年大一的时候入手的，当时只是当做一个Markdown编辑器用，后来就慢慢改用VSCode了。不过当时并没有想过建站，也对使用Markdown构建静态博客没有什么概念，所以并没有想过MWeb的真正功用，反而抱怨买的不值emmmmm。</p>
-
-<p>直到之前使用Hugo才对Markdown建站渐渐了解，回头来再看MWeb，真的是有一种“众里寻他千百度，蓦然回首，那人却在灯火阑珊处”的感觉。找了半天，还是回到了最初的地方啊。</p>
-
-<h2 id="toc_0">MWeb的基本使用</h2>
-
-<p>官方教程已经写得很清楚了，我这里在官方 Mweb 2 教程的基础上又加了一些整合成一篇更详(混)细(乱)的教程：</p>
-
-<p><a href="15090833160717.html">Markdown 语法和 MWeb 写作使用说明</a></p>
-
-<h2 id="toc_1">开始建站</h2>
-
-<h2 id="toc_2">首先我们需要一个GitHub Page，再首先我们需要GitHub账号，再再首先我们需要学会使用git。这些不在本文的讲述范围内，可以参考以下文章：</h2>
-
-<p><a href="https://blog.csdn.net/baidu_25464429/article/details/80805237">使用 github pages, 快速部署你的静态网页</a></p>
-
-<p>这篇文章，主要记录的是自己的静态网页搭建过程，供自己和他人参考，而更多的教程请参考官方。</p>
-
-<p>我们首先要在文档库模式下给博客建立一个文件夹</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[物理实验步骤]]></title>
-    <link href="https://gk0wk.github.io/15423332361636.html"/>
-    <updated>2018-11-16T09:53:56+08:00</updated>
-    <id>https://gk0wk.github.io/15423332361636.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">课前预习报告</h2>
-
-<ul>
-<li>写好实验目的、主要原理、公式（要注明式中各量的意义）、电路图或光路图及关键步骤。</li>
-<li>在草表一栏画好原始数据表格。</li>
-</ul>
-
-<blockquote>
-<p>预习报告要求字迹端正，简明扼要，重点明确，切忌照抄教材，未写预习报告者不能进行实验。</p>
-
-<blockquote>
-<p>预习报告成绩为20分，其中原理和内容占主要，原理10分，内容和其他10分。</p>
-
-<ol>
-<li>原理中缺少有关公式和说明扣5分；</li>
-<li>无主要的图示扣5分；</li>
-<li>全文抄袭教材扣5分；</li>
-<li>抄袭别人的内容分别不给分。</li>
-</ol>
-</blockquote>
-</blockquote>
-
-<p><span id="more"></span><!-- more --></p>
-
-<h2 id="toc_1">实验</h2>
-
-<p>到实验室在动手前先了解仪器的使用方法和规则 尤其是，人身和仪器的安全。实验中要仔细观察和记录。分析实验过程的合理性与规律。</p>
-
-<ul>
-<li>阅读有关资料、调整仪器、观察现象、记录数据。在此过程中要认真和事实求是地做好实验，重视自己的实验能力的培养。</li>
-<li>强调<strong>不可用铅笔记录数据</strong>。原始数据必须记录在草表内。数据完整、仪器还原后，经老师签字后方才有效。</li>
-</ul>
-
-<blockquote>
-<p>学生要认真作好实验的整体布局，仔细阅读有关仪器使用说明书，正确使用和调节仪器设备，操作规范、读数正确、实验结束后数据经老师签字、整理好仪器，方可离开实验室。</p>
-
-<blockquote>
-<p>实验操作分为30分</p>
-
-<ol>
-<li>违反操作规程。损坏仪器以至无法实验者30分不给；</li>
-<li>抄袭和伪造数据30分不给；</li>
-<li>操作中对仪器故障能自己排除，可适当加分；</li>
-<li>对仪器误差或缺陷有自己的见解和提出改进的意见可加分。</li>
-</ol>
-
-<p>上述两项加分不超过10分</p>
-</blockquote>
-</blockquote>
-
-<h2 id="toc_2">完成报告</h2>
-
-<p>认真写好实验报告。它是你这次实验的总结。要求字迹清楚、图表正确，完整、误差分析定量、有效数字正确等。</p>
-
-<blockquote>
-<p>评分办法：这部分总分50分。其中数据处理和结果30分，误差分析10分，实验心得及思考题解答10分。</p>
-
-<ol>
-<li>结果有效数字严重错误扣5分；</li>
-<li>不确定度计算及表示错误扣5分；</li>
-<li>结果计算错误或违背了理论值和公认值（非仪器本身引起的）扣20分；</li>
-<li>抄袭和伪造数据与结果者扣30分。</li>
-</ol>
-
-<p>下述情况可加分：</p>
-
-<ol>
-<li>对产生的误差分析合理，有独到的见解；</li>
-<li>对整个实验提出改进意见和合理人建议；</li>
-<li>报告整体规范，书写整洁、清楚。以上加分每次不超出10分。</li>
-</ol>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[数据处理]]></title>
-    <link href="https://gk0wk.github.io/15423332269346.html"/>
-    <updated>2018-11-16T09:53:46+08:00</updated>
-    <id>https://gk0wk.github.io/15423332269346.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">数据整理的重要步骤 —— 列表法</h2>
-
-<p>在原始数据记录以及整理数据时，都要进行正规列表。将各量的关系有序地排列成表格形式。既有利于一目了然地表示各物理量之间的关系，又便于发现实验中的问题。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_1">数据处理的表格法 —— 逐差法</h2>
-
-<p>在有些实验中，我们连续取得一些数据。如果依次相减，就会发现中间许多数据并未发挥作用，而影响到实验的可靠性。</p>
-
-<p>例如：金属杨氏弹性模量实验和等厚干涉的牛顿环实验。</p>
-
-<p>在金属杨氏弹性模量实验中，连续测量钢丝的伸长位置为： \(A_1, A_2, A_3, A_4, A_5, A_6, A_7, A_8, A_9, A_{10}\) 10个数据。若为求钢丝的伸长，依次相减，则伸长量\(\Delta A\)有：</p>
-
-<p>\[\Delta A=\frac{(A_2-A_1)+(A_3-A_2)+\cdots +(A_{10}-A_9)}{9}=\frac{A_{10}-A_1}{9}\]</p>
-
-<p>中间各次测量均未起到作用。为发挥多次测量的优越性，将数据分成前后两组：</p>
-
-<p>\[A_1, A_2, A_3, A_4, A_5\]<br/>
-\[A_6, A_7, A_8, A_9, A_{10}\]</p>
-
-<p>将这两组对应相减，得出5组，且每一组相减间距是原来临近间距的5倍，这样有：</p>
-
-<p>\[\Delta A=\frac{(A_6-A_1)+(A_7-A_2)+\cdots +(A_{10}-A_5)}{5\times 5}\]</p>
-
-<p>这种处理数据的方法称为 <strong>逐差法</strong>。此法的优点是充分利用所测的数据，有利于减少测量的随机误差和仪器带来的误差。是实验中常用的处理数据的方法。为了直观和便于处理，也常用列表格方法来表示。</p>
-
-<h2 id="toc_2">作图法</h2>
-
-<h3 id="toc_3">图示法</h3>
-
-<p>是用图形来表达物理量的变化。如静电场模拟实验中就是采用此法。</p>
-
-<p>从图示法中，有时也能得出定量的结果。</p>
-
-<h3 id="toc_4">图解法处理实验数据</h3>
-
-<p>图解法可形象、直观地显示出物理量之间的函数关系，也可用来求某些物理参数，因此它是一种重要的数据处理方法。作图时要<strong>先整理出数据表格</strong>，并要用<strong>坐标纸作图</strong>。</p>
-
-<p>作图六点要求：</p>
-
-<ol>
-<li>选择合适的坐标分度值，确定坐标纸的大小坐标分度值的选取应能反映测量值的有效位数，一般以 1～2mm对应于测量仪表的最小分度值或对应于测量值的次末位数）。</li>
-<li>标明坐标轴：用粗实线画坐标轴，用箭头标轴方向，标坐标轴的名称或符号、单位,再按顺序标出坐标轴整分格上的量值。</li>
-<li>标实验点：实验点可用“+”、“*”、“。”等符号标出（同一坐标系下不同曲线用不同的符号）。</li>
-<li>连成图线：用直尺、曲线板等把点连成直线、光滑曲线。一般不强求直线或曲线通过每个实验点，应使图线两边的实验点与图线最为接近且分布大体均匀。图线正穿过实验点时可以在点处断开。</li>
-<li>标出图线特征：在图上空白位置标明实验条件或从图上得出的某些参数。利用所绘直线可给出被测电阻R大小：从所绘直线上读取两点 A、B 的坐标就可求出 R 值。</li>
-<li>标出图名：在图线下方或空白位置写出图线的名称及某些必要的说明。</li>
-</ol>
-
-<p><img src="media/15423332269346/31.png" alt="31" style="width:500px;"/></p>
-
-<p>注意问题：</p>
-
-<ul>
-<li>曲线太粗，不均匀，不光滑。应该用直尺、曲线板等工具把实验点连成光滑、均匀的细实线。</li>
-<li>横轴坐标分度选取不当。横轴以3 cm 代表1 V，使作图和读图都很困难。实际在选择坐标分度值时，应既满足有效数字的要求又便于作图和读图，一般以1 mm 代表的量值是10的整数次幂或是其2倍或5倍。</li>
-<li>图纸使用不当。实际作图时，坐标原点的读数可以不从零开始。</li>
-</ul>
-
-<h3 id="toc_5">数据的直线拟合(最小二乘法)</h3>
-
-<p>设此两物理量 x、y 满足线性关系，且假定实验误差主要出现在\(y_i\)上，设拟合直线公式为 y =f(x)=a+bx，当所测各yi值与拟合直线上各估计值 \(f(x_i)=a+bx_i\)之间偏差的平方和最小，即</p>
-
-<p>\[s=\sum\left[y_i-f(x_i)\right]^2=\sum\left[y_i-(a+bx_i)\right]^2\rightarrow min\]</p>
-
-<p>时，所得拟合公式即为最佳经验公式。据此有</p>
-
-<p>\[\frac{\partial s}{\partial a}=-2\sum(y_i-a-bx_i)=0,\quad \frac{\partial s}{\partial b}=-2\sum(y_i-a-bx_i)x_i=0\]</p>
-
-<p>\[\therefore \quad a=\frac{\sum x_iy_i\sum x_i -\sum y_i\sum x_i^2}{(\sum x_i)^2-n\sum x_i^2},\quad b=\frac{\sum x_i\sum y_i -n\sum x_iy_i}{(\sum x_i)^2-n\sum x_i^2}\]</p>
-
-<p>相关系数r：最小二乘法处理数据除给出a、b外，还应给出相关系数r，r定义为:</p>
-
-<p>\[r\frac{\sum(x_i-\overline{x})-\sum(y_i-\overline{y})}{\sqrt{\sum(x_i-\overline{x})^2\sum(y_i-\overline{y})^2}},\qquad \overline{x}=\frac{\sum x_i}{n},\quad y=\frac{\sum y_i}{n}\]</p>
-
-<p>r表示两变量之间的函数关系与线性的符合程度，\(r\in[-1，1]\)。</p>
-
-<ul>
-<li>\(|r|\rightarrow 1\)，x、y间线性关系好;</li>
-<li>\(|r|\rightarrow 0\)，x、y间无线性关系，拟合无意义。</li>
-</ul>
-
-<p>物理实验中一般要求r绝对值达到0.999以上。</p>
-
-<blockquote>
-<p>用计算机Excel 程序中的 intercept、slope、correl 函数也可直接求得 a、b、r</p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[物理实验的误差和不确定度 - 下]]></title>
-    <link href="https://gk0wk.github.io/15423332157827.html"/>
-    <updated>2018-11-16T09:53:35+08:00</updated>
-    <id>https://gk0wk.github.io/15423332157827.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">直接测量的标准不确定度 \(u\) —— 测量工具读数方法</h2>
-
-<blockquote>
-<p>直接测量量（原始数据）的读数应反映仪器的精确度</p>
-</blockquote>
-
-<ul>
-<li>游标类器具(游标卡尺、分光计度盘、大气压计等)：读至游标最小分度的整数倍，即不需估读。</li>
-<li>数显仪表及有十进步式标度盘的仪表(电阻箱、电桥、电位差计、数字电压表等)：一般直接读取仪表的显示值。</li>
-<li>指针式仪表及其它器具(螺旋测微器、标尺等)，读数时估读到仪器最小分度的1/2～1/10，或使估读间隔不大于仪器基本误差限的1/5～1/3。</li>
-</ul>
-
-<p>注意：<strong>注意指针指在整刻度线上时读数的有效位数——末尾的0不可以省略！</strong></p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_1">间接测量的合成标准不确定度 \(u_C\)</h2>
-
-<blockquote>
-<p>间接测量是指利用某种已知的函数关系从直接测量量来得到待测量量的测量。</p>
-</blockquote>
-
-<p>设间接被测量量y与诸直接测量量 \(x_i (i=1,2,\dots ,n)\) 由函数f 来确定：\(y=f(x_1,x_2,\dots ,x_n)\)<br/>
-用诸不确定度\(u(x_i)\)代替微分\(dx_i\), 有<br/>
-\[u_C=\sqrt{\sum_{i=1}^n\left[\frac{\partial f}{\partial x_i}u(x_i)\right]^2}\]<br/>
-\[\frac{u_C}{y}=\sqrt{\sum_{i=1}^n\left[\frac{\partial \ln f}{\partial x_i}\right]^2\left[u(x_i)\right]^2}\]<br/>
-前者适用于和差形式的函数，后者适用于积商形式的函数。</p>
-
-<hr/>
-
-<p>例：</p>
-
-<blockquote>
-<p>设有一圆环，其外径为\(\phi_外=9.800\pm 0.005mm\)，内径为\(\phi_内=4.500\pm 0.005mm\)，高度\(h=5.000\pm 0.005mm\)，求环的体积V和不确定度。</p>
-</blockquote>
-
-<p>\[V=\frac{\pi}{4}(\phi_外^2-\phi_内^2)h=2.976\times 10^2 mm^3\]<br/>
-\[\frac{\partial \ln V}{\partial \phi_外}=\frac{2\times 9.800}{9.800^2 - 4.500^2}\]<br/>
-\[\frac{\partial \ln V}{\partial \phi_内}=\frac{2\times 4.500}{9.800^2 - 4.500^2}\]<br/>
-\[\frac{\partial \ln V}{\partial V}=\frac{1}{V}=\frac{1}{5.000}\]</p>
-
-<p>\[\frac{\Delta V}{V}=\sqrt{\left(\frac{\partial \ln V}{\partial \phi_外}\Delta\phi_外\right)^2+\left(\frac{\partial \ln V}{\partial \phi_内}\Delta\phi_内\right)^2+\left(\frac{\partial \ln V}{\partial V}\Delta h\right)^2}=0.55\%\]</p>
-
-<p>\[\Delta V=V\times \frac{\Delta V}{V}\approx 2 mm^3\]</p>
-
-<p>因此，环的体积为 \(V=(2.98\pm 0.02)\times 10^2 mm^3\)</p>
-
-<h2 id="toc_2">有效数字表示法及运算规则</h2>
-
-<p>在实验中我们所测的被测量都是含有不确定度的数值，对这些数值不能任意取舍，要正确地反映出测量值的准确度。所以在记录数据、计算以及书写测量结果时，应根据测量误差或实验结果的不确定度来确定究竟应取几位有效位数。</p>
-
-<ul>
-<li>作为一个通用规定，<strong>测量值只能写到也应该写到开始有误差的那一位到两位</strong>。其后的数字按“四舍六进五凑双”法则（即后面的数字是四及以下就舍掉，是六及以上就进一，遇五若前面是奇数就进一，最后一位就变成是偶数，若前面已是偶数，则舍掉）取舍。</li>
-<li>有效数字的位数多少直接反映测量的准确度。有效位数越多，表明测量的准确度越高。</li>
-<li>有效数值书写时应注意：有效数值的位数与小数点位置无关。也不因使用的单位不同而改变。<br/>
-例如：重力加速度某人测量值为\(980cm/s^2\), 改写单位为\(m/s^2\)，仍为三位有效数字，即\(9.80m/s^2(\neq 9.8m/s^2 注意0不可随意添减)\)。</li>
-<li>在运算过程中的有效数字取舍，一般遵循：<strong>加减运算的结果以参与运算的末位最高的数为准；乘除则以有效数字最少的数为准，有时可比其多取一位。</strong></li>
-</ul>
-
-<h2 id="toc_3">数值书写的要求</h2>
-
-<ul>
-<li>有效数字的 <strong>位数</strong>是由合成不确定度来确定。测量值的 <strong>最后一位应与不确定度的最后一位对齐</strong>。一般地，总不确定度只取一位或二位，不可多取。例如\(S=(2.35\pm 0.03)cm^2\)。</li>
-<li>为方便起见，对较大或较小的数值，常采用科学记数法，即使用\(10^n\)的形式，例如重力加速度可写成\(9.80\times 10^{-3}km/s^2\)；阿伏加德罗常数\(6.02214199\times 10^{23}/mol\)等等。</li>
-<li>结果是由 <strong>间接测量</strong>得到，其有效数字由算出结果的 <strong>不确定度</strong>来确定。在没有给出各数值的不确定度时，数值的四则运算，一般地由其中有效数字位数最少的决定。</li>
-<li>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
-\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</li>
-</ul>
-
-<blockquote>
-<ul>
-<li>E 是测量量</li>
-<li>1.89 是测量量值</li>
-<li>±0.08 是不确定度(误差)</li>
-<li>最后的是测量值单位</li>
-</ul>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[物理实验的误差和不确定度 - 上]]></title>
-    <link href="https://gk0wk.github.io/15423331812230.html"/>
-    <updated>2018-11-16T09:53:01+08:00</updated>
-    <id>https://gk0wk.github.io/15423331812230.html</id>
-    <content type="html"><![CDATA[
-<p>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
-\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</p>
-
-<ul>
-<li>E 是测量量</li>
-<li>1.89 是测量量值</li>
-<li>±0.08 是不确定度(误差)</li>
-<li>最后的是测量值单位</li>
-</ul>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h2 id="toc_0">误差和不确定度</h2>
-
-<p>不确定度是对测量结果的可靠性予以标度。测量不确定度表征被测量的真值所处量值范围的评定。它按某一置信概率给出真值可能落入的区间。它可以是标准差或其倍数，或是说明了置信水准的区间的半宽。它不是具体的真误差，它只是以参数形式定量表示了无法修正的那部分误差范围。它来源于偶然效应和系统效应的不完善修正，是用于表征合理赋予的被测量值的分散性参数。不确定度按其获得方法分为A、B两类评定分量。A类评定分量是通过观测列统计分析作出的不确定度评定，B类评定分量是依据经验或其他信息进行估计，并假定存在近似的“标准偏差”所表征的不确定度分量。</p>
-
-<p>测量不确定度是无符号的参数，用标准差或标准差的倍数或置信区间的半宽表示，由人们根据实验、资料、经验等信息进行评定，可以通过A，B两类评定方法定量确定;</p>
-
-<p>测量不确定度由人们经过分析和评定得到，因而与人们对被测量、影响量及测量过程的认识有关;</p>
-
-<p>“不确定度”一词本身隐含为一种可估计的值，它不是指具体的、确切的误差值，虽可估计，但却不能用以修正量值，只可在已修正测量结果的不确定度中考虑修正不完善而引入的不确定度;</p>
-
-<hr/>
-
-<p>误差多数情况下是指测量误差，<strong>它的传统定义是测量结果与被测量真值之差</strong>。通常可分为两类：系统误差和偶然误差。误差是客观存在的，它应该是一个确定的值，但由于在绝大多数情况下，真值是不知道的，所以真误差也无法准确知道。我们只是在特定的条件下寻求最佳的真值近似值，并称之为约定真值。</p>
-
-<p>测量误差为有正号或负号的量值，其值为测量结果减去被测量的真值，由于真值未知，往往不能准确得到，当用约定真值代替真值时，只可得到其估计值。</p>
-
-<p>测量误差是客观存在的，不受外界因素的影响，不以人的认识程度而改变;</p>
-
-<p>而系统误差的估计值如果已知则可以对测量结果进行修正，得到已修正的测量结果。</p>
-
-<h2 id="toc_1">误差：<em>测量值-真值</em></h2>
-
-<p>特点：普遍存在、小量<br/>
-分类：</p>
-
-<ul>
-<li>系统误差：对同一被测量多次测量的过程中，绝对值和符号保持恒定或以可预知方式变化的测量误差的分量
-<ul>
-<li>已定系统误差：例如：电表、读数显微镜的零位误差等此项可以也必须修正。</li>
-<li>未定系统误差：已知存在于某个范围，而不知具体数值的系统误差。例如：游标卡尺的允差。</li>
-</ul></li>
-<li>随机误差：对同一被测量多次测量的过程中，每次测量值相对于真值有一个无规则的涨落(大小、方向)的误差分量
-<ul>
-<li>特点一：小误差出现的概率比大误差出现的概率大</li>
-<li>特点二：多次测量时分布对称，具有抵偿性 —— <strong>多次测量取平均有利于消除随机误差</strong></li>
-</ul></li>
-<li>表示：
-<ul>
-<li>绝对误差：测量结果 - 被测量的真值(理论值)</li>
-<li>相对误差：\(E=\frac{绝对误差}{被测量的真值(理论值)}\times 100\%\)</li>
-</ul></li>
-<li>产生原因：仪器、方法、环境、个人主观、对象本身</li>
-</ul>
-
-<h3 id="toc_2">随机变量的统计规律——正态分布</h3>
-
-<p>\[\rho(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}},\ x\in R\]</p>
-
-<p>μ 表示 x 出现概率最大的值，消除系统误差后称为 <strong>数学期望值</strong>。通常就可以得到 x 的真值：</p>
-
-<p>\[ \mu =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i \]</p>
-
-<p>σ称为 <strong>标准差</strong>，决定了线型的宽窄。σ越大，正态曲线就越平坦它表征了测量值的分散程度:</p>
-
-<p>\[\sigma =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n}\sum_{i=1}^n\left(x_i-\mu\right)^2}\]</p>
-
-<h2 id="toc_3">不确定度</h2>
-
-<p>定义：不确定度表示由于测量误差存在而对被测量值不能确定的程度。不确定度是一定概率下的 <strong>误差限值</strong>。</p>
-
-<p>不确定度反映了可能存在的误差分布范围，即随误差分量和未定系统误差的联合分布范围。<br/>
-由于真值的不可知，误差一般是不能计算的，它可正、可负也可能十分接近零；而不确定度总是不为零的正值，是可以具体评定的。</p>
-
-<h3 id="toc_4">分类</h3>
-
-<ul>
-<li>由随机效应引入的不确定度分量 —— A类分量\(u_A\)，多次重复测量时与随机误差有关的分量；<br/>
-可用统计方法评定的不确定度部分</li>
-<li>由系统效应引入的不确定度分量 —— B类分量\(u_B\)，与未定系统误差有关的分量。<br/>
-要用其他方法（非统计方法）评定的不确定度部分</li>
-</ul>
-
-<p>这两类分量在相同置信概率下用方和根方法合成总不确定度：</p>
-
-<p>\[u=\sqrt{u_A^2+u_B^2}\]</p>
-
-<p>在具体使用中，测量不确定度又有三种不同的表述</p>
-
-<ul>
-<li>直接测量的标准不确定度u(standard ncertainty)</li>
-<li>间接测量的合成标准不确定度\(u_C\) (combined standard uncertainty)</li>
-<li>扩展不确定度U(expanded uncertainty)</li>
-</ul>
-
-<h2 id="toc_5">总结：测量结果的不确定性和误差分析</h2>
-
-<ol>
-<li>首先有一系列值 \(x_1 \sim x_n\)</li>
-<li>然后找一个最佳估计值\(\overline{x}\)：<br/>
-\[\overline{x} =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i\]</li>
-<li><p>按贝塞公式求出分散性\(s\)(<strong>单次测量的标准偏差</strong>)：<br/>
-\[s(x) =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p>
-<ul>
-<li>s大，表示测得值很分散，随机误差分布范围宽，测量的精密度低；</li>
-<li>s小，表示测得值很密集，随机误差分布范围窄，测量的精密度高；<br/>
-&gt; 其实可以发现，这里用\(\overline{x}\)取代真实值\(\mu\)，毕竟真值是测不出来的，所以上述公式其实并不是算误差，而是不确定度， <strong>不确定度是一个误差存在的范围</strong>。</li>
-</ul></li>
-<li><p>对算术平均值为结果时，<strong>平均值的标准偏差</strong>应为：<br/>
-\[s(\overline{x})=\frac{s(\overline{x})}{\sqrt{n}} =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p></li>
-<li><p>当 \(5 ＜ n\le 10\)，置信概率为95%时，可简化认为\(u_A\approx s\).<br/>
-根据使用仪器得出\(u_B=\Delta_仪\).<br/>
-由\(u_A\)、\(u_B\)合成总不确定度  \(u=\sqrt{u_A^2+u_B^2}\)</p></li>
-<li><p>给出直接测量的最后结果 \(x=\overline{x}\pm u\)</p></li>
-</ol>
-
-<hr/>
-
-<h3 id="toc_6">例</h3>
-
-<blockquote>
-<p>用螺旋测微计测某一钢丝的直径，6次测量值yi分别为：0.249,0.250, 0.247, 0.251, 0.253, 0.250; 同时读得螺旋测微计的零位x0为：0.004, 单位mm，已知螺旋测微计的仪器误差为Δ仪=0.004mm，请给出完整的测量结果。</p>
-</blockquote>
-
-<p>解：</p>
-
-<ul>
-<li>测得值的最佳估计值为<br/>
-\[x=\overline{x}-x_0=0.250-0.004=0.246mm\]</li>
-<li>测量列的标准偏差<br/>
-\[s(x)=\sqrt{\frac{1}{6-1}\left[\sum^6_{k=1}(x_k-\overline{x})^2\right]}=0.002mm\]</li>
-<li>测量次数n=6，可近似有<br/>
-\[u=\sqrt{u_A^2+u_B^2}\approx \sqrt{s(\overline{x})^2+\Delta_仪^2}=\sqrt{0.002^2+0.004^2}\approx 0.004mm\]</li>
-<li>测量结果为<br/>
-\[x=0.246\pm 0.004mm\]</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[虚拟内存机制和TLB]]></title>
-    <link href="https://gk0wk.github.io/15346760576204.html"/>
-    <updated>2018-08-19T18:54:17+08:00</updated>
-    <id>https://gk0wk.github.io/15346760576204.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>Assume: 32位操作系统，32位寻址总线宽度 → 4G线性空间</p>
-</blockquote>
-
-<h2 id="toc_0">地址转化</h2>
-
-<p>地址转化的全过程可以用以下这张图来概括：</p>
-
-<p><img src="media/15346760576204/OG.png" alt="OG"/></p>
-
-<p>以下是具体步骤介绍。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_1">1. 逻辑地址 → 线性地址 (段式内存管理，Intel早期策略的保留)</h2>
-
-<ul>
-<li><p>段内偏移地址(32位)</p></li>
-<li><p>段选择符：16位长的序列，是索引值，定位段描述符；结构：<br/>
-<img src="media/15346760576204/2.png" alt="#2"/></p>
-<ul>
-<li>高13位为表内索引号 —— 但注意由于GDT第一项留空，所以索引要先加1；</li>
-<li>而2位为TI表指示器，0是指GDT，1是指LDT；</li>
-<li>0、1位是RPL请求者特权级，00最高，11最低 —— 在x86保护模式下修改寄存器是系统之灵，必须有对应的权限才能修改(当前执行权限和段寄存器中(被修改的)的RPL均不低于目标段的RPL)</li>
-</ul></li>
-<li><p>段描述符：8x8=64位长的结构，用来描述一个段的各种属性。结构：<br/>
-<img src="media/15346760576204/1.png" alt="#1"/></p>
-<ul>
-<li>0、1字节+6字节低4位(20位) 段边界/段长度：最大1MB或者4G(看粒度位的单位)</li>
-<li>2、3、4、7字节(32位) 段基址：4G线性地址的任意位置(不一定非要被16整除)</li>
-<li>6、7字节的奇怪设计是为了兼容80286(24位地址总线)</li>
-<li>剩下的那些是段属性，详见<code>20180819143434</code></li>
-</ul></li>
-<li><p>段描述表：多任务操作系统中，含有多个任务，而每个人物都有多个段，其段描述符存于段描述表中。<br/>
-IA-32处理器有3个段描述表：GDT、LDT和IDT。</p>
-<ul>
-<li>GDT(Global Descripter Table) 全局段描述符表：一个系统一般只有一个GDT，含有每一个任务都可以访问的段；通常包含操作系统所使用的代码段、数据段和堆栈段，GDT同时包含各进程LDT数据段项，以及进程间通讯所需要的段。<br/>
-GDTR是CPU提供的寄存器，存储GDT的位置和边界；在32位模式下RGDT有48位长(高32位基地址+低16位边界)，在32e模式下有80位长(高64位基地址+低16位边界)。<br/>
-GDT的第一个表项留空不用，是空描述符，所以索引号要加1。<br/>
-GDT最多128项。</li>
-<li>LDT(Local Descripter Table) 局部段描述符表：16位长，属于某个进程。一个进程一个LDT，对应有RLDT寄存器，进程切换时RLDT改变。<br/>
-RLDT和RGDT不一样，RLDT是一个索引值而不是实际指向，指向GDT中某一个LDT描述项。所以如果要获取LDT中的某一项，先要访问GDT找到对应LDT，再找到LDT中的一项。<br/>
-编译程序时，程序内赋予了虚拟页号。在程序运行时，通过对应LDT转译成物理地址。故虚拟页号是局部性的、不同进程的页号会有冲突。<br/>
-LDT没有空选择子。</li>
-<li>IDT(Interrupt Descripter Table) 中断段描述符表；一个系统一般也只有一个。</li>
-<li>以下这个图能做一点解释：
-<img src="media/15346760576204/7.png" alt="#7"/></li>
-</ul></li>
-</ul>
-
-<h2 id="toc_2">2. 线性地址 → 物理地址 (页式内存管理)</h2>
-
-<p>这一步由CPU的页式管理单元来负责转换。——MMU(内存管理单元)。</p>
-
-<ul>
-<li><p>线性地址可以拆分为三部分(或者两部分)：<br/>
-<img src="media/15346760576204/3.png" alt="#3"/></p></li>
-<li><p>页(Page)：线性地址被划分为大小一致的若干内存区域，其对应映射到大小相同的与物理空间区域页框(Frame)上。这个映射不一定是连贯而有序的。</p></li>
-<li><p>CR3：页目录基址寄存器。对于每一个进程，CR3的内容不同(有点像RLDT)，页目录基址也不同，线性地址-物理地址的映射也不同。</p></li>
-<li><p>页目录：占用一个4kb的内存页，最多存储1024个页目录表项(PDE)，一个PDE有4字节。在没启用PAE时，有两种PDE，规格不同。</p></li>
-<li><p>页目录表项(PDE)：每个程序有多个页表，即拥有多个PDE。PDE的结构如下：<br/>
-<img src="media/15346760576204/4.png" alt="#4"/><br/>
-12~31位(20位)表示页表起始物理地址的高20位(页表基址低12位为0，即一定以4kb对齐)。</p></li>
-<li><p>页表：一个页表占4kb的内存页，最多存储1024个页表项(PTE)，一个PTE是4字节。页表的基址是4kb对齐的，低12位是0。</p></li>
-</ul>
-
-<p>采用对页表项的二级管理模式(也目录→页表→页)能够节约空间。因为不存在的页表就可以不分配空间，并且对于Windows来说只有一级页表才会存在主存中，二级可以存在辅存中——不过Linux中它们都常驻主存。</p>
-
-<p>一些CPU会提供更多级的架构，如三级、四级。Linux中，有对应的高层次抽象，提供了一个四层页管理架构：<br/>
-<img src="media/15346760576204/6.png" alt="#6"/><br/>
-把中间的某几个定为长度为0，就可以调整架构级数。如“四化二”：某地址0x08147258，对应的PUD、PMD里只有一个表项为PUD→PMD，PMD→PT；划分的时候，PGD=0000100000，PUD=PMD=0，PT=0101000111.</p>
-
-<h2 id="toc_3">3. TLB (转换检测缓冲区、快表、转译后被缓冲区)</h2>
-
-<p>处理器中，一个具有并行朝赵能力的特殊高速缓存器，存储最近访问过的一些页表项(时空局部性原理，减少页映射的内存访问次数)。</p>
-
-<p>TLB较贵，通常能够存放16~512个页表项。</p>
-
-<ul>
-<li>TLB命中：直接取出对应的页表项</li>
-<li><p>TLB缺失：先淘汰TLB中的某一项(TLB替换策略，一些算法，可以由硬件或软件来实现)</p>
-<ul>
-<li>硬件处理TLB Miss：CPU会遍历页表，找到正确的PTE；如果没有找到，CPU就会发起一个页错误并将控制权交给操作系统。</li>
-<li>软件处理TLB Miss：CPU直接发出未命中错误，让操作系统来处理。</li>
-</ul></li>
-<li><p>脏记录：当TLB中某个PTE项失效(如切换进程、进程退出、虚拟页换出到磁盘)，PTE标记为不存在，此时映射已经不成立了。<br/>
-操作系统要保证即时刷新掉这些脏记录，不同的CPU有不同的刷新TLB方法，但每次都完全刷新TLB会很慢，所以现在有一些策略，扩展对一个PTE的描述(如针对某个进程、空间的标识，如果目前进程与PTE相关，就会忽略掉)，这样可以让多个进程同时共存TLB</p></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Markdown 语法和 MWeb 写作使用说明]]></title>
-    <link href="https://gk0wk.github.io/15090833160717.html"/>
-    <updated>2017-10-27T13:48:36+08:00</updated>
-    <id>https://gk0wk.github.io/15090833160717.html</id>
-    <content type="html"><![CDATA[
-<p>本文在 <code>Mweb 2</code> 原有教程的基础上，又添加了其他教程的内容，结合形成了一个相对更全面(也更啰嗦)的 MWeb Markdown 使用教程/参考书。为的是可以让自己更好地使用 MWeb+Markdown 写博客。当然也可以单纯用来作为 Markdown 教程，只是一些功能只有 MWeb 能用就是了。</p>
-
-<span id="more"></span><!-- more -->
-
-<p><img src="media/15090833160717/15539307903780.jpg" alt="" class="mw_img_center" style="display: block; clear:both; margin: 0 auto;"/></p>
-
-<ul>
-<li>
-<a href="#toc_0">准备部分</a>
-<ul>
-<li>
-<a href="#toc_1">欢迎使用 MWeb</a>
-</li>
-<li>
-<a href="#toc_2">需要您重点注意的</a>
-</li>
-<li>
-<a href="#toc_3">Markdown 的设计哲学</a>
-<ul>
-<li>
-<a href="#toc_4">Markdown兼容HTML</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">本文约定</a>
-</li>
-<li>
-<a href="#toc_6">Cheatsheet</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_7">基础部分</a>
-<ul>
-<li>
-<a href="#toc_8">标题</a>
-</li>
-<li>
-<a href="#toc_9">强调</a>
-</li>
-<li>
-<a href="#toc_10">段落和换行</a>
-</li>
-<li>
-<a href="#toc_11">分隔线</a>
-</li>
-<li>
-<a href="#toc_12">列表</a>
-<ul>
-<li>
-<a href="#toc_13">无序列表</a>
-</li>
-<li>
-<a href="#toc_14">有序列表</a>
-</li>
-<li>
-<a href="#toc_15">列表的段落缩进</a>
-</li>
-<li>
-<a href="#toc_16">任务列表（Task lists）</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_17">图片</a>
-</li>
-<li>
-<a href="#toc_18">链接</a>
-</li>
-<li>
-<a href="#toc_19">自动链接</a>
-</li>
-<li>
-<a href="#toc_20">区块引用 Blockquotes</a>
-<ul>
-<li>
-<a href="#toc_22">代码</a>
-<ul>
-<li>
-<a href="#toc_23">行内代码</a>
-</li>
-<li>
-<a href="#toc_24">多行或者一段代码</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_25">实用模块</a>
-<ul>
-<li>
-<a href="#toc_26">顺序图或流程图</a>
-</li>
-<li>
-<a href="#toc_27">表格</a>
-</li>
-<li>
-<a href="#toc_28">MathJax</a>
-</li>
-<li>
-<a href="#toc_29">脚注（Footnote）</a>
-</li>
-<li>
-<a href="#toc_30">注释和阅读更多</a>
-</li>
-<li>
-<a href="#toc_31">TOC (目录)</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_32">进阶：Markdown 中使用 Html</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_33">区块标签</a>
-</li>
-<li>
-<a href="#toc_34">区段（行内）标签</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_35">特殊字符自动转换</a>
-</li>
-<li>
-<a href="#toc_36">反斜杠</a>
-</li>
-<li>
-<a href="#toc_37">实用的Markdown工具</a>
-</li>
-</ul>
-
-
-<h2 id="toc_0">准备部分</h2>
-
-<h3 id="toc_1">欢迎使用 MWeb</h3>
-
-<p>首先介绍一下 MWeb 是什么，MWeb 是专业的 Markdown 写作、记笔记、静态博客生成软件。MWeb 使用的是 Github Flavored Markdown 语法，在使用 MWeb 前，建议你一定要去 <a href="http://zh.mweb.im/">MWeb 官网首页</a> 看一下介绍视频，MWeb 官网也做了比较详细的帮助，建议你也看一下大概内容，帮助的网址为：<a href="http://zh.mweb.im/help.html">http://zh.mweb.im/help.html</a>。</p>
-
-<h3 id="toc_2">需要您重点注意的</h3>
-
-<p>MWeb 是有<strong>两种模式</strong>的：外部模式和文档库模式。MWeb 为了满足所有 Markdown 使用需求，设计了两种模式！外部模式用于打开和编辑所有本地 Markdown 文档。另外为了方便用 Markdown 记笔记，MWeb 设计了文档库模式，文档库中的文档也支持一键生成静态博客，以便于分享。关于两个模式的情况，还是建议您去看一下官网的视频和帮助。</p>
-
-<h3 id="toc_3">Markdown 的设计哲学</h3>
-
-<blockquote>
-<p>Markdown 的目标是实现“易读易写”。<br/>
-不过最需要强调的便是它的可读性。一份使用 Markdown 格式撰写的文件应该可以直接以纯文字发布，并且看起来不会像是由许多标签或是格式指令所构成。Markdown 语法受到一些既有 text-to-HTML 格式的影响，包括 Setext、atx、Textile、reStructuredText、Grutatext 和 EtText，而最大灵感来源其实是纯文本电子邮件的格式。<br/>
-Markdown 的语法有个主要的目的：用来作为一种网路内容的<em>写作</em>用语言。</p>
-</blockquote>
-
-<h4 id="toc_4">Markdown兼容HTML</h4>
-
-<p>Markdown 语法的目标是：成为一种适用于网络的书写语言。</p>
-
-<p>Markdown 不是想要取代 HTML，甚至也没有要和它相近，它的语法种类很少，只对应 HTML 标记的一小部分。Markdown 的构想不是要使得 HTML 文档更容易书写。在我看来， HTML 已经很容易写了。Markdown 的理念是，能让文档更容易读、写和随意改。HTML 是一种发布的格式，Markdown 是一种书写的格式。就这样，Markdown 的格式语法只涵盖纯文本可以涵盖的范围。</p>
-
-<p>不在 Markdown 涵盖范围之内的标签，都可以直接在文档里面用 HTML 撰写。不需要额外标注这是 HTML 或是 Markdown；只要直接加标签就可以了。</p>
-
-<h3 id="toc_5">本文约定</h3>
-
-<p>如果有写 <code>效果如下：</code>， 在 MWeb 编辑状态下只有用 <code>CMD + 4</code> 或 <code>CMD + R</code> 预览才可以看效果。</p>
-
-<h3 id="toc_6">Cheatsheet</h3>
-
-<p><img src="media/15090833160717/markdown-cheatsheet.png" alt="markdown-cheatsheet"/></p>
-
-<p><img src="media/15090833160717/1dcc00202cfe37df5e17.jpg" alt="1dcc00202cfe37df5e17"/></p>
-
-<h2 id="toc_7">基础部分</h2>
-
-<h3 id="toc_8">标题</h3>
-
-<p>Markdown 支持两种标题的语法，类 <strong>Setext</strong> 和类 <strong>atx</strong> 形式。</p>
-
-<p>类 Setext 形式是用底线的形式，利用 <code>=</code> （最高阶标题）和 <code>-</code> （第二阶标题），例如：</p>
-
-<pre><code class="language-markdown">This is an H1
-=============
-
-This is an H2
--------------
-</code></pre>
-
-<p>任何数量的 <code>=</code> 和 <code>-</code> 都可以有效果。</p>
-
-<p>类 Atx 形式则是在行首插入 1 到 6 个 <code>#</code> ，对应到标题 1 到 6 阶，例如：</p>
-
-<pre><code class="language-markdown"># 第一级标题 `&lt;h1&gt;`
-## 第二级标题 `&lt;h2&gt;` 
-###### 第六级标题 `&lt;h6&gt;` 
-</code></pre>
-
-<p>你可以选择性地「闭合」类 atx 样式的标题，这纯粹只是美观用的，若是觉得这样看起来比较舒适，你就可以在行尾加上 #，而行尾的 # 数量也不用和开头一样（行首的井字符数量决定标题的阶数）：</p>
-
-<pre><code class="language-markdown"># 这是 H1 #
-
-## 这是 H2 ##
-
-### 这是 H3 ######
-</code></pre>
-
-<p>注意后面的<code>#</code>不会显示出来。</p>
-
-<h3 id="toc_9">强调</h3>
-
-<p>Markdown 使用星号（<code>*</code>）和底线（<code>_</code>）作为标记强调字词的符号，被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围，用两个 <code>*</code> 或 <code>_</code> 包起来的话，则会被转成 <code>&lt;strong&gt;</code>，例如：</p>
-
-<pre><code class="language-markdown">*single asterisks*
-
-_single underscores_
-
-**double asterisks**
-
-__double underscores__
-</code></pre>
-
-<p>会转成：</p>
-
-<pre><code class="language-markup">&lt;em&gt;single asterisks&lt;/em&gt;
-
-&lt;em&gt;single underscores&lt;/em&gt;
-
-&lt;strong&gt;double asterisks&lt;/strong&gt;
-
-&lt;strong&gt;double underscores&lt;/strong&gt;
-</code></pre>
-
-<p>你可以随便用你喜欢的样式，唯一的限制是，你用什么符号开启标签，就要用什么符号结束。</p>
-
-<p>强调也可以直接插在文字中间：</p>
-
-<pre><code class="language-markdown">un*frigging*believable
-</code></pre>
-
-<p>但是如果你的 <code>*</code> 和 <code>_</code> 两边都有空白的话，它们就只会被当成普通的符号。</p>
-
-<p>如果要在文字前后直接插入普通的星号或底线，你可以用反斜线：</p>
-
-<pre><code class="language-markdown">\*this text is surrounded by literal asterisks\*
-</code></pre>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">*这些文字会生成`&lt;em&gt;`*
-_这些文字会生成`&lt;u&gt;`_
-
-**这些文字会生成`&lt;strong&gt;`**
-__这些文字会生成`&lt;strong&gt;`__
-
-~~这些文字会被加上删除线&lt;s&gt;~~
-</code></pre>
-
-<p>在 MWeb 中的快捷键为： <code>CMD + U</code>、<code>CMD + I</code>、<code>CMD + B</code><br/>
-效果如下：</p>
-
-<p><em>这些文字会生成斜体<code>&lt;em&gt;</code></em><br/>
-<u>这些文字会生成下划线<code>&lt;u&gt;</code></u></p>
-
-<p><strong>这些文字会生成粗体<code>&lt;strong&gt;</code></strong><br/>
-<strong>这些文字会生成粗体<code>&lt;strong&gt;</code></strong></p>
-
-<p><del>这些文字会被加上删除线<code>&lt;s&gt;</code></del></p>
-
-<p>如果既要粗体又要斜体，就可以写：</p>
-
-<pre><code class="language-markdown">***123***
-___123___
-</code></pre>
-
-<p>效果如下</p>
-
-<p><strong><em>123</em></strong><br/>
-<strong><em>123</em></strong></p>
-
-<p>如果要斜体+下划线，可以写：</p>
-
-<pre><code class="language-markdown">_*123*_     //*_123_*不可以
-</code></pre>
-
-<p>效果如下</p>
-
-<p><u><em>123</em></u></p>
-
-<p><strong>没有下划线+粗体!</strong></p>
-
-<h3 id="toc_10">段落和换行</h3>
-
-<p>一个 Markdown 段落是由一个或多个连续的文本行组成，它的前后要有一个以上的空行（空行的定义是显示上看起来像是空的，便会被视为空行。比方说，若某一行只包含空格和制表符，则该行也会被视为空行）。普通段落不该用空格或制表符来缩进。</p>
-
-<p>「由一个或多个连续的文本行组成」这句话其实暗示了 Markdown 允许段落内的强迫换行（插入换行符），这个特性和其他大部分的 text-to-HTML 格式不一样（包括 Movable Type 的「Convert Line Breaks」选项），其它的格式会把每个换行符都转成 <br /> 标签。</p>
-
-<p>如果你确实想要依赖 Markdown 来插入 <br /> 标签的话，在插入处先按入两个以上的空格然后回车。</p>
-
-<p>的确，需要多费点事（多加空格）来产生 <br /> ，但是简单地「每个换行都转换为 <br />」的方法在 Markdown 中并不适合， Markdown 中 email 式的 区块引用 和多段落的 列表 在使用换行来排版的时候，不但更好用，还更方便阅读。</p>
-
-<hr/>
-
-<p>MWeb中，四个及以上空格加回车。<br/>
-如果不想打这么多空格，只要回车就为换行，请勾选：<code>Preferences</code> - <code>Themes</code> - <code>Translate newlines to &lt;br&gt; tags</code></p>
-
-<h3 id="toc_11">分隔线</h3>
-
-<p>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线：</p>
-
-<pre><code class="language-markdown">* * *
-
-***
-
-*****
-
-- - -
-
----------------------------------------
-</code></pre>
-
-<p>效果如下：</p>
-
-<hr/>
-
-<hr/>
-
-<hr/>
-
-<hr/>
-
-<hr/>
-
-<h3 id="toc_12">列表</h3>
-
-<p>Markdown 支持有序列表和无序列表。</p>
-
-<h4 id="toc_13">无序列表</h4>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">* 项目一 无序列表 `* + 空格键`
-* 项目二
-    * 项目二的子项目一 无序列表 `TAB + * + 空格键`
-    * 项目二的子项目二
-</code></pre>
-
-<p>在 MWeb 中的快捷键为： <code>Option + U</code><br/>
-效果如下：</p>
-
-<ul>
-<li>项目一 无序列表 <code>* + 空格键</code></li>
-<li>项目二
-<ul>
-<li>项目二的子项目一 无序列表 <code>TAB + * + 空格键</code></li>
-<li>项目二的子项目二</li>
-</ul></li>
-</ul>
-
-<p>各层样式：</p>
-
-<ul>
-<li>Layer 1
-<ul>
-<li>Layer 2
-<ul>
-<li>Layer 3
-<ul>
-<li>Layer 4
-<ul>
-<li>Layer 5
-<ul>
-<li>....</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
-
-<p>可以看到<code>实心圆--&gt;空心圆--&gt;实心块</code>的变化</p>
-
-<p>无序列表使用星号、加号或是减号都作为列表标记：</p>
-
-<pre><code class="language-markdown">* Red
-* Green
-* Blue
-</code></pre>
-
-<p>等同于：</p>
-
-<pre><code class="language-markdown">+ Red
-+ Green
-+ Blue
-</code></pre>
-
-<p>也等同于：</p>
-
-<pre><code class="language-markdown">- Red
-- Green
-- Blue
-</code></pre>
-
-<h4 id="toc_14">有序列表</h4>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">1. 项目一 有序列表 `数字 + . + 空格键`
-2. 项目二 
-3. 项目三
-    1. 项目三的子项目一 有序列表 `TAB + 数字 + . + 空格键`
-    2. 项目三的子项目二
-</code></pre>
-
-<p>效果如下：</p>
-
-<ol>
-<li>项目一 有序列表 <code>数字 + . + 空格键</code></li>
-<li>项目二 </li>
-<li>项目三
-<ol>
-<li>项目三的子项目一 有序列表 <code>TAB + 数字 + . + 空格键</code></li>
-<li>项目三的子项目二</li>
-</ol></li>
-</ol>
-
-<p>各层样式</p>
-
-<ol>
-<li>Layer 1
-<ol>
-<li>Layer 2
-<ol>
-<li>Layer 3
-<ol>
-<li>Layer 4
-<ol>
-<li>Layer 5
-<ol>
-<li>....<br/>
-可以看到`1--&gt;i--&gt;a的变化</li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol>
-
-<p>有序列表则使用数字接着一个英文句点：</p>
-
-<pre><code class="language-markdown">1. Bird
-2. McHale
-3. Parish
-</code></pre>
-
-<p>很重要的一点是，你在列表标记上使用的数字并不会影响输出的 HTML 结果，上面的列表所产生的 HTML 标记为：</p>
-
-<pre><code class="language-markup">&lt;ol&gt;
-&lt;li&gt;Bird&lt;/li&gt;
-&lt;li&gt;McHale&lt;/li&gt;
-&lt;li&gt;Parish&lt;/li&gt;
-&lt;/ol&gt;
-</code></pre>
-
-<p>如果你的列表标记写成：</p>
-
-<pre><code class="language-markdown">1. Bird
-1. McHale
-1. Parish
-</code></pre>
-
-<p>或甚至是：</p>
-
-<pre><code class="language-markdown">3. Bird
-1. McHale
-8. Parish
-</code></pre>
-
-<p>你都会得到完全相同的 HTML 输出。重点在于，你可以让 Markdown 文件的列表数字和输出的结果相同，或是你懒一点，你可以完全不用在意数字的正确性。</p>
-
-<p>如果你使用懒惰的写法，建议第一个项目最好还是从 1. 开始，因为 Markdown 未来可能会支持有序列表的 start 属性。</p>
-
-<p>列表项目标记通常是放在最左边，但是其实也可以缩进，最多 3 个空格，项目标记后面则一定要接着至少一个空格或制表符。</p>
-
-<h4 id="toc_15">列表的段落缩进</h4>
-
-<p>要让列表看起来更漂亮，你可以把内容用固定的缩进整理好：</p>
-
-<pre><code class="language-markdown">* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
-    viverra nec, fringilla in, laoreet vitae, risus.
-* Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
-    Suspendisse id sem consectetuer libero luctus adipiscing.
-</code></pre>
-
-<p>但是如果你懒，那也行：</p>
-
-<pre><code class="language-markdown">* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
-viverra nec, fringilla in, laoreet vitae, risus.
-* Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
-</code></pre>
-
-<p>Suspendisse id sem consectetuer libero luctus adipiscing.<br/>
-如果列表项目间用空行分开，在输出 HTML 时 Markdown 就会将项目内容用 <p> 标签包起来，举例来说：</p>
-
-<pre><code class="language-markdown">* Bird
-* Magic
-</code></pre>
-
-<p>会被转换为：</p>
-
-<pre><code class="language-markup">&lt;ul&gt;
-&lt;li&gt;Bird&lt;/li&gt;
-&lt;li&gt;Magic&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<p>但是这个：</p>
-
-<pre><code class="language-markdown">* Bird
-
-* Magic
-</code></pre>
-
-<p>会被转换为：</p>
-
-<pre><code class="language-markup">&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Bird&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Magic&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<p>列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符：</p>
-
-<pre><code class="language-markdown">1.  This is a list item with two paragraphs. Lorem ipsum dolor
-    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
-    mi posuere lectus.
-
-    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
-    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
-    sit amet velit.
-
-2.  Suspendisse id sem consectetuer libero luctus adipiscing.
-</code></pre>
-
-<p>如果你每行都有缩进，看起来会看好很多，当然，再次地，如果你很懒惰，Markdown 也允许：</p>
-
-<pre><code class="language-markdown">* This is a list item with two paragraphs.
-
-    This is the second paragraph in the list item. You&#39;re
-only required to indent the first line. Lorem ipsum dolor
-sit amet, consectetuer adipiscing elit.
-
-* Another item in the same list.
-</code></pre>
-
-<p>如果要在列表项目内放进引用，那 &gt; 就需要缩进：</p>
-
-<pre><code class="language-markdown">* A list item with a blockquote:
-
-    &gt; This is a blockquote
-    &gt; inside a list item.
-</code></pre>
-
-<p>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符：</p>
-
-<pre><code class="language-markdown">* 一列表项包含一个列表区块：
-
-        &lt;代码写在这&gt;
-</code></pre>
-
-<p>当然，项目列表很可能会不小心产生，像是下面这样的写法：</p>
-
-<pre><code class="language-markdown">1986. What a great season.
-</code></pre>
-
-<p>换句话说，也就是在行首出现 <u>数字-句点-空白</u> ，要避免这样的状况，你可以在句点前面加上反斜杠。</p>
-
-<pre><code class="language-markdown">1986\. What a great season.
-</code></pre>
-
-<h4 id="toc_16">任务列表（Task lists）</h4>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">- [ ] 任务一 未做任务 `- + 空格 + [ ]`
-- [x] 任务二 已做任务 `- + 空格 + [x]`
-</code></pre>
-
-<p>效果如下：</p>
-
-<ul>
-<li class="task-list-item"><input disabled="disabled" type="checkbox" /> 任务一 未做任务 <code>- + 空格 + [ ]</code></li>
-<li class="task-list-item"><input disabled="disabled" type="checkbox" checked /> 任务二 已做任务 <code>- + 空格 + [x]</code></li>
-</ul>
-
-<h3 id="toc_17">图片</h3>
-
-<p>很明显地，要在纯文字应用中设计一个「自然」的语法来插入图片是有一定难度的。</p>
-
-<p>Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。</p>
-
-<p>行内式的图片语法看起来像是：</p>
-
-<pre><code class="language-markup">![Alt text](/path/to/img.jpg)
-
-![Alt text](/path/to/img.jpg &quot;Optional title&quot;)
-</code></pre>
-
-<p>详细叙述如下：</p>
-
-<ul>
-<li>一个惊叹号 !</li>
-<li>接着一个方括号，里面放上图片的替代文字</li>
-<li>接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上 选择性的 &#39;title&#39; 文字。</li>
-</ul>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">![GitHub set up](http://zh.mweb.im/asset/img/set-up-git.gif)
-格式: ![Alt Text](url)
-</code></pre>
-
-<p><code>Control + Shift + I</code> 可插入Markdown语法。<br/>
-如果是 MWeb 的文档库中的文档，还可以用拖放图片、<code>CMD + V</code> 粘贴、<code>CMD + Option + I</code> 导入这三种方式来增加图片。<br/>
-效果如下：</p>
-
-<p><img src="http://zh.mweb.im/asset/img/set-up-git.gif" alt="GitHub set up"/></p>
-
-<p>MWeb 引入的特别的语法来设置图片宽度，方法是在图片描述后加 <code>-w + 图片宽度</code> 即可，比如说要设置上面的图片的宽度为 140，语法如下：</p>
-
-<pre><code class="language-markdown">![GitHub set up-w140](http://zh.mweb.im/asset/img/set-up-git.gif)
-</code></pre>
-
-<p><img src="http://zh.mweb.im/asset/img/set-up-git.gif" alt="GitHub set up" style="width:140px;"/></p>
-
-<hr/>
-
-<p>参考式的图片语法则长得像这样：</p>
-
-<pre><code class="language-markdown">![Alt text][id]
-</code></pre>
-
-<p>「id」是图片参考的名称，图片参考的定义方式则和连结参考一样：</p>
-
-<pre><code class="language-markdown">[id]: url/to/image  &quot;Optional title attribute&quot;
-</code></pre>
-
-<p>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <code>&lt;img&gt;</code> 标签。</p>
-
-<h3 id="toc_18">链接</h3>
-
-<p>Markdown 支持两种形式的链接语法： <u>行内式</u> 和 <u>参考式</u> 两种形式。</p>
-
-<p>不管是哪一种，链接文字都是用 [方括号] 来标记。</p>
-
-<p>要建立一个行内式的链接，只要在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，例如：</p>
-
-<pre><code class="language-markdown">This is [an example](http://example.com/ &quot;Title&quot;) inline link.
-
-[This link](http://example.net/) has no title attribute.
-</code></pre>
-
-<p>会产生：</p>
-
-<pre><code class="language-markup">&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot; title=&quot;Title&quot;&gt;
-an example&lt;/a&gt; inline link.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://example.net/&quot;&gt;This link&lt;/a&gt; has no
-title attribute.&lt;/p&gt;
-</code></pre>
-
-<p>如果你是要链接到同样主机的资源，你可以使用相对路径：</p>
-
-<pre><code class="language-markdown">See my [About](/about/) page for details.
-</code></pre>
-
-<p>参考式的链接是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里面要填入用以辨识链接的标记：</p>
-
-<pre><code class="language-markdown">This is [an example][id] reference-style link.
-</code></pre>
-
-<p>你也可以选择性地在两个方括号中间加上一个空格：</p>
-
-<pre><code class="language-markdown">This is [an example] [id] reference-style link.
-</code></pre>
-
-<p>接着，在文件的任意处，你可以把这个标记的链接内容定义出来：</p>
-
-<pre><code class="language-markdown">[id]: http://example.com/  &quot;Optional Title Here&quot;
-</code></pre>
-
-<p>链接内容定义的形式为：</p>
-
-<ul>
-<li>方括号（前面可以选择性地加上至多三个空格来缩进），里面输入链接文字</li>
-<li>接着一个冒号</li>
-<li>接着一个以上的空格或制表符</li>
-<li>接着链接的网址</li>
-<li>选择性地接着 title 内容，可以用单引号、双引号或是括弧包着</li>
-</ul>
-
-<p>下面这三种链接的定义都是相同：</p>
-
-<pre><code class="language-markdown">[foo]: http://example.com/  &quot;Optional Title Here&quot;
-[foo]: http://example.com/  &#39;Optional Title Here&#39;
-[foo]: http://example.com/  (Optional Title Here)
-</code></pre>
-
-<p><strong>请注意：有一个已知的问题是 Markdown.pl 1.0.1 会忽略单引号包起来的链接 title。</strong></p>
-
-<p>链接网址也可以用方括号包起来：</p>
-
-<pre><code class="language-markdown">[id]: &lt;http://example.com/&gt;  &quot;Optional Title Here&quot;
-</code></pre>
-
-<p>你也可以把 title 属性放到下一行，也可以加一些缩进，若网址太长的话，这样会比较好看：</p>
-
-<pre><code class="language-markdown">[id]: http://example.com/longish/path/to/resource/here
-    &quot;Optional Title Here&quot;
-</code></pre>
-
-<p>网址定义只有在产生链接的时候用到，并不会直接出现在文件之中。</p>
-
-<p>链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的：</p>
-
-<pre><code class="language-markdown">[link text][a]
-[link text][A]
-</code></pre>
-
-<p>隐式链接标记功能让你可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号，如果你要让 &quot;Google&quot; 链接到 google.com，你可以简化成：</p>
-
-<pre><code class="language-markdown">[Google][]
-</code></pre>
-
-<p>然后定义链接内容：</p>
-
-<pre><code class="language-markdown">[Google]: http://google.com/
-</code></pre>
-
-<p>由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词：</p>
-
-<pre><code class="language-markdown">Visit [Daring Fireball][] for more information.
-</code></pre>
-
-<p>然后接着定义链接：</p>
-
-<pre><code class="language-markdown">[Daring Fireball]: http://daringfireball.net/
-</code></pre>
-
-<p>链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样。</p>
-
-<p>下面是一个参考式链接的范例：</p>
-
-<pre><code class="language-markdown">I get 10 times more traffic from [Google] [1] than from
-[Yahoo] [2] or [MSN] [3].
-
-  [1]: http://google.com/        &quot;Google&quot;
-  [2]: http://search.yahoo.com/  &quot;Yahoo Search&quot;
-  [3]: http://search.msn.com/    &quot;MSN Search&quot;
-</code></pre>
-
-<p>如果改成用链接名称的方式写：</p>
-
-<pre><code class="language-markdown">I get 10 times more traffic from [Google][] than from
-[Yahoo][] or [MSN][].
-
-  [google]: http://google.com/        &quot;Google&quot;
-  [yahoo]:  http://search.yahoo.com/  &quot;Yahoo Search&quot;
-  [msn]:    http://search.msn.com/    &quot;MSN Search&quot;
-</code></pre>
-
-<p>上面两种写法都会产生下面的 HTML。</p>
-
-<pre><code class="language-markup">&lt;p&gt;I get 10 times more traffic from &lt;a href=&quot;http://google.com/&quot;
-title=&quot;Google&quot;&gt;Google&lt;/a&gt; than from
-&lt;a href=&quot;http://search.yahoo.com/&quot; title=&quot;Yahoo Search&quot;&gt;Yahoo&lt;/a&gt;
-or &lt;a href=&quot;http://search.msn.com/&quot; title=&quot;MSN Search&quot;&gt;MSN&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
-
-<p>下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：</p>
-
-<pre><code class="language-markdown">I get 10 times more traffic from [Google](http://google.com/ &quot;Google&quot;)
-than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or
-[MSN](http://search.msn.com/ &quot;MSN Search&quot;).
-</code></pre>
-
-<p>参考式的链接其实重点不在于它比较好写，而是它比较好读，比较一下上面的范例，使用参考式的文章本身只有 81 个字符，但是用行内形式的却会增加到 176 个字元，如果是用纯 HTML 格式来写，会有 234 个字元，在 HTML 格式中，标签比文本还要多。</p>
-
-<p>使用 Markdown 的参考式链接，可以让文件更像是浏览器最后产生的结果，让你可以把一些标记相关的元数据移到段落文字之外，你就可以增加链接而不让文章的阅读感觉被打断。</p>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">Email： &lt;example@example.com&gt;
-[连接标题Github网站](http://github.com)
-自动生成链接： &lt;http://www.github.com/&gt; 
-</code></pre>
-
-<p><code>Control + Shift + L</code> 可插入Markdown语法。<br/>
-如果是 MWeb 的文档库中的文档，拖放或<code>CMD + Option + I</code> 导入非图片时，会生成连接。<br/>
-效果如下：</p>
-
-<p>Email： <a href="mailto:example@example.com">example@example.com</a><br/>
-<a href="http://github.com">连接标题Github网站</a><br/>
-自动生成链接： <a href="http://www.github.com/">http://www.github.com/</a> </p>
-
-<h3 id="toc_19">自动链接</h3>
-
-<p>Markdown 支持以比较简短的自动链接形式来处理网址和电子邮件信箱，只要是用方括号包起来， Markdown 就会自动把它转成链接。一般网址的链接文字就和链接地址一样，例如：</p>
-
-<pre><code class="language-markdown">&lt;http://example.com/&gt;
-</code></pre>
-
-<p>Markdown 会转为：</p>
-
-<pre><code class="language-markup">&lt;a href=&quot;http://example.com/&quot;&gt;http://example.com/&lt;/a&gt;
-</code></pre>
-
-<p>邮址的自动链接也很类似，只是 Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人，例如：</p>
-
-<pre><code class="language-markdown">&lt;address@example.com&gt;
-</code></pre>
-
-<p>Markdown 会转成：</p>
-
-<pre><code class="language-markup">&lt;a href=&quot;&amp;#x6D;&amp;#x61;i&amp;#x6C;&amp;#x74;&amp;#x6F;:&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;
-&amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;&amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;
-&amp;#109;&quot;&gt;&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;&amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;
-&amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;
-</code></pre>
-
-<p>在浏览器里面，这段字串（其实是 <code>&lt;a href=&quot;mailto:address@example.com&quot;&gt;address@example.com&lt;/a&gt;</code>）会变成一个可以点击的「<a href="mailto:address@example.com">address@example.com</a>」链接。</p>
-
-<p>（这种作法虽然可以糊弄不少的机器人，但并不能全部挡下来，不过总比什么都不做好些。不管怎样，公开你的信箱终究会引来广告信件的。）</p>
-
-<h3 id="toc_20">区块引用 Blockquotes</h3>
-
-<p>Markdown 标记区块引用是使用类似 email 中用 &gt; 的引用方式。如果你还熟悉在 email 信件中的引言部分，你就知道怎么在 Markdown 文件中建立一个区块引用，那会看起来像是你自己先断好行，然后在每行的最前面加上 &gt; ：</p>
-
-<pre><code class="language-markdown">&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-&gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-&gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-&gt; 
-&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-&gt; id sem consectetuer libero luctus adipiscing.
-</code></pre>
-
-<p>Markdown 也允许你偷懒只在整个段落的第一行最前面加上 &gt; ：</p>
-
-<pre><code class="language-markdown">&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.
-</code></pre>
-
-<p>效果如下：</p>
-
-<blockquote>
-<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,<br/>
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.<br/>
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
-
-<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse<br/>
-id sem consectetuer libero luctus adipiscing.</p>
-</blockquote>
-
-<p>MWeb中使用 <code>CMD + Shift + B</code> 可插入Markdown语法。</p>
-
-<p>区块引用可以嵌套（例如：引用内的引用），只要根据层次加上不同数量的 &gt; ：</p>
-
-<pre><code class="language-markdown">&gt; 引用
-&gt;&gt; 引用的引用
-&gt;&gt;&gt; 引用的引用的引用
-</code></pre>
-
-<blockquote>
-<p>引用</p>
-
-<blockquote>
-<p>引用的引用</p>
-
-<blockquote>
-<p>引用的引用的引用</p>
-</blockquote>
-</blockquote>
-</blockquote>
-
-<p>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等：</p>
-
-<pre><code class="language-markdown">&gt; ## 这是一个标题。
-&gt; 
-&gt; 1.   这是第一行列表项。
-&gt; 2.   这是第二行列表项。
-&gt; 
-&gt; 给出一些例子代码：
-&gt; 
-&gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
-</code></pre>
-
-<p>效果:</p>
-
-<blockquote>
-<h2 id="toc_21">这是一个标题。</h2>
-
-<ol>
-<li>  这是第一行列表项。</li>
-<li>  这是第二行列表项。</li>
-</ol>
-
-<p>给出一些例子代码：</p>
-
-<pre><code class="language-text">return shell_exec(&quot;echo $input | $markdown_script&quot;);
-</code></pre>
-</blockquote>
-
-<h3 id="toc_22">代码</h3>
-
-<p>和程序相关的写作或是标签语言原始码通常会有已经排版好的代码区块，通常这些区块我们并不希望它以一般段落文件的方式去排版，而是照原来的样子显示，Markdown 会用 <code>&lt;pre&gt;</code> 和 <code>&lt;code&gt;</code> 标签来把代码区块包起来。</p>
-
-<p>代码区块中，一般的 Markdown 语法不会被转换，像是星号便只是星号，这表示你可以很容易地以 Markdown 语法撰写 Markdown 语法相关的文件。</p>
-
-<h4 id="toc_23">行内代码</h4>
-
-<p>如果要标记一小段行内代码，你可以用反引号把它包起来（`），例如：</p>
-
-<pre><code class="language-markdown">Use the `printf()` function.
-</code></pre>
-
-<p>会产生：</p>
-
-<pre><code class="language-markup">&lt;p&gt;Use the &lt;code&gt;printf()&lt;/code&gt; function.&lt;/p&gt;
-</code></pre>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">像这样即可：`&lt;addr&gt;` `code`
-</code></pre>
-
-<p><code>CMD + K</code> 可插入Markdown语法。<br/>
-效果如下：</p>
-
-<p>像这样即可：<code>&lt;addr&gt;</code> <code>code</code></p>
-
-<h4 id="toc_24">多行或者一段代码</h4>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-javascript">function fancyAlert(arg) {
-    if(arg) {
-        $.facebox({div:&#39;#foo&#39;})
-    }
-}
-</code></pre>
-
-<p><code>CMD + Shift + K</code> 可插入Markdown语法。<br/>
-效果如下：</p>
-
-<pre><code class="language-javascript">function fancyAlert(arg) {
-    if(arg) {
-        $.facebox({div:&#39;#foo&#39;})
-    }
-}
-</code></pre>
-
-<p>要在 Markdown 中建立代码区块很简单，只要简单地缩进 4 个空格或是 1 个制表符就可以，例如，下面的输入：</p>
-
-<pre><code class="language-markdown">这是一个普通段落：
-
-    这是一个代码区块。
-</code></pre>
-
-<p>Markdown 会转换成：</p>
-
-<pre><code class="language-markup">&lt;p&gt;这是一个普通段落：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;这是一个代码区块。
-&lt;/code&gt;&lt;/pre&gt;
-</code></pre>
-
-<p>这个每行一阶的缩进（4 个空格或是 1 个制表符），都会被移除，例如：</p>
-
-<pre><code class="language-markdown">Here is an example of AppleScript:
-
-    tell application &quot;Foo&quot;
-        beep
-    end tell
-</code></pre>
-
-<p>会被转换为：</p>
-
-<pre><code class="language-markup">&lt;p&gt;Here is an example of AppleScript:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;tell application &quot;Foo&quot;
-    beep
-end tell
-&lt;/code&gt;&lt;/pre&gt;
-</code></pre>
-
-<p>一个代码区块会一直持续到没有缩进的那一行（或是文件结尾）。</p>
-
-<p>在代码区块里面， <code>&amp;</code> 、 <code>&lt;</code> 和 <code>&gt;</code> 会自动转成 HTML 实体，这样的方式让你非常容易使用 Markdown 插入范例用的 HTML 原始码，只需要复制贴上，再加上缩进就可以了，剩下的 Markdown 都会帮你处理，例如：</p>
-
-<pre><code class="language-markup">    &lt;div class=&quot;footer&quot;&gt;
-        &amp;copy; 2004 Foo Corporation
-    &lt;/div&gt;
-</code></pre>
-
-<p>会被转换为：</p>
-
-<pre><code class="language-markup">&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;footer&quot;&amp;gt;
-    &amp;amp;copy; 2004 Foo Corporation
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-</code></pre>
-
-<p>如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段：</p>
-
-<pre><code class="language-markdown">``There is a literal backtick (`) here.``
-</code></pre>
-
-<p>这段语法会产生：</p>
-
-<pre><code class="language-markup">&lt;p&gt;&lt;code&gt;There is a literal backtick (`) here.&lt;/code&gt;&lt;/p&gt;
-</code></pre>
-
-<p>代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号：</p>
-
-<pre><code class="language-markdown">A single backtick in a code span: `` ` ``
-
-A backtick-delimited string in a code span: `` `foo` ``
-</code></pre>
-
-<p>会产生：</p>
-
-<pre><code class="language-markup">&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;A backtick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
-</code></pre>
-
-<p>在代码区段内，<code>&amp;</code> 和方括号都会被自动地转成 HTML 实体，这使得插入 HTML 原始码变得很容易，Markdown 会把下面这段：</p>
-
-<p>Please don&#39;t use any <code>&lt;blink&gt;</code> tags.<br/>
-转为：</p>
-
-<pre><code class="language-markup">&lt;p&gt;Please don&#39;t use any &lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
-</code></pre>
-
-<p>你也可以这样写：</p>
-
-<pre><code class="language-markdown">`&amp;#8212;` is the decimal-encoded equivalent of `&amp;mdash;`.
-</code></pre>
-
-<p>以产生：</p>
-
-<pre><code class="language-markup">&lt;p&gt;&lt;code&gt;&amp;amp;#8212;&lt;/code&gt; is the decimal-encoded
-equivalent of &lt;code&gt;&amp;amp;mdash;&lt;/code&gt;.&lt;/p&gt;
-</code></pre>
-
-<p>Markdown支持多种语言的语法高亮，在第一个 &quot; ``` &quot;后边写上语言的对应标识就可以显示对应语言的高亮；如果不写，系统会自动识别。<br/>
-表示符号如下：</p>
-
-<table>
-<thead>
-<tr>
-<th>language</th>
-<th>language_key</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>1C</td>
-<td>1c</td>
-</tr>
-<tr>
-<td>ActionScript</td>
-<td>actionscript</td>
-</tr>
-<tr>
-<td>Apache</td>
-<td>apache</td>
-</tr>
-<tr>
-<td>AppleScript</td>
-<td>a</td>
-</tr>
-<tr>
-<td>AsciiDoc</td>
-<td>asciidoc</td>
-</tr>
-<tr>
-<td>AspectJ</td>
-<td>asciidoc</td>
-</tr>
-<tr>
-<td>AutoHotkey</td>
-<td>autohotkey</td>
-</tr>
-<tr>
-<td>AVR Assembler</td>
-<td>avrasm</td>
-</tr>
-<tr>
-<td>Axapta</td>
-<td>axapta</td>
-</tr>
-<tr>
-<td>Bash</td>
-<td>bash</td>
-</tr>
-<tr>
-<td>BrainFuck</td>
-<td>brainfuck</td>
-</tr>
-<tr>
-<td>Cap&#39;n Proto</td>
-<td>capnproto</td>
-</tr>
-<tr>
-<td>Clojure REPL</td>
-<td>clojure</td>
-</tr>
-<tr>
-<td>Clojure</td>
-<td>clojure</td>
-</tr>
-<tr>
-<td>CMake</td>
-<td>cmake</td>
-</tr>
-<tr>
-<td>CoffeeScript</td>
-<td>coffeescript</td>
-</tr>
-<tr>
-<td>C++</td>
-<td>cpp</td>
-</tr>
-<tr>
-<td>C#</td>
-<td>cs</td>
-</tr>
-<tr>
-<td>CSS</td>
-<td>css</td>
-</tr>
-<tr>
-<td>D</td>
-<td>d</td>
-</tr>
-<tr>
-<td>Dart</td>
-<td>d</td>
-</tr>
-<tr>
-<td>Delphi</td>
-<td>delphi</td>
-</tr>
-<tr>
-<td>Diff</td>
-<td>diff</td>
-</tr>
-<tr>
-<td>Django</td>
-<td>django</td>
-</tr>
-<tr>
-<td>DOS.bat</td>
-<td>dos</td>
-</tr>
-<tr>
-<td>Dust</td>
-<td>dust</td>
-</tr>
-<tr>
-<td>Elixir</td>
-<td>elixir</td>
-</tr>
-<tr>
-<td>ERB(Embedded Ruby)</td>
-<td>erb</td>
-</tr>
-<tr>
-<td>Erlang REPL</td>
-<td>erlang-repl</td>
-</tr>
-<tr>
-<td>Erlang</td>
-<td>erlang</td>
-</tr>
-<tr>
-<td>FIX</td>
-<td>fix</td>
-</tr>
-<tr>
-<td>F#</td>
-<td>fsharp</td>
-</tr>
-<tr>
-<td>G-code(ISO 6983)</td>
-<td>gcode</td>
-</tr>
-<tr>
-<td>Gherkin</td>
-<td>gherkin</td>
-</tr>
-<tr>
-<td>GLSL</td>
-<td>glsl</td>
-</tr>
-<tr>
-<td>Go</td>
-<td>go</td>
-</tr>
-<tr>
-<td>Gradle</td>
-<td>gradle</td>
-</tr>
-<tr>
-<td>Groovy</td>
-<td>groovy</td>
-</tr>
-<tr>
-<td>Haml</td>
-<td>haml</td>
-</tr>
-<tr>
-<td>Handlebars</td>
-<td>handlebars</td>
-</tr>
-<tr>
-<td>Haskell</td>
-<td>haskell</td>
-</tr>
-<tr>
-<td>Haxe</td>
-<td>haxe</td>
-</tr>
-<tr>
-<td>HTTP</td>
-<td>http</td>
-</tr>
-<tr>
-<td>Ini file</td>
-<td>ini</td>
-</tr>
-<tr>
-<td>Java</td>
-<td>java</td>
-</tr>
-<tr>
-<td>JavaScript</td>
-<td>javascript</td>
-</tr>
-<tr>
-<td>JSON</td>
-<td>json</td>
-</tr>
-<tr>
-<td>Lasso</td>
-<td>lasso</td>
-</tr>
-<tr>
-<td>Less</td>
-<td>less</td>
-</tr>
-<tr>
-<td>Lisp</td>
-<td>lisp</td>
-</tr>
-<tr>
-<td>LiveCode</td>
-<td>livecodeserver</td>
-</tr>
-<tr>
-<td>LiveScript</td>
-<td>livescript</td>
-</tr>
-<tr>
-<td>Lua</td>
-<td>lua</td>
-</tr>
-<tr>
-<td>Makefile</td>
-<td>makefile</td>
-</tr>
-<tr>
-<td>Markdown</td>
-<td>markdown</td>
-</tr>
-<tr>
-<td>Mathematica</td>
-<td>mathematica</td>
-</tr>
-<tr>
-<td>Matlab</td>
-<td>matlab</td>
-</tr>
-<tr>
-<td>MEL (Maya Embedded Language)</td>
-<td>mel</td>
-</tr>
-<tr>
-<td>Mercury</td>
-<td>mercury</td>
-</tr>
-<tr>
-<td>Mizar</td>
-<td>mizar</td>
-</tr>
-<tr>
-<td>Monkey</td>
-<td>monkey</td>
-</tr>
-<tr>
-<td>nginx</td>
-<td>nginx</td>
-</tr>
-<tr>
-<td>Nimrod</td>
-<td>nimrod</td>
-</tr>
-<tr>
-<td>Nix</td>
-<td>nix</td>
-</tr>
-<tr>
-<td>NSIS</td>
-<td>nsis</td>
-</tr>
-<tr>
-<td>Objective C</td>
-<td>objectivec</td>
-</tr>
-<tr>
-<td>OCaml</td>
-<td>ocaml</td>
-</tr>
-<tr>
-<td>Oxygene</td>
-<td>oxygene</td>
-</tr>
-<tr>
-<td>Parser 3</td>
-<td>parser3</td>
-</tr>
-<tr>
-<td>Perl</td>
-<td>perl</td>
-</tr>
-<tr>
-<td>PHP</td>
-<td>php</td>
-</tr>
-<tr>
-<td>PowerShell</td>
-<td>powershell</td>
-</tr>
-<tr>
-<td>Processing</td>
-<td>processing</td>
-</tr>
-<tr>
-<td>Python’s profiler output</td>
-<td>profile</td>
-</tr>
-<tr>
-<td>Protocol Buffers</td>
-<td>protobuf</td>
-</tr>
-<tr>
-<td>Puppet</td>
-<td>puppet</td>
-</tr>
-<tr>
-<td>Python</td>
-<td>python</td>
-</tr>
-<tr>
-<td>Q</td>
-<td>q</td>
-</tr>
-<tr>
-<td>R</td>
-<td>r</td>
-</tr>
-<tr>
-<td>RenderMan RIB</td>
-<td>rib</td>
-</tr>
-<tr>
-<td>Roboconf</td>
-<td>roboconf</td>
-</tr>
-<tr>
-<td>RenderMan RSL</td>
-<td>rsl</td>
-</tr>
-<tr>
-<td>Ruby</td>
-<td>ruby</td>
-</tr>
-<tr>
-<td>Oracle Rules Language</td>
-<td>ruleslanguage</td>
-</tr>
-<tr>
-<td>Rust</td>
-<td>rust</td>
-</tr>
-<tr>
-<td>Scala</td>
-<td>scala</td>
-</tr>
-<tr>
-<td>Scheme</td>
-<td>scheme</td>
-</tr>
-<tr>
-<td>Scilab</td>
-<td>scilab</td>
-</tr>
-<tr>
-<td>SCSS</td>
-<td>scss</td>
-</tr>
-<tr>
-<td>Smali</td>
-<td>smali</td>
-</tr>
-<tr>
-<td>SmallTalk</td>
-<td>smalltalk</td>
-</tr>
-<tr>
-<td>SML</td>
-<td>sml</td>
-</tr>
-<tr>
-<td>SQL</td>
-<td>sql</td>
-</tr>
-<tr>
-<td>Stata</td>
-<td>stata</td>
-</tr>
-<tr>
-<td>STEP Part21(ISO 10303-21)</td>
-<td>step21</td>
-</tr>
-<tr>
-<td>Stylus</td>
-<td>stylus</td>
-</tr>
-<tr>
-<td>Swift</td>
-<td>swift</td>
-</tr>
-<tr>
-<td>Tcl</td>
-<td>tcl</td>
-</tr>
-<tr>
-<td>Tex</td>
-<td>tex</td>
-</tr>
-<tr>
-<td>Thrift</td>
-<td>thrift</td>
-</tr>
-<tr>
-<td>Twig</td>
-<td>twig</td>
-</tr>
-<tr>
-<td>TypeScript</td>
-<td>typescript</td>
-</tr>
-<tr>
-<td>Vala</td>
-<td>vala</td>
-</tr>
-<tr>
-<td>VB.NET</td>
-<td>vbnet</td>
-</tr>
-<tr>
-<td>VBScript in HTML</td>
-<td>vbscript-html</td>
-</tr>
-<tr>
-<td>VBScript</td>
-<td>vbscript</td>
-</tr>
-<tr>
-<td>Verilog</td>
-<td>verilog</td>
-</tr>
-<tr>
-<td>VHDL</td>
-<td>vhdl</td>
-</tr>
-<tr>
-<td>Vim Script</td>
-<td>vim</td>
-</tr>
-<tr>
-<td>Intel x86 Assembly</td>
-<td>x86asm</td>
-</tr>
-<tr>
-<td>XL</td>
-<td>xl</td>
-</tr>
-<tr>
-<td>XML,HTML</td>
-<td>xml</td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="toc_25">实用模块</h2>
-
-<h3 id="toc_26">顺序图或流程图</h3>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-text">```sequence
-张三-&gt;李四: 嘿，小四儿, 写博客了没?
-Note right of 李四: 李四愣了一下，说：
-李四--&gt;张三: 忙得吐血，哪有时间写。
-```
-
-```flow
-st=&gt;start: 开始
-e=&gt;end: 结束
-op=&gt;operation: 我的操作
-cond=&gt;condition: 确认？
-
-st-&gt;op-&gt;cond
-cond(yes)-&gt;e
-cond(no)-&gt;op
-```
-</code></pre>
-
-<p>效果如下（ <code>Preferences</code> - <code>Themes</code> - <code>Enable sequence &amp; flow chart</code> 才会看到效果 ）：</p>
-
-<pre><code class="language-sequence">    张三-&gt;李四: 嘿，小四儿, 写博客了没?
-    Note right of 李四: 李四愣了一下，说：
-    李四-&gt;张三: 忙得吐血，哪有时间写。
-</code></pre>
-
-<pre><code class="language-flow">st=&gt;start: 开始
-e=&gt;end: 结束
-op=&gt;operation: 我的操作
-cond=&gt;condition: 确认？
-
-st-&gt;op-&gt;cond
-cond(yes)-&gt;e
-cond(no)-&gt;op
-</code></pre>
-
-<p>更多请参考：<a href="http://bramp.github.io/js-sequence-diagrams/">http://bramp.github.io/js-sequence-diagrams/</a>, <a href="http://adrai.github.io/flowchart.js/">http://adrai.github.io/flowchart.js/</a></p>
-
-<h3 id="toc_27">表格</h3>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-txt">第一格表头 | 第二格表头
-------------- | -------------
-内容单元格 第一列第一格 | 内容单元格第二列第一格
-内容单元格 第一列第二格 多加文字 | 内容单元格第二列第二格
-</code></pre>
-
-<p>效果如下：</p>
-
-<table>
-<thead>
-<tr>
-<th>第一格表头</th>
-<th>第二格表头</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>内容单元格 第一列第一格</td>
-<td>内容单元格第二列第一格</td>
-</tr>
-<tr>
-<td>内容单元格 第一列第二格 多加文字</td>
-<td>内容单元格第二列第二格</td>
-</tr>
-</tbody>
-</table>
-
-<p>第二行的每一列，是用来控制对其方向的，例如以下的例子：</p>
-
-<pre><code class="language-markdown">| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-</code></pre>
-
-<p>分别是靠左、居中和靠右，效果如下：</p>
-
-<table>
-<thead>
-<tr>
-<th>Tables</th>
-<th style="text-align: center">Are</th>
-<th style="text-align: right">Cool</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>col 3 is</td>
-<td style="text-align: center">right-aligned</td>
-<td style="text-align: right">$1600</td>
-</tr>
-<tr>
-<td>col 2 is</td>
-<td style="text-align: center">centered</td>
-<td style="text-align: right">$12</td>
-</tr>
-<tr>
-<td>zebra stripes</td>
-<td style="text-align: center">are neat</td>
-<td style="text-align: right">$1</td>
-</tr>
-</tbody>
-</table>
-
-<h3 id="toc_28">MathJax</h3>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">块级公式：
-$$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
-
-\\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =
-1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
-{1+\frac{e^{-8\pi}} {1+\ldots} } } } \\]
-
-行内公式： $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$
-</code></pre>
-
-<p>效果如下（<code>Preferences</code> - <code>Themes</code> - <code>Enable MathJax</code> 才会看到效果）：</p>
-
-<p>块级公式：<br/>
-\[  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} \]</p>
-
-<p>\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =<br/>
-1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}<br/>
-{1+\frac{e^{-8\pi}} {1+\&lt;!-- more --&gt;ldots} } } } \]</p>
-
-<p>行内公式： \(\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N\)</p>
-
-<h3 id="toc_29">脚注（Footnote）</h3>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">这是一个脚注：[^sample_footnote]
-</code></pre>
-
-<p>效果如下：</p>
-
-<p>这是一个脚注：<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup></p>
-
-<h3 id="toc_30">注释和阅读更多</h3>
-
-<!-- comment -->
-
-<!-- more -->
-
-<p>Actions-&gt;Insert Read More Comment <em>或者</em> <code>Command + .</code><br/>
-<strong>注</strong> 阅读更多的功能只用在生成网站或博客时，插入时注意要后空一行。</p>
-
-<h3 id="toc_31">TOC (目录)</h3>
-
-<p>Markdown 语法：</p>
-
-<pre><code class="language-markdown">[TOC]
-</code></pre>
-
-<p>效果如下：</p>
-
-<ul>
-<li>
-<a href="#toc_0">准备部分</a>
-<ul>
-<li>
-<a href="#toc_1">欢迎使用 MWeb</a>
-</li>
-<li>
-<a href="#toc_2">需要您重点注意的</a>
-</li>
-<li>
-<a href="#toc_3">Markdown 的设计哲学</a>
-<ul>
-<li>
-<a href="#toc_4">Markdown兼容HTML</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">本文约定</a>
-</li>
-<li>
-<a href="#toc_6">Cheatsheet</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_7">基础部分</a>
-<ul>
-<li>
-<a href="#toc_8">标题</a>
-</li>
-<li>
-<a href="#toc_9">强调</a>
-</li>
-<li>
-<a href="#toc_10">段落和换行</a>
-</li>
-<li>
-<a href="#toc_11">分隔线</a>
-</li>
-<li>
-<a href="#toc_12">列表</a>
-<ul>
-<li>
-<a href="#toc_13">无序列表</a>
-</li>
-<li>
-<a href="#toc_14">有序列表</a>
-</li>
-<li>
-<a href="#toc_15">列表的段落缩进</a>
-</li>
-<li>
-<a href="#toc_16">任务列表（Task lists）</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_17">图片</a>
-</li>
-<li>
-<a href="#toc_18">链接</a>
-</li>
-<li>
-<a href="#toc_19">自动链接</a>
-</li>
-<li>
-<a href="#toc_20">区块引用 Blockquotes</a>
-<ul>
-<li>
-<a href="#toc_22">代码</a>
-<ul>
-<li>
-<a href="#toc_23">行内代码</a>
-</li>
-<li>
-<a href="#toc_24">多行或者一段代码</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_25">实用模块</a>
-<ul>
-<li>
-<a href="#toc_26">顺序图或流程图</a>
-</li>
-<li>
-<a href="#toc_27">表格</a>
-</li>
-<li>
-<a href="#toc_28">MathJax</a>
-</li>
-<li>
-<a href="#toc_29">脚注（Footnote）</a>
-</li>
-<li>
-<a href="#toc_30">注释和阅读更多</a>
-</li>
-<li>
-<a href="#toc_31">TOC (目录)</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_32">进阶：Markdown 中使用 Html</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_33">区块标签</a>
-</li>
-<li>
-<a href="#toc_34">区段（行内）标签</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_35">特殊字符自动转换</a>
-</li>
-<li>
-<a href="#toc_36">反斜杠</a>
-</li>
-<li>
-<a href="#toc_37">实用的Markdown工具</a>
-</li>
-</ul>
-
-
-<h2 id="toc_32">进阶：Markdown 中使用 Html</h2>
-
-<h4 id="toc_33">区块标签</h4>
-
-<p>要制约的只有一些 HTML 区块元素――比如 <code>&lt;div&gt;</code>、<code>&lt;table&gt;</code>、<code>&lt;pre&gt;</code>、<code>&lt;p&gt;</code> 等标签，必须在前后加上空行与其它内容区隔开，还要求它们的开始标签与结尾标签不能用制表符或空格来缩进。Markdown 的生成器有足够智能，不会在 HTML 区块标签外加上不必要的 <code>&lt;p&gt;</code> 标签。</p>
-
-<p>例子如下，在 Markdown 文件里加上一段 HTML 表格：</p>
-
-<pre><code class="language-markup">这是一个普通段落。
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Foo&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-这是另一个普通段落。
-</code></pre>
-
-<p>效果：</p>
-
-<p>这是一个普通段落。</p>
-
-<table>
-    <tr>
-        <td>Foo</td>
-    </tr>
-</table>
-
-<p>这是另一个普通段落。</p>
-
-<p>请注意，在 HTML 区块标签间的 Markdown 格式语法将不会被处理。比如，你在 HTML 区块内使用 Markdown 样式的<code>*强调*</code>会没有效果。</p>
-
-<h4 id="toc_34">区段（行内）标签</h4>
-
-<p>HTML 的区段（行内）标签如 <code>&lt;span&gt;</code>、<code>&lt;cite&gt;</code>、<code>&lt;del&gt;</code>可以在 Markdown 的段落、列表或是标题里随意使用。依照个人习惯，甚至可以不用 Markdown 格式，而直接采用 HTML 标签来格式化。举例说明：如果比较喜欢 HTML 的 <code>&lt;a&gt;</code> 或 <code>&lt;img&gt;</code> 标签，可以直接使用这些标签，而不用 Markdown 提供的链接或是图像标签语法。</p>
-
-<p>和处在 HTML 区块标签间不同，Markdown 语法在 HTML 区段标签间是有效的。</p>
-
-<h2 id="toc_35">特殊字符自动转换</h2>
-
-<p>在 HTML 文件中，有两个字符需要特殊处理： <code>&lt;</code> 和 <code>&amp;</code> 。 <code>&lt;</code> 符号用于起始标签，<code>&amp;</code> 符号则用于标记 HTML 实体，如果你只是想要显示这些字符的原型，你必须要使用实体的形式，像是 <code>&amp;lt;</code> 和 <code>&amp;amp;</code>。</p>
-
-<p>&amp; 字符尤其让网络文档编写者受折磨，如果你要打 AT&amp;T  ，你必须要写成 <code>AT&amp;amp;T</code> 。而网址中的 <code>&amp;</code> 字符也要转换。比如你要链接到：</p>
-
-<blockquote>
-<p><a href="http://images.google.com/images?num=30&amp;q=larry+bird">http://images.google.com/images?num=30&amp;q=larry+bird</a></p>
-</blockquote>
-
-<p>你必须要把网址转换写为：</p>
-
-<blockquote>
-<p><a href="http://images.google.com/images?num=30&amp;amp;q=larry+bird">http://images.google.com/images?num=30&amp;amp;q=larry+bird</a></p>
-</blockquote>
-
-<p>才能放到链接标签的 <code>href</code> 属性里。不用说也知道这很容易忽略，这也可能是 HTML 标准检验所检查到的错误中，数量最多的。</p>
-
-<p>Markdown 让你可以自然地书写字符，需要转换的由它来处理好了。如果你使用的 &amp; 字符是 HTML 字符实体的一部分，它会保留原状，否则它会被转换成 <code>&amp;amp;</code>。</p>
-
-<p>所以你如果要在文档中插入一个版权符号 <code>©</code>，你可以这样写：</p>
-
-<p><code>&amp;copy;</code><br/>
-Markdown 会保留它不动。而若你写：</p>
-
-<p><code>AT&amp;T</code><br/>
-Markdown 就会将它转为：</p>
-
-<p><code>AT&amp;amp;T</code><br/>
-类似的状况也会发生在 <code>&lt;</code> 符号上，因为 Markdown 允许 <strong>兼容 HTML</strong> ，如果你是把 <code>&lt;</code> 符号作为 HTML 标签的定界符使用，那 Markdown 也不会对它做任何转换，但是如果你写：</p>
-
-<p><code>4 &lt; 5</code></p>
-
-<p>Markdown 将会把它转换为：</p>
-
-<p><code>4 &amp;lt; 5</code></p>
-
-<p>不过需要注意的是，code 范围内，不论是行内还是区块， <code>&lt;</code> 和 <code>&amp;</code> 两个符号都一定会被转换成 HTML 实体，这项特性让你可以很容易地用 Markdown 写 HTML code （和 HTML 相对而言， HTML 语法中，你要把所有的 <code>&lt;</code> 和 <code>&amp;</code> 都转换为 HTML 实体，才能在 HTML 文件里面写出 HTML code。）</p>
-
-<h2 id="toc_36">反斜杠</h2>
-
-<p>Markdown 可以利用反斜杠来插入一些在语法中有其它意义的符号，例如：如果你想要用星号加在文字旁边的方式来做出强调效果（但不用 <code>&lt;em&gt;</code> 标签），你可以在星号的前面加上反斜杠：</p>
-
-<pre><code class="language-markdown">\*literal asterisks\*
-</code></pre>
-
-<p>Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
-
-<pre><code class="language-txt">\   反斜线
-`   反引号
-*   星号
-_   底线
-{}  花括号
-[]  方括号
-()  括弧
-#   井字号
-+   加号
--   减号
-.   英文句点
-!   惊叹号
-</code></pre>
-
-<h2 id="toc_37">实用的Markdown工具</h2>
-
-<ul>
-<li><p>Html-&gt;Markdown在线工具</p>
-<ul>
-<li><a href="https://www.bejson.com/convert/html2markdown/">https://www.bejson.com/convert/html2markdown/</a></li>
-<li><a href="http://tinyambition.com/h2m/">http://tinyambition.com/h2m/</a></li>
-</ul></li>
-<li><p>在线Markdown编辑</p>
-<ul>
-<li><a href="https://www.madoko.net/">https://www.madoko.net/</a> 强推这款，甚至可以使用LaTeX+Markdown混合输出Document和Beamer，把二者的优势结合起来了。</li>
-</ul></li>
-</ul>
-
-<div class="footnotes">
-<hr/>
-<ol>
-
-<li id="fn1">
-<p>这里是脚注信息&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
-</li>
-
-</ol>
-</div>
 
 ]]></content>
   </entry>

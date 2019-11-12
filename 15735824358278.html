@@ -1,0 +1,418 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  AppleScript - Sttot Stack
+  
+  </title>
+  
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>AppleScript</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/11/13 02:13 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p><a href="AppleScript">AppleScript</a> 是 Mac OS X 内置的一种功能强大的脚本语言，能够帮你在 mac 上实现自动化。其语法和英语自然语法很像。</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li><a href="AppleScript">AppleScript</a> 的采用 <a href="Unicode">Unicode</a> 文字编码，并且不区分大小写。</li>
+</ul>
+
+<p><a href="AppleScript">AppleScript</a> 本身是一门<a href="%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AF%AD%E8%A8%80">面向对象语言</a>，它拥有三个重要的 OO 术语: <code>对象(Object)</code>、<code>属性(Property)</code> 和 <code>命令(Command)</code>。命令又称方法（Method）。</p>
+
+<p>其核心为通过访问应用程序提供出来的一系列消息动作API来获取数据和对应用程序进行某种操作，OO的性质很强。<a href="AppleScript">AppleScript</a> 本身具有的功能很少，有必要的数据类型、流程控制和一些简单的输入输出，剩下的都是依靠和应用程序的通信来完成的。</p>
+
+<hr/>
+
+<p>AppleScript 包括如下三部分：</p>
+
+<ul>
+<li>  AppleScript 语言</li>
+<li>  AppleScript 脚本文件</li>
+<li>  AppleScript 脚本解释器</li>
+</ul>
+<br/>
+<h2 id="toc_0">关于 AppleScript 的编写与执行</h2>
+
+<ul>
+<li>在 mac 中自带 <code>Automator.app</code> 和 <code>Script Editor.app</code> 均可以编写脚本。</li>
+<li>其中 <code>Automator.app</code> 是可视化的，但是功能很简单。而 <code>Script Editor.app</code> 很全面。</li>
+<li>也可以用 <code>Xcode</code> 编写 <code>Cocoa - AppleScript Application</code>。<a href="https://github.com/BenXia/AppleScriptStudy/tree/master/5_%E5%BF%AB%E5%8F%91%E9%82%AE%E4%BB%B6OC%E7%89%88%E6%9C%AC">比如这个</a></li>
+<li>Alfred 也可以用。</li>
+<li>命令行直接使用 <code>osascript [脚本文件的路径]</code>来执行，配合<a href="%E8%BE%93%E5%87%BA%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91">输出流重定向</a>和其他脚本(如<a href="Python">Python</a>和<a href="Linux%20Shell">Linux Shell</a>)可以实现更多自动化功能。</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_1">更多参考</h2>
+
+<ol>
+<li><a href="https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html">AppleScript Language Guide 官方文档</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/MakeaSystem-WideService.html#//apple_ref/doc/uid/TP40016239-CH46-SW1">Mac Automation Scripting Guide</a></li>
+<li><a href="https://support.apple.com/zh-cn/guide/terminal/trml1003/mac">AppleScript 与 Shell 的互相调用</a></li>
+<li><a href="https://blog.csdn.net/SysProgram/article/details/46817917">Objective-C 运行 AppleScript 脚本</a></li>
+<li><a href="https://www.aliyun.com/jiaocheng/376240.html?spm=5176.100033.2.11.2a7d9a70mlzSWR">如何让 Cocoa App 支持 AppleScript</a></li>
+<li><a href="http://www.docin.com/p-515251458.html">AppleScript for Absolute Starters</a></li>
+<li><a href="http://ishare.iask.sina.com.cn/f/33325750.html">Apple Automator with AppleScript</a></li>
+<li><a href="https://developer.apple.com/library/archive/releasenotes/InterapplicationCommunication/RN-JavaScriptForAutomation/Articles/Introduction.html#//apple_ref/doc/uid/TP40014508-CH111-SW1">JavaScript for Automation</a></li>
+<li><a href="https://github.com/JXA-Cookbook/JXA-Cookbook/wiki/Foreword">JXA-Cookbook</a></li>
+<li><a href="https://wenku.baidu.com/view/41c783c3aa00b52acfc7ca09.html">Mac 的自动化 AppleScript 终极入门手册</a></li>
+</ol>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15735825376552.html" 
+          title="Previous Post: AppleScript的语言逻辑">&laquo; AppleScript的语言逻辑</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15735795193541.html" 
+          title="Next Post: 使用 Script Editor.app">使用 Script Editor.app &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15735830719694.html">AppleScript样例</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830027400.html">tell 结构</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735829601096.html">Record 记录</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735828924204.html">List 列表</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

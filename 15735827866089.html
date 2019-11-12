@@ -1,0 +1,508 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  String 字符串、Text 文本型 - Sttot Stack
+  
+  </title>
+  
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>String 字符串、Text 文本型</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/11/13 02:19 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <blockquote>
+<p>String 类和未提及的 Unicode Text 类是 AppleScript 2.0 的概念，现在已经被 Text 类完全替代。但是为了向下兼容，保留了这两个类。</p>
+
+<p>text, string, and Unicode text will all compare as equal<br/>
+————《AppleScript Language Guide》2008 年 3 月版</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+<br/>
+<h2 id="toc_0">使用 set to 语句赋值</h2>
+
+<pre><code class="language-applescript">set emptyString to &quot;&quot;
+set aSpaceString to &quot; &quot;
+set helloString to &quot;Hello&quot;
+set AppleScriptString to &quot;AppleScript&quot;
+</code></pre>
+
+<ul>
+<li>字符串用双引号括起来</li>
+<li>转义字符<code>\&quot;</code>输出双引号</li>
+<li>转义字符<code>\\</code>输出反斜杠</li>
+</ul>
+<br/>
+<h2 id="toc_1">使用 <code>&amp;</code> 运算符连接字符串</h2>
+
+<p>可以使用 “&amp;” 运算符将几个字符串连结在一起：</p>
+
+<pre><code class="language-applescript">set stringAndString to (helloString &amp; aSpaceString &amp; AppleScriptString)
+</code></pre>
+<br/>
+<h2 id="toc_2">获取字符串变量的长度</h2>
+
+<p>使用关键字 <code>the length of</code> 来获取字符串变量的长度：</p>
+
+<pre><code class="language-applescript">get the length of stringAndString
+</code></pre>
+
+<p>输出结果为17。</p>
+<br/>
+<h2 id="toc_3">将字符串分割成字符组成的列表(list)</h2>
+
+<p>使用 <code>every character of</code> 或 <code>characters of</code>：</p>
+
+<pre><code class="language-applescript">set charList to every character of strXY
+set charList to characters of strXY
+</code></pre>
+<br/>
+<h2 id="toc_4">将字符串分割成单词(以空格分隔)组成的列表(list)</h2>
+
+<p>使用 <code>every word of</code> 或 <code>words of</code>：</p>
+
+<pre><code class="language-applescript">set wordList to every word of strXY
+set wordList to words of strXY
+</code></pre>
+
+<p>可以设置其他的分割符来分割单词：</p>
+
+<pre><code class="language-applescript">set strXY to &quot;Hello AppleScript&quot;
+
+-- 通过 AppleScript&#39;s text item delimiters 来指定分隔号，然后通过 every text item of 来实现分割
+-- 注意要首先保存 AppleScript&#39;s text item delimiters，在分割字符串完成后记得要将其还原
+set defaultDelimiters to AppleScript&#39;s text item delimiters
+set AppleScript&#39;s text item delimiters to &quot; &quot;
+set listAfterDelimiter to every text item of strXY
+set AppleScript&#39;s text item delimiters to defaultDelimiters
+</code></pre>
+
+<p>结果为：<code>{&quot;Hello&quot;,&quot;AppleScript&quot;}</code></p>
+
+<p>注：使用 &quot;&quot; 分割字符串结果为：<code>{&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;, &quot;&quot;,&quot;A&quot;,&quot;p&quot;,&quot;p&quot;,&quot;l&quot;,&quot;e&quot;,&quot;S&quot;,&quot;c&quot;,&quot;r&quot;,&quot;i&quot;,&quot;p&quot;,&quot;t&quot;}</code></p>
+
+<p>可以将分割后的 list 恢复为一个 string。恢复过程是一个逆向的过程，方法如下：</p>
+
+<pre><code class="language-applescript">-- Restore list after delimiter to string
+-- 这里也要保存和还原 AppleScript&#39;s text item delimiters。
+set defaultDelimiters to AppleScript&#39;s text item delimiters
+set AppleScript&#39;s text item delimiters to&quot; &quot;
+set restoredString to listAfterDelimiter as string
+set AppleScript&#39;s text item delimiters to defaultDelimiters
+get restoredString
+</code></pre>
+<br/>
+<h2 id="toc_5">提取指定位置的字符、单词</h2>
+
+<p>提取指定未知的几个字符或单词，结果为 List ：</p>
+
+<pre><code class="language-applescript">characters 3 through 5 of &quot;A String&quot; -- 结果:{&quot;S&quot;, &quot;t&quot;, &quot;r&quot;}
+words 3 through 5 of &quot;我的名字叫张三&quot; -- 结果:{&quot;名字&quot;, &quot;叫&quot;, &quot;张三&quot;}
+</code></pre>
+
+<p>提取特定位置的一个字符或单词，结果为 Text ：</p>
+
+<pre><code class="language-applescript">word 2 of &quot;This is a text&quot;
+character 3 of &quot;This is a text&quot;
+ninth character of &quot;This is a text&quot;
+</code></pre>
+
+<ul>
+<li>第一个字符的位置是1，而不是0；</li>
+<li><code>through</code> 可以缩写为 <code>thru</code>；</li>
+<li>不推荐用序数词方法获得一个单词或字符；</li>
+<li>不推荐对于中文引用 “word” 相关语句。</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_6">字符串比较</h2>
+
+<p>在对字符串进行某种比较(<code>=</code>、<code>&gt;</code>等)时，可以设置忽略或者考虑某种特性，特性可以是：</p>
+
+<ol>
+<li><strong>case</strong> 大小写</li>
+<li><strong>diacriticals</strong> 字母变调符号 (如 e 和 é)</li>
+<li><strong>hyphens</strong> 连字符 (-)</li>
+<li><strong>numeric strings</strong> 数字化字符串 (默认是忽略的)，用于比较版本号时启用它。</li>
+<li><strong>punctuation</strong> 标点符号 (,.?! 等等, 包括中文标点)</li>
+<li><strong>white space</strong> 空格</li>
+</ol>
+
+<p>使用<code>considering</code>开启考虑某种特性：</p>
+
+<pre><code class="language-applescript">considering numeric strings
+    if &quot;10.3&quot; &gt; &quot;9.3&quot; then
+        display alert &quot;10.3 &gt; 9.3&quot;
+    end if
+end considering
+</code></pre>
+
+<p>使用<code>ignoring</code>关闭考虑某种特性：</p>
+
+<pre><code class="language-applescript">ignoring case
+    if &quot;AAA&quot; = &quot;aaa&quot; then
+        display alert &quot;AAA equal aaa when ignoring case&quot;
+    end if
+end ignoring
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15735828924204.html" 
+          title="Previous Post: List 列表">&laquo; List 列表</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15735827612332.html" 
+          title="Next Post: Number 数字">Number 数字 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15735830719694.html">AppleScript样例</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830027400.html">tell 结构</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735829601096.html">Record 记录</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735828924204.html">List 列表</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

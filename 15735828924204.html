@@ -1,0 +1,511 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  List 列表 - Sttot Stack
+  
+  </title>
+  
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>List 列表</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/11/13 02:21 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">形式</h2>
+
+<p>以大括号括起来，逗号分割，元素的类型无限制。如：</p>
+
+<pre><code class="language-applescript">{&quot;hello&quot;, 123, &quot;world&quot;}
+</code></pre>
+
+<span id="more"></span><!-- more -->
+<br/>
+<h2 id="toc_1">赋值</h2>
+
+<p>使用 <code>set to</code> 语句赋值</p>
+
+<pre><code class="language-applescript">set firstList to {100, 200.0, &quot;Number&quot;, -10}
+set emptyList to {}
+</code></pre>
+
+<p>list 中也可以包含 list，例如：</p>
+
+<pre><code class="language-applescript">set listOfList to {1, &quot;2&quot;, firstList}
+</code></pre>
+<br/>
+<h2 id="toc_2">获取/更改值</h2>
+
+<p>获取和更改列表中的元素:</p>
+
+<ol>
+<li><p>获取 list 中指定序号的元素有多种方法：</p>
+<pre><code class="language-applescript">get item 2 of arr3  -- 获取第二个元素，即123
+get 2nd item of arr3<br/>
+get the second item of arr3 --该种方式只能用到tenth<br/>
+set the 2nd item of modifiedList to &quot;2nd&quot;<br/>
+get item -1 of arr3 -- -1表示最后一个，-2表示倒数第2个<br/>
+get items 2 through 5 of arr3 -- 获取第2到第5个元素
+</code></pre>
+<p>可以用 <code>the last item</code> 关键字来获取列表中的最后一个元素；貌似没有 <code>the first item</code> 关键字。</p>
+<p><strong>注：list 的序号从 1 开始</strong>，没有<code>item 0</code>。</p></li>
+<li><p>使用<code>some item of</code>选择列表中的随机元素赋值</p></li>
+</ol>
+<br/>
+<h2 id="toc_3">添加元素</h2>
+
+<p>使用 <code>set the end of 列表名 to 元素</code> 添加元素到列表末尾</p>
+
+<pre><code class="language-applescript">set the end of arr3 to &quot;new&quot;  --在最后添加一个元素 &quot;new&quot;
+</code></pre>
+<br/>
+<h2 id="toc_4">合并</h2>
+
+<p>使用 &amp; 运算符可以直接将若干个列表中的元素合并并形成一个新的列表：</p>
+
+<pre><code class="language-applescript">set arr3 to arr1 &amp; arr2  -- 合并
+</code></pre>
+<br/>
+<h2 id="toc_5">获取元素个数</h2>
+
+<p>使用 <code>(the) length</code> 或 <code>(the) count</code> 关键字获取列表的元素个数</p>
+
+<pre><code class="language-applescript">get the length of arr3
+get the count of arr3
+</code></pre>
+<br/>
+<h2 id="toc_6">获取逆序后的列表</h2>
+
+<p>要逆向获取子列表，需要用到 <code>reverse</code> 关键字</p>
+
+<pre><code class="language-applescript">get reverse of arr3
+</code></pre>
+<br/>
+<h2 id="toc_7">类型转换</h2>
+
+<pre><code class="language-applescript">set arr3 to {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;}
+get arr3 as string --将数组的元素凭借成一个字符串
+</code></pre>
+<br/>
+<h2 id="toc_8">获取子列表</h2>
+
+<p>获取子列表:<br/>
+使用 <code>items 开始序号 through 结束序号 of</code> 可以获取 list 中的子列表：</p>
+
+<pre><code class="language-applescript">set longList to {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+set shortList to items 6 through 10 of longList
+</code></pre>
+
+<p>结果输出为：<code>{6, 7, 8, 9, 10}</code></p>
+
+<p>注：从结束序号取到开始序号的方式获取的子列表是相同的，例如：</p>
+
+<pre><code class="language-applescript">set shortList to items 10 through 6 of longList
+</code></pre>
+
+<p>结果输出为：<code>{6, 7, 8, 9, 10}</code></p>
+
+<p>要逆向获取子列表，需要用到 <code>reverse</code> 关键字，例如：</p>
+
+<pre><code class="language-applescript">set reversedList to reverse of longList
+</code></pre>
+
+<p>结果输出为：<code>{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}</code></p>
+
+<hr/>
+
+<h2 id="toc_9">String 与 List</h2>
+
+<p>将 String 转换为 List，方法就是在 <code>set to</code> 语句后加一个 <code>as list</code> ：</p>
+
+<pre><code class="language-applescript">-- string to list
+set stringNotConvert to &quot;string&quot;
+set convertStringToList to stringNotConvert as list
+</code></pre>
+
+<p>输出结果为：<code>{&quot;string&quot;}</code></p>
+<br/>
+<p>使用 <code>&amp;</code> 可以连接 string 和 list 变量，结果的类型由 <code>&amp;</code> 运算符之前的变量类型决定，例如：</p>
+
+<pre><code class="language-applescript">set stringBeforeAnd to &quot;string&quot;
+set listBeforeAnd to {&quot;list&quot;}
+set stringAndList to stringBeforeAnd &amp; listBeforeAnd -- &amp;之前的变量是一个string
+</code></pre>
+
+<p>输出结果为：<code>&quot;stringlist&quot;</code></p>
+
+<p>另一种情况：</p>
+
+<pre><code class="language-applescript">-- string &amp; list or list &amp; string
+set stringBeforeAnd to &quot;string&quot;
+set listBeforeAnd to {&quot;list&quot;}
+-- set stringAndList to stringBeforeAnd &amp; listBeforeAnd -- 注释掉这段代码
+set listAndString to listBeforeAnd &amp; stringBeforeAnd -- &amp;之前的变量是一个list
+</code></pre>
+
+<p>输出结果为：<code>{&quot;list&quot;, &quot;string&quot;}</code></p>
+
+<p>这样的写法不够明确，将上面的代码改进如下：</p>
+
+<pre><code class="language-applescript">-- A better way
+set stringAndList to (listBeforeAnd as string) &amp; stringBeforeAnd
+set listAndString to (stringBeforeAnd as list) &amp; listBeforeAnd
+</code></pre>
+
+<p>更好的做法是使用 <code>as</code> 关键字做出变量类型的显式声明。</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15735829601096.html" 
+          title="Previous Post: Record 记录">&laquo; Record 记录</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15735827866089.html" 
+          title="Next Post: String 字符串、Text 文本型">String 字符串、Text 文本型 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15735830719694.html">AppleScript样例</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830027400.html">tell 结构</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735829601096.html">Record 记录</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735828924204.html">List 列表</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

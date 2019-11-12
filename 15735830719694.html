@@ -1,0 +1,642 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  AppleScript样例 - Sttot Stack
+  
+  </title>
+  
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="AppleScript%E6%95%99%E7%A8%8B.html">AppleScript教程</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>AppleScript样例</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/11/13 02:24 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='AppleScript%E6%95%99%E7%A8%8B.html'>AppleScript教程</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <span id="more"></span><!-- more -->
+
+<h2 id="toc_0">使用 mac 的邮件系统</h2>
+
+<pre><code class="language-applescript">--Variables
+set recipientName to &quot; 小红&quot;
+set recipientAddress to &quot;aliyunzixun@xxx.com&quot;
+set theSubject to &quot;AppleScript Automated Email&quot;
+set theContent to &quot;This email was created and sent using AppleScript!&quot;
+--Mail Tell Block
+tell application &quot;Mail&quot;
+--Create the message
+set theMessage to make new outgoing message with properties {subject:theSubject, content:theContent, visible:true}
+--Set a recipient
+tell theMessage
+    make new to recipient with properties {name:recipientName, address:recipientAddress}
+    --Send the Message
+    send
+end tell
+end tell
+</code></pre>
+
+<h2 id="toc_1">让浏览器打开网页</h2>
+
+<pre><code class="language-applescript">set urlMyBlog to &quot;https://blog.csdn.net/sodaslay&quot;
+set urlChinaSearch to &quot;http://www.chinaso.com&quot;
+set urlBiying to &quot;https://cn.bing.com&quot;
+
+--使用Chrome浏览器
+tell application &quot;Google Chrome&quot;
+--新建一个chrome窗口
+set window1 to make new window
+tell window1
+    --当前标签页加载必应,就是不用百度哈哈
+    set currTab to active tab of window1
+    set URL of currTab to urlBiying
+    --打开csdn博客,搜索
+    make new tab with properties {URL:urlMyBlog}
+    make new tab with properties {URL:urlChinaSearch}
+    --将焦点由最后一个打开的标签页还给首个标签页
+    set active tab index of window1 to 1
+end tell
+end tell
+</code></pre>
+
+<h2 id="toc_2">让你的电脑说话</h2>
+
+<pre><code class="language-applescript">-- You can use any of the voices from the System Voice pop-up on the Text to Speech tab in the Speech preferences pane.
+-- Default Value:
+-- The current System Voice (set in the Speech panel in System Preferences.
+
+tell current application
+say &quot;My name is LiMei. Nice to meet you. How are you?&quot; using &quot;Veena&quot;
+say &quot;Fine, thanks. And you?&quot; using &quot;Victoria&quot;
+say &quot;滚&quot;
+say &quot;我跟你说&quot; using &quot;Sin-Ji&quot;
+end tell
+
+beep
+</code></pre>
+
+<h2 id="toc_3">调用 mac 的通知中心</h2>
+
+<blockquote>
+<p>crontab + AppleScript + 通知中心 可以做很多定制的提醒工具</p>
+</blockquote>
+
+<pre><code class="language-applescript">display notification &quot;message&quot; with title &quot;title&quot; subtitle &quot;subtitle&quot;
+
+display notification &quot;message&quot; sound name &quot;Bottle.aiff&quot;
+-- 声音文件都在 ~/Library/Sounds 和 /System/Library/Sounds 下面
+</code></pre>
+
+<h2 id="toc_4">清理废纸篓</h2>
+
+<pre><code class="language-applescript">tell application &quot;Finder&quot;
+empty the trash
+beep
+-- 打开启动磁盘
+open the startup disk
+end tell
+</code></pre>
+
+<h2 id="toc_5">模拟键盘按键消息</h2>
+
+<pre><code class="language-applescript">launch application &quot;System Events&quot;
+launch application &quot;TextMate&quot;
+tell application &quot;System Events&quot;
+set frontmost of process &quot;TextMate&quot; to true
+keystroke &quot;input string from applescript&quot;
+keystroke &quot;a&quot; using command down
+keystroke &quot;c&quot; using command down
+keystroke &quot;a&quot; using command down
+key code 124 using command down
+keystroke &quot;
+&quot;
+keystroke &quot;v&quot; using command down
+end tell
+</code></pre>
+
+<p>&lt;&lt;&lt;<br/>
+其中 using command 可以使用组合，例如：key code 53 using {command down, option down}<br/>
+其中的 key code 对照表如下<br/>
+&lt;&lt;&lt;</p>
+
+<pre><code class="language-applescript">apple key code list:
+
+0 0x00 ANSI_A
+1 0x01 ANSI_S
+2 0x02 ANSI_D
+3 0x03 ANSI_F
+4 0x04 ANSI_H
+5 0x05 ANSI_G
+6 0x06 ANSI_Z
+7 0x07 ANSI_X
+8 0x08 ANSI_C
+9 0x09 ANSI_V
+10 0x0A ISO_Section
+11 0x0B ANSI_B
+12 0x0C ANSI_Q
+13 0x0D ANSI_W
+14 0x0E ANSI_E
+15 0x0F ANSI_R
+16 0x10 ANSI_Y
+17 0x11 ANSI_T
+18 0x12 ANSI_1
+19 0x13 ANSI_2
+20 0x14 ANSI_3
+21 0x15 ANSI_4
+22 0x16 ANSI_6
+23 0x17 ANSI_5
+24 0x18 ANSI_Equal
+25 0x19 ANSI_9
+26 0x1A ANSI_7
+27 0x1B ANSI_Minus
+28 0x1C ANSI_8
+29 0x1D ANSI_0
+30 0x1E ANSI_RightBracket
+31 0x1F ANSI_O
+32 0x20 ANSI_U
+33 0x21 ANSI_LeftBracket
+34 0x22 ANSI_I
+35 0x23 ANSI_P
+36 0x24 Return
+37 0x25 ANSI_L
+38 0x26 ANSI_J
+39 0x27 ANSI_Quote
+40 0x28 ANSI_K
+41 0x29 ANSI_Semicolon
+42 0x2A ANSI_Backslash
+43 0x2B ANSI_Comma
+44 0x2C ANSI_Slash
+45 0x2D ANSI_N
+46 0x2E ANSI_M
+47 0x2F ANSI_Period
+48 0x30 Tab
+49 0x31 Space
+50 0x32 ANSI_Grave
+51 0x33 Delete
+53 0x35 Escape
+55 0x37 Command
+56 0x38 Shift
+57 0x39 CapsLock
+58 0x3A Option
+59 0x3B Control
+60 0x3C RightShift
+61 0x3D RightOption
+62 0x3E RightControl
+63 0x3F Function
+64 0x40 F17
+65 0x41 ANSI_KeypadDecimal
+67 0x43 ANSI_KeypadMultiply
+69 0x45 ANSI_KeypadPlus
+71 0x47 ANSI_KeypadClear
+72 0x48 VolumeUp
+73 0x49 VolumeDown
+74 0x4A Mute
+75 0x4B ANSI_KeypadDivide
+76 0x4C ANSI_KeypadEnter
+78 0x4E ANSI_KeypadMinus
+79 0x4F F18
+80 0x50 F19
+81 0x51 ANSI_KeypadEquals
+82 0x52 ANSI_Keypad0
+83 0x53 ANSI_Keypad1
+84 0x54 ANSI_Keypad2
+85 0x55 ANSI_Keypad3
+86 0x56 ANSI_Keypad4
+87 0x57 ANSI_Keypad5
+88 0x58 ANSI_Keypad6
+89 0x59 ANSI_Keypad7
+90 0x5A F20
+91 0x5B ANSI_Keypad8
+92 0x5C ANSI_Keypad9
+93 0x5D JIS_Yen
+94 0x5E JIS_Underscore
+95 0x5F JIS_KeypadComma
+96 0x60 F5
+97 0x61 F6
+98 0x62 F7
+99 0x63 F3
+100 0x64 F8
+101 0x65 F9
+102 0x66 JIS_Eisu
+103 0x67 F11
+104 0x68 JIS_Kana
+105 0x69 F13
+106 0x6A F16
+107 0x6B F14
+109 0x6D F10
+111 0x6F F12
+113 0x71 F15
+114 0x72 Help
+115 0x73 Home
+116 0x74 PageUp
+117 0x75 ForwardDelete
+118 0x76 F4
+119 0x77 End
+120 0x78 F2
+121 0x79 PageDown
+122 0x7A F1
+123 0x7B LeftArrow
+124 0x7C RightArrow
+125 0x7D DownArrow
+126 0x7E UpArrow
+</code></pre>
+
+<h2 id="toc_6">切换程序前台、设置焦点窗口</h2>
+
+<pre><code class="language-applescript">-- 前提是当前 iTerm app 中打开了两个窗口，其中有个窗口名字叫 &quot;2. bash&quot; 并且该窗口中第一个 tab 中含有三个 session，本脚本的作用是让 &quot;2. bash&quot; 窗口中第一个 tab 中的第三个 session 变为焦点。
+tell the application &quot;iTerm&quot;
+activate
+
+set theWindow to the first item of ¬
+    (get the windows whose name is &quot;2. bash&quot;)
+if index of theWindow is not 1 then
+    set index of theWindow to 1
+
+    set visible of theWindow to false
+    set visible of theWindow to true
+end if
+
+tell theWindow
+    set theTab to the first item of theWindow&#39;s tabs
+
+    select theTab
+
+    select the third session of theTab
+end tell
+end tell
+</code></pre>
+
+<pre><code class="language-applescript">-- 下面是上面的逻辑的另一种实现
+tell the application &quot;iTerm&quot;
+activate
+
+set theWindow to the first item of ¬
+    (get the windows whose name is &quot;2. bash&quot;)
+if the index of theWindow is not 1 then
+    set the index of theWindow to 2
+    tell application &quot;System Events&quot; to ¬
+        tell application process &quot;iTerm2&quot; to ¬
+            keystroke &quot;`&quot; using command down
+end if
+end tell
+</code></pre>
+
+<h2 id="toc_7">粘贴板操作</h2>
+
+<pre><code class="language-applescript">set the clipboard to &quot;Add this sentence at the end.&quot;
+tell application &quot;TextEdit&quot;
+activate --make sure TextEdit is running
+make new paragraph at end of document 1 with data (return &amp; (the clipboard))
+end tell
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15735830354689.html" 
+          title="Next Post: AppleScript一些默认指令">AppleScript一些默认指令 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.png" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des">穷吾一生，与一人为敌，当为吾之内心也</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="AppleScript%E6%95%99%E7%A8%8B.html"><strong>AppleScript教程</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15735830719694.html">AppleScript样例</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830354689.html">AppleScript一些默认指令</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735830027400.html">tell 结构</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735829601096.html">Record 记录</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15735828924204.html">List 列表</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>
