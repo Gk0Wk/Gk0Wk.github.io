@@ -1,0 +1,444 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  物理实验的误差和不确定度 - 下 - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>物理实验的误差和不确定度 - 下</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/11/16 9:53 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='PhyLab.html'>PhyLab</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">直接测量的标准不确定度 \(u\) —— 测量工具读数方法</h2>
+
+<blockquote>
+<p>直接测量量（原始数据）的读数应反映仪器的精确度</p>
+</blockquote>
+
+<ul>
+<li>游标类器具(游标卡尺、分光计度盘、大气压计等)：读至游标最小分度的整数倍，即不需估读。</li>
+<li>数显仪表及有十进步式标度盘的仪表(电阻箱、电桥、电位差计、数字电压表等)：一般直接读取仪表的显示值。</li>
+<li>指针式仪表及其它器具(螺旋测微器、标尺等)，读数时估读到仪器最小分度的1/2～1/10，或使估读间隔不大于仪器基本误差限的1/5～1/3。</li>
+</ul>
+
+<p>注意：<strong>注意指针指在整刻度线上时读数的有效位数——末尾的0不可以省略！</strong></p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">间接测量的合成标准不确定度 \(u_C\)</h2>
+
+<blockquote>
+<p>间接测量是指利用某种已知的函数关系从直接测量量来得到待测量量的测量。</p>
+</blockquote>
+
+<p>设间接被测量量y与诸直接测量量 \(x_i (i=1,2,\dots ,n)\) 由函数f 来确定：\(y=f(x_1,x_2,\dots ,x_n)\)<br/>
+用诸不确定度\(u(x_i)\)代替微分\(dx_i\), 有<br/>
+\[u_C=\sqrt{\sum_{i=1}^n\left[\frac{\partial f}{\partial x_i}u(x_i)\right]^2}\]<br/>
+\[\frac{u_C}{y}=\sqrt{\sum_{i=1}^n\left[\frac{\partial \ln f}{\partial x_i}\right]^2\left[u(x_i)\right]^2}\]<br/>
+前者适用于和差形式的函数，后者适用于积商形式的函数。</p>
+
+<hr/>
+
+<p>例：</p>
+
+<blockquote>
+<p>设有一圆环，其外径为\(\phi_外=9.800\pm 0.005mm\)，内径为\(\phi_内=4.500\pm 0.005mm\)，高度\(h=5.000\pm 0.005mm\)，求环的体积V和不确定度。</p>
+</blockquote>
+
+<p>\[V=\frac{\pi}{4}(\phi_外^2-\phi_内^2)h=2.976\times 10^2 mm^3\]<br/>
+\[\frac{\partial \ln V}{\partial \phi_外}=\frac{2\times 9.800}{9.800^2 - 4.500^2}\]<br/>
+\[\frac{\partial \ln V}{\partial \phi_内}=\frac{2\times 4.500}{9.800^2 - 4.500^2}\]<br/>
+\[\frac{\partial \ln V}{\partial V}=\frac{1}{V}=\frac{1}{5.000}\]</p>
+
+<p>\[\frac{\Delta V}{V}=\sqrt{\left(\frac{\partial \ln V}{\partial \phi_外}\Delta\phi_外\right)^2+\left(\frac{\partial \ln V}{\partial \phi_内}\Delta\phi_内\right)^2+\left(\frac{\partial \ln V}{\partial V}\Delta h\right)^2}=0.55\%\]</p>
+
+<p>\[\Delta V=V\times \frac{\Delta V}{V}\approx 2 mm^3\]</p>
+
+<p>因此，环的体积为 \(V=(2.98\pm 0.02)\times 10^2 mm^3\)</p>
+
+<h2 id="toc_2">有效数字表示法及运算规则</h2>
+
+<p>在实验中我们所测的被测量都是含有不确定度的数值，对这些数值不能任意取舍，要正确地反映出测量值的准确度。所以在记录数据、计算以及书写测量结果时，应根据测量误差或实验结果的不确定度来确定究竟应取几位有效位数。</p>
+
+<ul>
+<li>作为一个通用规定，<strong>测量值只能写到也应该写到开始有误差的那一位到两位</strong>。其后的数字按“四舍六进五凑双”法则（即后面的数字是四及以下就舍掉，是六及以上就进一，遇五若前面是奇数就进一，最后一位就变成是偶数，若前面已是偶数，则舍掉）取舍。</li>
+<li>有效数字的位数多少直接反映测量的准确度。有效位数越多，表明测量的准确度越高。</li>
+<li>有效数值书写时应注意：有效数值的位数与小数点位置无关。也不因使用的单位不同而改变。<br/>
+例如：重力加速度某人测量值为\(980cm/s^2\), 改写单位为\(m/s^2\)，仍为三位有效数字，即\(9.80m/s^2(\neq 9.8m/s^2 注意0不可随意添减)\)。</li>
+<li>在运算过程中的有效数字取舍，一般遵循：<strong>加减运算的结果以参与运算的末位最高的数为准；乘除则以有效数字最少的数为准，有时可比其多取一位。</strong></li>
+</ul>
+
+<h2 id="toc_3">数值书写的要求</h2>
+
+<ul>
+<li>有效数字的 <strong>位数</strong>是由合成不确定度来确定。测量值的 <strong>最后一位应与不确定度的最后一位对齐</strong>。一般地，总不确定度只取一位或二位，不可多取。例如\(S=(2.35\pm 0.03)cm^2\)。</li>
+<li>为方便起见，对较大或较小的数值，常采用科学记数法，即使用\(10^n\)的形式，例如重力加速度可写成\(9.80\times 10^{-3}km/s^2\)；阿伏加德罗常数\(6.02214199\times 10^{23}/mol\)等等。</li>
+<li>结果是由 <strong>间接测量</strong>得到，其有效数字由算出结果的 <strong>不确定度</strong>来确定。在没有给出各数值的不确定度时，数值的四则运算，一般地由其中有效数字位数最少的决定。</li>
+<li>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
+\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</li>
+</ul>
+
+<blockquote>
+<ul>
+<li>E 是测量量</li>
+<li>1.89 是测量量值</li>
+<li>±0.08 是不确定度(误差)</li>
+<li>最后的是测量值单位</li>
+</ul>
+</blockquote>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15423332269346.html" 
+          title="Previous Post: 数据处理">&laquo; 数据处理</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15423331812230.html" 
+          title="Next Post: 物理实验的误差和不确定度 - 上">物理实验的误差和不确定度 - 上 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

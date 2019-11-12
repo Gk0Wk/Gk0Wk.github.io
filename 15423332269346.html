@@ -1,0 +1,455 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  数据处理 - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>数据处理</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/11/16 9:53 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='PhyLab.html'>PhyLab</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">数据整理的重要步骤 —— 列表法</h2>
+
+<p>在原始数据记录以及整理数据时，都要进行正规列表。将各量的关系有序地排列成表格形式。既有利于一目了然地表示各物理量之间的关系，又便于发现实验中的问题。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">数据处理的表格法 —— 逐差法</h2>
+
+<p>在有些实验中，我们连续取得一些数据。如果依次相减，就会发现中间许多数据并未发挥作用，而影响到实验的可靠性。</p>
+
+<p>例如：金属杨氏弹性模量实验和等厚干涉的牛顿环实验。</p>
+
+<p>在金属杨氏弹性模量实验中，连续测量钢丝的伸长位置为： \(A_1, A_2, A_3, A_4, A_5, A_6, A_7, A_8, A_9, A_{10}\) 10个数据。若为求钢丝的伸长，依次相减，则伸长量\(\Delta A\)有：</p>
+
+<p>\[\Delta A=\frac{(A_2-A_1)+(A_3-A_2)+\cdots +(A_{10}-A_9)}{9}=\frac{A_{10}-A_1}{9}\]</p>
+
+<p>中间各次测量均未起到作用。为发挥多次测量的优越性，将数据分成前后两组：</p>
+
+<p>\[A_1, A_2, A_3, A_4, A_5\]<br/>
+\[A_6, A_7, A_8, A_9, A_{10}\]</p>
+
+<p>将这两组对应相减，得出5组，且每一组相减间距是原来临近间距的5倍，这样有：</p>
+
+<p>\[\Delta A=\frac{(A_6-A_1)+(A_7-A_2)+\cdots +(A_{10}-A_5)}{5\times 5}\]</p>
+
+<p>这种处理数据的方法称为 <strong>逐差法</strong>。此法的优点是充分利用所测的数据，有利于减少测量的随机误差和仪器带来的误差。是实验中常用的处理数据的方法。为了直观和便于处理，也常用列表格方法来表示。</p>
+
+<h2 id="toc_2">作图法</h2>
+
+<h3 id="toc_3">图示法</h3>
+
+<p>是用图形来表达物理量的变化。如静电场模拟实验中就是采用此法。</p>
+
+<p>从图示法中，有时也能得出定量的结果。</p>
+
+<h3 id="toc_4">图解法处理实验数据</h3>
+
+<p>图解法可形象、直观地显示出物理量之间的函数关系，也可用来求某些物理参数，因此它是一种重要的数据处理方法。作图时要<strong>先整理出数据表格</strong>，并要用<strong>坐标纸作图</strong>。</p>
+
+<p>作图六点要求：</p>
+
+<ol>
+<li>选择合适的坐标分度值，确定坐标纸的大小坐标分度值的选取应能反映测量值的有效位数，一般以 1～2mm对应于测量仪表的最小分度值或对应于测量值的次末位数）。</li>
+<li>标明坐标轴：用粗实线画坐标轴，用箭头标轴方向，标坐标轴的名称或符号、单位,再按顺序标出坐标轴整分格上的量值。</li>
+<li>标实验点：实验点可用“+”、“*”、“。”等符号标出（同一坐标系下不同曲线用不同的符号）。</li>
+<li>连成图线：用直尺、曲线板等把点连成直线、光滑曲线。一般不强求直线或曲线通过每个实验点，应使图线两边的实验点与图线最为接近且分布大体均匀。图线正穿过实验点时可以在点处断开。</li>
+<li>标出图线特征：在图上空白位置标明实验条件或从图上得出的某些参数。利用所绘直线可给出被测电阻R大小：从所绘直线上读取两点 A、B 的坐标就可求出 R 值。</li>
+<li>标出图名：在图线下方或空白位置写出图线的名称及某些必要的说明。</li>
+</ol>
+
+<p><img src="media/15423332269346/31.png" alt="31" style="width:500px;"/></p>
+
+<p>注意问题：</p>
+
+<ul>
+<li>曲线太粗，不均匀，不光滑。应该用直尺、曲线板等工具把实验点连成光滑、均匀的细实线。</li>
+<li>横轴坐标分度选取不当。横轴以3 cm 代表1 V，使作图和读图都很困难。实际在选择坐标分度值时，应既满足有效数字的要求又便于作图和读图，一般以1 mm 代表的量值是10的整数次幂或是其2倍或5倍。</li>
+<li>图纸使用不当。实际作图时，坐标原点的读数可以不从零开始。</li>
+</ul>
+
+<h3 id="toc_5">数据的直线拟合(最小二乘法)</h3>
+
+<p>设此两物理量 x、y 满足线性关系，且假定实验误差主要出现在\(y_i\)上，设拟合直线公式为 y =f(x)=a+bx，当所测各yi值与拟合直线上各估计值 \(f(x_i)=a+bx_i\)之间偏差的平方和最小，即</p>
+
+<p>\[s=\sum\left[y_i-f(x_i)\right]^2=\sum\left[y_i-(a+bx_i)\right]^2\rightarrow min\]</p>
+
+<p>时，所得拟合公式即为最佳经验公式。据此有</p>
+
+<p>\[\frac{\partial s}{\partial a}=-2\sum(y_i-a-bx_i)=0,\quad \frac{\partial s}{\partial b}=-2\sum(y_i-a-bx_i)x_i=0\]</p>
+
+<p>\[\therefore \quad a=\frac{\sum x_iy_i\sum x_i -\sum y_i\sum x_i^2}{(\sum x_i)^2-n\sum x_i^2},\quad b=\frac{\sum x_i\sum y_i -n\sum x_iy_i}{(\sum x_i)^2-n\sum x_i^2}\]</p>
+
+<p>相关系数r：最小二乘法处理数据除给出a、b外，还应给出相关系数r，r定义为:</p>
+
+<p>\[r\frac{\sum(x_i-\overline{x})-\sum(y_i-\overline{y})}{\sqrt{\sum(x_i-\overline{x})^2\sum(y_i-\overline{y})^2}},\qquad \overline{x}=\frac{\sum x_i}{n},\quad y=\frac{\sum y_i}{n}\]</p>
+
+<p>r表示两变量之间的函数关系与线性的符合程度，\(r\in[-1，1]\)。</p>
+
+<ul>
+<li>\(|r|\rightarrow 1\)，x、y间线性关系好;</li>
+<li>\(|r|\rightarrow 0\)，x、y间无线性关系，拟合无意义。</li>
+</ul>
+
+<p>物理实验中一般要求r绝对值达到0.999以上。</p>
+
+<blockquote>
+<p>用计算机Excel 程序中的 intercept、slope、correl 函数也可直接求得 a、b、r</p>
+</blockquote>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15423332361636.html" 
+          title="Previous Post: 物理实验步骤">&laquo; 物理实验步骤</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15423332157827.html" 
+          title="Next Post: 物理实验的误差和不确定度 - 下">物理实验的误差和不确定度 - 下 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

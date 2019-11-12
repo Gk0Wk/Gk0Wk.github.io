@@ -1,0 +1,503 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  多路搜索树(B-Tree) - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>多路搜索树(B-Tree)</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/5/20 15:13 PM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='DataStructure%20&%20Algorithm.html'>DataStructure & Algorithm</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>多路搜索树又称<code>B~Tree</code>、<code>B树</code>、<code>B-Tree 树</code>或者<code>B-树</code>(不念“B减树”！)。B-Tree是一种自平衡树，插入和删除都需要维护。</p>
+
+<p>B-Tree 主要用在文件系统以及部分数据库索引，比如 MongoDB。</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h2 id="toc_0">概念</h2>
+
+<p>B-Tree 是一种多路平衡查找树，每个节点最多包含 &#39;&#39;m&#39;&#39; 个子节点(分支)和 &#39;&#39;m-1&#39;&#39; 个元素(关键字)，m被称为B-Tree的<code>阶</code>，阶一般大于等于3。(数据库索引树中，m 的大小取决于磁盘页的大小。)</p>
+
+<blockquote>
+<p>一个m阶的B-Tree有如下特征：</p>
+
+<ol>
+<li>根节点至少有两个孩子(分支)和一个关键字；</li>
+<li>每个中间节点都包含 &#39;&#39;k-1&#39;&#39; 个元素(关键字)和 &#39;&#39;k&#39;&#39; 个分支(\(\lceil\frac{m}{2}\rceil\le k\le m\))；</li>
+<li>每个叶子节点都包含 &#39;&#39;k-1&#39;&#39; 个元素(关键字)(\(\frac{m}{2}\le k\le m\))；</li>
+<li>所有的叶子节点都位于同一层；可以用空指针表示，是查找失败到达的位置；</li>
+<li>每个节点中的元素(关键字)从小到大排列，节点中的 &#39;&#39;k-1&#39;&#39; 个元素（关键字）正好是 &#39;&#39;k&#39;&#39; 个分支包含的元素(关键字)的值域分划。</li>
+</ol>
+
+<p>所以B-Tree的每个节点的结构是这样的：</p>
+
+<p><img src="media/15583364169947/15583368589780.jpg" alt=""/></p>
+
+<p>节点中每个元素\(k_i\)应满足\(k_i&lt;k_{i+1}\)，同时每个分支\(p_i\)的范围应满足\(k_i&lt;p_i&lt;k_{i+1}\)</p>
+</blockquote>
+
+<p>(在这个过程中，随着元素的增多，实际情况下内存中比较次数可能很多，但是内存的比较时间与磁盘 IO 消耗相比几乎可以忽略不计。)</p>
+
+<hr/>
+
+<h2 id="toc_1">操作</h2>
+
+<h3 id="toc_2">寻找</h3>
+
+<ul>
+<li>从根节点开始，所寻找的值依次和节点的k-1个关键字比较：
+<ul>
+<li>若小于该关键字，那么进入该关键字左侧的分支重复搜索动作；</li>
+<li>若等于该关键字，就是找到了；</li>
+<li>若大于该关键字，
+<ul>
+<li>若这是该节点的最后一个关键字，那么进入该关键字右侧的分支重复搜索动作；</li>
+<li>若不是最后一个关键字，所搜索值继续和下一个关键字比较。</li>
+</ul></li>
+</ul></li>
+<li>同时，如果进入的分支是NULL，说明没有找到匹配的值，退出搜索。</li>
+</ul>
+
+<blockquote>
+<p><img src="media/15583364169947/15583368878499.jpg" alt=""/></p>
+
+<p>以上图为例：</p>
+
+<ul>
+<li>寻找“3”：根节点看第一个关键字【3&lt;5】故到第一个分支，随后有【3==3】，找到。</li>
+<li>寻找“13”：根节点看第一个关键字【13&gt;5】故看第二个关键字【13&gt;9】故到第三个分支，随后看第一个关键字【13&gt;12】故看第二个关键字【13&lt;15】故到第二个分支，随后看第一个关键字【13==13】，找到。</li>
+<li>寻找“10”：根节点看第一个关键字【10&gt;5】故看第二个关键字【10&gt;9】故到第三个分支，随后看第一个关键字【10&lt;12】故到第一个分支，随后看第一个关键字【10&lt;11】故到第一分支，由于第一分支是NULL，所以没有找到。</li>
+</ul>
+</blockquote>
+
+<h3 id="toc_3">插入</h3>
+
+<p>首先明确，对于一个阶为m的B-Tree：</p>
+
+<ol>
+<li>根节点的关键字容量为\(1\sim\left(m-1\right)\)；</li>
+<li>中间节点和叶子节点的关键字容量为\(\left(\lceil\frac{m}{2}\rceil -1\right)\sim\left(m-1\right)\)。</li>
+</ol>
+
+<p>插入关键字可能会破坏B-Tree的规则(节点容量超过上限)，解决方法就是 &#39;&#39;拆分节点&#39;&#39;。</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，填入根节点的第一个关键字；</li>
+<li>Step 1：搜索触底，插入的值应当是树中没有的(如果允许插入重复元素，要改一改判断语句)，所以最后会到达一个NULL的分支，根据规则此时一定会在叶子层(也就是最底层)；</li>
+<li>Step 2：尝试把这个值作为关键字，和节点中的其他几个关键字排一下序，共同作为该节点新的关键字序列；</li>
+<li>Step 3：看新关键字数量是否超过了节点容量上限：<br/>
+** 如果没有超过，新的关键字序列存入该节点；<br/>
+** 如果超过了，就取序列中间(如果有两个中间的就取一个)的一个关键字，两侧的关键字分裂为两个新的节点接在选出的关键字两侧。把这个选出的关键字插入上一层节点中(调回执行Step 2)——如果之前的节点是根节点就把该关键字作为新的根节点。</li>
+</ul>
+
+<blockquote>
+<p>这是一个4阶B-Tree插入的例子，允许插入重复元素，动画来自 [[USFCA 数据结构可视化|<a href="https://www.cs.usfca.edu/%7Egalles/visualization/BTree.html%5D">https://www.cs.usfca.edu/~galles/visualization/BTree.html]</a>]<br/>
+：</p>
+
+<p><img src="media/15583364169947/201903171212166.gif" alt="201903171212166"/></p>
+</blockquote>
+
+<h3 id="toc_4">删除</h3>
+
+<p>删除关键字可能会破坏B-Tree的规则(节点容量小于下限)，解决方法是：&#39;&#39;向其兄弟结点借关键字&#39;&#39;、&#39;&#39;与子结点进行关键字交换&#39;&#39;或&#39;&#39;进行结点的合并&#39;&#39;。其中，和当前结点的孩子进行关键字交换的操作可以保证删除操作总是发生在终端结点上。网上所总结的调整方法过于复杂，这里使用一种简洁统一的方法：</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，或者没有找到要删除的值，返回。</li>
+<li>Step 1：删除节点(递归向下)
+<ul>
+<li>如果要删除的值在叶子节点，那么先直接删除：</li>
+<li>如果要删除的值在非叶子节点，那么：
+<ul>
+<li>如果该点左侧和右侧的分支，都没有达到最小容量下限，就拿左侧最大关键字或者右侧最小关键字(Y)来替换它(X)，然后再递归删除那一个最值关键字(Y)；</li>
+<li>如果该点左侧已达到下限而右侧没有，就用右侧最小替换然后递归删除；</li>
+<li>如果该点右侧已达到下限而左侧没有，同理；</li>
+<li>如果该点左右两侧分支都达到最小下限，就直接删除该关键字，并将右侧分支合并入左侧分支变成一个分支。</li>
+</ul></li>
+</ul></li>
+<li>Step 3：调整节点
+<ul>
+<li>如果删除之后该点的关键字数量不少于容量下限，不用作调整，完成删除。</li>
+<li>如果删除之后该点的关键字数量少于容量下限：
+<ul>
+<li>如果其右侧和左侧的兄弟节点的关键字数量都大于容量下限，取左侧兄弟节点与该节点之间的父节点关键字放入该节点，再取左侧兄弟节点的最大关键字替换父节点的关键字 &#39;&#39;(左旋)&#39;&#39; ，然后递归到删除左侧兄弟节点最大关键字；或者取右侧兄弟节点与该节点之间的父节点关键字放入该节点，再取右侧兄弟节点的最小关键字替换父节点的关键字 &#39;&#39;(右旋)&#39;&#39; ，然后递归到删除右侧兄弟节点最小关键字；</li>
+<li>如果其左侧兄弟节点的关键字数量大于容量下限，而右侧兄弟节点的关键字数量等于容量下限，那么只能用左边来做；</li>
+<li>如果其右侧兄弟节点的关键字数量大于容量下限，而左侧兄弟节点的关键字数量等于容量下限，反之；</li>
+<li>如果两侧兄弟节点的关键字数量都等于容量下限，那么把左侧节点的关键字、左侧和该节点之间父节点的关键字和该节点剩余的关键字合并到一起成为新的左侧兄弟节点，删除父节点对应关键字和该节点；或者拿右侧做(同理)；</li>
+</ul></li>
+</ul></li>
+<li>Step 4：递归向上，继续第三步调整</li>
+</ul>
+
+<p>这里有一个<a href="https://www.jb51.net/article/154166.htm">删除的例子</a>。</p>
+<br/>
+<p>以上算法的复杂度均为\(O\left(\log_{M-1}{N}\right)\sim O\left(\log_{M/2}{N}\right)\)。</p>
+
+<p>这种效率是很高的，对于N=6.2×10<sup>10</sup> 个节点，如果度为1024，则只需要小于4次即可定位到该节点，然后再采用二分查找即可找到要找的值。</p>
+
+<hr/>
+
+<h2 id="toc_5">参考</h2>
+
+<ul>
+<li><a href="https://www.jianshu.com/p/7dedb7ebe033">https://www.jianshu.com/p/7dedb7ebe033</a></li>
+<li><a href="http://www.cnblogs.com/vincently/p/4526560.html">http://www.cnblogs.com/vincently/p/4526560.html</a></li>
+</ul>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15583369413094.html" 
+          title="Previous Post: B* 树(B* Tree)">&laquo; B* 树(B* Tree)</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15583362803987.html" 
+          title="Next Post: 动态查找树">动态查找树 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

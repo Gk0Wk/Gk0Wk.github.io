@@ -1,0 +1,3433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Sttot Stack]]></title>
+  <link href="https://gk0wk.github.io/atom.xml" rel="self"/>
+  <link href="https://gk0wk.github.io/"/>
+  <updated>2019-11-13T00:46:29+08:00</updated>
+  <id>https://gk0wk.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[B+树(B+ Tree)]]></title>
+    <link href="https://gk0wk.github.io/15583370060570.html"/>
+    <updated>2019-05-20T15:23:26+08:00</updated>
+    <id>https://gk0wk.github.io/15583370060570.html</id>
+    <content type="html"><![CDATA[
+<p>B+ Tree是<a href="15583364169947.html">多路搜索树(B-Tree)</a>的一种变体，在磁盘查找结构中，B+ Tree更适合文件系统的磁盘存储结构。</p>
+
+<p>相对于<a href="15583364169947.html">多路搜索树(B-Tree)</a>来说B+ Tree更充分的利用了节点的空间，让查询速度更加稳定，其速度完全接近于二分法查找。</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h2 id="toc_0">概念</h2>
+
+<blockquote>
+<p>定义：一颗度为m的B+ Tree满足以下规则：</p>
+
+<ol>
+<li>整棵树的节点分为两类：叶子节点(用于存储数据)和非叶子节点(包括根节点；不存储数据，只保存关键字用作索引)。</li>
+<li>非叶子节点：
+<ol>
+<li>根节点有2 ~ m个分支(子节点)；</li>
+<li>根节点可以是叶子节点也可以是非叶子节点；</li>
+<li>其他的非叶子节点有\(\lceil m/2 \rceil\) ~ m个分支(子节点)；</li>
+<li>非叶子节点的 分支点数=关键字数-1 (或者 分支点数=关键字数 ，MySQL用的是这一种)；</li>
+<li>两个关键字k,,i,,、k,,i+1,,之间的分支内的关键字/数据，范围在 [k,,i,,,k,,i+1,,) 之间(最后一个分支大于等于前一个关键字)。</li>
+<li>所有的非叶子节点关键字都同时存在于某个叶子节点，且在该叶子节点元素中是最小元素。</li>
+</ol></li>
+<li>叶子节点：
+<ol>
+<li>叶子节点在同一层；</li>
+<li>所有叶子节点通过指针链相连，且叶子节点本身按关键字的大小从小到大顺序排列(从左连到右)。</li>
+</ol></li>
+<li>自然插入而不进行删除操作时，叶子节点的数据容量为\([\lfloor m/2\rfloor ,m-1]\)，非叶子节点的关键字数量容量为\(\left[\lceil m/2\rceil -1,m-1\right]\)。</li>
+</ol>
+</blockquote>
+
+<p>如：</p>
+
+<p><img src="media/15583370060570/15583374321306.jpg" alt="" class="mw_img_center" style="display: block; clear:both; margin: 0 auto;"/></p>
+
+<ul>
+<li>由于叶子节点和非叶子节点的功能不同(叶子节点之存储数据，非叶子节点只作为“路标”)，所以一般来讲两种节点的数据结构是不同的 ( _非叶子节点的结构可以参考B-Tree|多路搜索树(B-Tree)，叶子节点可以做成“数据数组+长度+指向下一个叶子节点的指针”这样的节点结构_) 。</li>
+<li>B+树有两个头指针，一个指向根节点、一个指向最小的叶子节点。</li>
+<li><p>在进行删除操作时，涉及到索引节点填充因子和叶子节点填充因子，一般可设叶子节点和索引节点的填充因子都不少于50%。</p></li>
+<li><p><strong>注意：由于本文所用的是“左大等右小于”的判断方式，所以关键字是每个节点的最小元素，再删除的时候删除最小值需要上溯修改关键字；如果换成“左大于右小于”，关键字就是每个节点的最大元素了，删除逻辑需要调整。</strong></p></li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_1">操作</h2>
+
+<p>B+ Tree是<a href="15583364169947.html">多路搜索树(B-Tree)</a>的变种，在查找、插入和删除操作上和<a href="15583364169947.html">多路搜索树(B-Tree)</a>很类似。</p>
+
+<h3 id="toc_2">查找</h3>
+
+<ul>
+<li>从根节点开始，所寻找的值依次和节点的k-1个关键字比较：
+<ul>
+<li>若小于该关键字，那么进入该关键字左侧的分支重复搜索动作；</li>
+<li>若大于等于该关键字，
+<ul>
+<li>若这是该节点的最后一个关键字，那么进入该关键字右侧的分支重复搜索动作；</li>
+<li>若不是最后一个关键字，所搜索值继续和下一个关键字比较。</li>
+</ul></li>
+</ul></li>
+<li>如果进入了叶子节点，那么就遍历叶子节点的数组找到所要的值；找不到则退出。</li>
+</ul>
+
+<h3 id="toc_3">遍历</h3>
+
+<ul>
+<li>遍历操作，先去找最左侧的树，然后顺着叶子节点的指针一路摸下去就可以。</li>
+<li>如果存储了最小叶子节点的指针，那就更方便了。</li>
+</ul>
+
+<h3 id="toc_4">插入</h3>
+
+<p>首先明确，对于一个阶为m的B+ Tree：</p>
+
+<ol>
+<li>根节点的关键字容量为\(1\sim\left(m-1\right)\)；</li>
+<li>中间节点和叶子节点的关键字容量为\(\left(\lceil\frac{m}{2}\rceil -1\right)\sim\left(m-1\right)\)。</li>
+<li>叶子节点的容量为\(\lfloor m/2\rfloor \sim (m-1)\)。</li>
+</ol>
+
+<p>插入元素可能会破坏B+ Tree的规则(叶子节点容量超过上限)，解决方法就是 &#39;&#39;拆分叶子节点&#39;&#39;。同时，非叶子节点也需要拆分。</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，根节点作为叶子节点，把元素直接放入；</li>
+<li>Step 1：搜索触底到达叶子节点，插入的元素；</li>
+<li>Step 2：看元素数量是否超过了节点容量上限：
+<ul>
+<li>如果没有超过，可以返回；</li>
+<li>如果超过了，取叶子节点的元素序列中的中间元素(如果有两个就取中间右侧，因为规则2.4是“大于等于”)作为新的关键字，将叶子节点分为两个(取的元素不从叶子节点删除，分给右边的节点)，挂在新的关键字两边(如果叶子节点非根节点，那么左边的节点不动，依旧挂在原来的位置)；该关键字放到这之上的非叶子节点；如果如果叶子节点是根节点，那么新的关键字变成非叶子节点的根节点。</li>
+</ul></li>
+<li>Step 3：如果叶子节点非根节点，继续调整关键字：这里就和 <a href="15583364169947.html">多路搜索树(B-Tree)</a> 的插入上翻维护一样了，只是注意取中间右侧的关键字(上升的关键字需要删除)，不断上翻维护直到不超过关键字容量上限。</li>
+</ul>
+
+<p>就取序列中间(如果有两个中间的就取一个)的一个关键字，两侧的关键字分裂为两个新的节点接在选出的关键字两侧。把这个选出的关键字插入上一层节点中(调回执行Step 2)——如果之前的节点是根节点就把该关键字作为新的根节点。</p>
+
+<h3 id="toc_5">删除</h3>
+
+<p>B+ Tree的删除和<a href="15583364169947.html">多路搜索树(B-Tree)</a>很像，只是记得改变每个叶子节点最小值之后需要上溯修改关键字。</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，或者没有找到要删除的值，返回。</li>
+<li>Step 1：删除节点：找到叶子节点的该元素，删除；
+<ul>
+<li>如果该节点此时的元素数量已经小于容量下限：
+<ul>
+<li>如果该叶子节点左侧和右侧的叶子节点，都没有达到最小容量下限，就拿左侧最大的元素给该节点；</li>
+<li>如果该叶子节点左侧叶子节点已达到下限而右侧叶子节点没有，就用右侧最小的来给它；</li>
+<li>如果该叶子节点右侧叶子节点已达到下限而左侧叶子节点没有，同理；</li>
+<li>如果该叶子节点左右两侧叶子节点都达到最小下限，就让该节点与左侧(或者右侧)叶子节点合并，删除该点左侧(或者右侧)的关键字。</li>
+</ul></li>
+<li>如果没有小于容量下限，不作调整。</li>
+</ul></li>
+<li>Step 3：更新关键字
+<ul>
+<li>如果上一步没有发生叶子节点合并，但是该叶子节点或者右侧叶子节点的最小元素已经改变，就需要更新关键字：
+<ul>
+<li>取新的最小元素，覆盖之前的该叶子节点左侧的关键字(如果是该叶子节点最小元素发生改变)或者右侧的关键字(如果是该叶子节点的右侧叶子节点最小元素发生改变)；</li>
+<li>进一步，如果上一层非叶子节点中，所修改的关键字也是该节点中最小的关键字，就需要继续向上修改，依此循环直至不再是最小关键字。</li>
+</ul></li>
+<li>如果上一步发生了叶子节点的合并，也需要调整关键字：
+<ul>
+<li>如果上层非叶子节点的关键字数量已小于容量下限，就需要做 &#39;&#39;左旋、右旋或者合并&#39;&#39; ，方法和 <a href="15583364169947.html">多路搜索树(B-Tree)</a> 一样(Step 3.2)、一路上溯——但是需要注意几点：
+<ul>
+<li>① 左旋右旋移动关键字的时候，别忘了把所属分支也挪过来！</li>
+<li>② 如果非叶子节点(如果修改过左右非叶子节点，那么左右也要看)的最小关键字更新了，需要继续上溯更新；</li>
+<li>③ &#39;&#39;如果已经上溯到根节点，并且根节点也小于容量下限了，那么合并的叶子节点将作为根节点。&#39;&#39;</li>
+</ul></li>
+<li>如果上层非叶子节点关键字数量没有低于容量下限，但是如果是该非叶子节点的第一个叶子节点和其右侧节点合并，那么上一层的非叶子节点最小关键字将改变，按照上面的方法一路上溯更新。</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>这里有一些带图示的<a href="https://yq.aliyun.com/articles/9280">例子</a>有助于理解。</p>
+
+<hr/>
+
+<h2 id="toc_6">B+ Tree对B-Tree的改进</h2>
+
+<p>相较于<a href="15583364169947.html">多路搜索树(B-Tree)</a>，B+ Tree的非叶子节点没有包括有效的元素信息(是这样的，在实际存储中，树中存储的不可能只有一个值，而是一段数据+一个ID值，所以说B+ Tree非叶子节点没有有效的元素信息)，非叶子节点中的关键字只作为叶子结点元素的索引而存在，需要的信息全都在叶子节点上。</p>
+
+<p>B+ Tree严格意义上说已经不是树，它的叶子结点之间也有指针链接。B+ Tree的非终结点中并不含有关键字的信息。</p>
+
+<ol>
+<li><p>查找对比：</p>
+<ol>
+<li>B+ Tree的层级更少：在磁盘页大小相同的情况下，相较于<a href="15583364169947.html">多路搜索树(B-Tree)</a>，B+ Tree每个非叶子节点存储的关键字数更多(因为不存储元素数据)，树的层级更少所以查询数据更快；所以在相同数量的待查数据下，B+ Tree查找过程中需要调用的磁盘IO操作要少于普通<a href="15583364169947.html">多路搜索树(B-Tree)</a>树。因此B+ Tree的查找性能要好于<a href="15583364169947.html">多路搜索树(B-Tree)</a>。</li>
+<li>B+ Tree的查找更加稳定，因为所有叶子结点都处于同一层中，而且查找所有关键字都必须走完从根结点到叶子结点的全部历程。因此同一颗B+ Tree中，任何关键字的查找比较次数都是一样的。而<a href="15583364169947.html">多路搜索树(B-Tree)</a>就不一定了，可能查找到某一个非终结点就结束了。</li>
+</ol></li>
+<li><p>插入删除对比：B+ Tree与<a href="15583364169947.html">多路搜索树(B-Tree)</a>在插入删除操作中的效率是差不多的。</p></li>
+<li><p>B+ Tree天然具备排序功能：B+ Tree所有的叶子节点数据构成了一个有序链表，在查询大小区间的数据时候更方便。</p></li>
+<li><p>数据紧密性很高(磁盘存储)，缓存的命中率也会比<a href="15583364169947.html">多路搜索树(B-Tree)</a>高，这种情况下访问更快。</p></li>
+<li><p>B+ Tree全节点遍历更快：B+ Tree遍历整棵树只需要遍历所有的叶子节点即可，而不需要像<a href="15583364169947.html">多路搜索树(B-Tree)</a>一样需要对每一层进行遍历，这有利于数据库做全表扫描和范围查询。</p></li>
+</ol>
+
+<p>总体评价：在应用背景下，特别是文件结构存储中。B+ Tree的应用要更多，其效率也要比<a href="15583364169947.html">多路搜索树(B-Tree)</a>好。</p>
+
+<ul>
+<li><a href="15583364169947.html">多路搜索树(B-Tree)</a>相对于B+ Tree的优点是，如果经常访问的数据离根节点很近，而<a href="15583364169947.html">多路搜索树(B-Tree)</a>的非叶子节点本身存有关键字其数据的地址，所以这种数据检索的时候会要比B+ Tree快。</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_7">参考</h2>
+
+<ul>
+<li><a href="https://juejin.im/post/5b9073f9f265da0acd209624">https://juejin.im/post/5b9073f9f265da0acd209624</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[B* 树(B* Tree)]]></title>
+    <link href="https://gk0wk.github.io/15583369413094.html"/>
+    <updated>2019-05-20T15:22:21+08:00</updated>
+    <id>https://gk0wk.github.io/15583369413094.html</id>
+    <content type="html"><![CDATA[
+<p>B* Tree是<a href="15583370060570.html">B+树(B+ Tree)</a>的变种，相对于<a href="15583370060570.html">B+树(B+ Tree)</a>他们的不同之处如下：</p>
+
+<span id="more"></span><!-- more -->
+
+<ol>
+<li><p>首先是关键字个数限制问题，<a href="15583370060570.html">B+树(B+ Tree)</a>初始化的关键字初始化个数是\(\lceil m/2\rceil\)，B* Tree的初始化个数为\(\lceil \frac{2}{3}m\rceil\)。</p></li>
+<li><p>B+ Tree节点满时就会分裂，而B* Tree节点满时会检查兄弟节点是否满(因为每个节点都有指向兄弟的指针)，如果兄弟节点未满则向兄弟节点转移关键字，如果兄弟节点已满，则从当前节点和兄弟节点各拿出1/3的数据创建一个新的节点出来；</p></li>
+</ol>
+
+<p>B* Tree在<a href="15583370060570.html">B+树(B+ Tree)</a>的基础上因其初始化的容量变大，使得节点空间使用率更高，而又存有兄弟节点的指针，可以向兄弟节点转移关键字的特性使得B* Tree额分解次数变得更少；</p>
+
+<hr/>
+
+<h2 id="toc_0">实现</h2>
+
+<p>略。</p>
+
+<hr/>
+
+<h2 id="toc_1">参考</h2>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/27700617">https://zhuanlan.zhihu.com/p/27700617</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[多路搜索树(B-Tree)]]></title>
+    <link href="https://gk0wk.github.io/15583364169947.html"/>
+    <updated>2019-05-20T15:13:36+08:00</updated>
+    <id>https://gk0wk.github.io/15583364169947.html</id>
+    <content type="html"><![CDATA[
+<p>多路搜索树又称<code>B~Tree</code>、<code>B树</code>、<code>B-Tree 树</code>或者<code>B-树</code>(不念“B减树”！)。B-Tree是一种自平衡树，插入和删除都需要维护。</p>
+
+<p>B-Tree 主要用在文件系统以及部分数据库索引，比如 MongoDB。</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h2 id="toc_0">概念</h2>
+
+<p>B-Tree 是一种多路平衡查找树，每个节点最多包含 &#39;&#39;m&#39;&#39; 个子节点(分支)和 &#39;&#39;m-1&#39;&#39; 个元素(关键字)，m被称为B-Tree的<code>阶</code>，阶一般大于等于3。(数据库索引树中，m 的大小取决于磁盘页的大小。)</p>
+
+<blockquote>
+<p>一个m阶的B-Tree有如下特征：</p>
+
+<ol>
+<li>根节点至少有两个孩子(分支)和一个关键字；</li>
+<li>每个中间节点都包含 &#39;&#39;k-1&#39;&#39; 个元素(关键字)和 &#39;&#39;k&#39;&#39; 个分支(\(\lceil\frac{m}{2}\rceil\le k\le m\))；</li>
+<li>每个叶子节点都包含 &#39;&#39;k-1&#39;&#39; 个元素(关键字)(\(\frac{m}{2}\le k\le m\))；</li>
+<li>所有的叶子节点都位于同一层；可以用空指针表示，是查找失败到达的位置；</li>
+<li>每个节点中的元素(关键字)从小到大排列，节点中的 &#39;&#39;k-1&#39;&#39; 个元素（关键字）正好是 &#39;&#39;k&#39;&#39; 个分支包含的元素(关键字)的值域分划。</li>
+</ol>
+
+<p>所以B-Tree的每个节点的结构是这样的：</p>
+
+<p><img src="media/15583364169947/15583368589780.jpg" alt=""/></p>
+
+<p>节点中每个元素\(k_i\)应满足\(k_i&lt;k_{i+1}\)，同时每个分支\(p_i\)的范围应满足\(k_i&lt;p_i&lt;k_{i+1}\)</p>
+</blockquote>
+
+<p>(在这个过程中，随着元素的增多，实际情况下内存中比较次数可能很多，但是内存的比较时间与磁盘 IO 消耗相比几乎可以忽略不计。)</p>
+
+<hr/>
+
+<h2 id="toc_1">操作</h2>
+
+<h3 id="toc_2">寻找</h3>
+
+<ul>
+<li>从根节点开始，所寻找的值依次和节点的k-1个关键字比较：
+<ul>
+<li>若小于该关键字，那么进入该关键字左侧的分支重复搜索动作；</li>
+<li>若等于该关键字，就是找到了；</li>
+<li>若大于该关键字，
+<ul>
+<li>若这是该节点的最后一个关键字，那么进入该关键字右侧的分支重复搜索动作；</li>
+<li>若不是最后一个关键字，所搜索值继续和下一个关键字比较。</li>
+</ul></li>
+</ul></li>
+<li>同时，如果进入的分支是NULL，说明没有找到匹配的值，退出搜索。</li>
+</ul>
+
+<blockquote>
+<p><img src="media/15583364169947/15583368878499.jpg" alt=""/></p>
+
+<p>以上图为例：</p>
+
+<ul>
+<li>寻找“3”：根节点看第一个关键字【3&lt;5】故到第一个分支，随后有【3==3】，找到。</li>
+<li>寻找“13”：根节点看第一个关键字【13&gt;5】故看第二个关键字【13&gt;9】故到第三个分支，随后看第一个关键字【13&gt;12】故看第二个关键字【13&lt;15】故到第二个分支，随后看第一个关键字【13==13】，找到。</li>
+<li>寻找“10”：根节点看第一个关键字【10&gt;5】故看第二个关键字【10&gt;9】故到第三个分支，随后看第一个关键字【10&lt;12】故到第一个分支，随后看第一个关键字【10&lt;11】故到第一分支，由于第一分支是NULL，所以没有找到。</li>
+</ul>
+</blockquote>
+
+<h3 id="toc_3">插入</h3>
+
+<p>首先明确，对于一个阶为m的B-Tree：</p>
+
+<ol>
+<li>根节点的关键字容量为\(1\sim\left(m-1\right)\)；</li>
+<li>中间节点和叶子节点的关键字容量为\(\left(\lceil\frac{m}{2}\rceil -1\right)\sim\left(m-1\right)\)。</li>
+</ol>
+
+<p>插入关键字可能会破坏B-Tree的规则(节点容量超过上限)，解决方法就是 &#39;&#39;拆分节点&#39;&#39;。</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，填入根节点的第一个关键字；</li>
+<li>Step 1：搜索触底，插入的值应当是树中没有的(如果允许插入重复元素，要改一改判断语句)，所以最后会到达一个NULL的分支，根据规则此时一定会在叶子层(也就是最底层)；</li>
+<li>Step 2：尝试把这个值作为关键字，和节点中的其他几个关键字排一下序，共同作为该节点新的关键字序列；</li>
+<li>Step 3：看新关键字数量是否超过了节点容量上限：<br/>
+** 如果没有超过，新的关键字序列存入该节点；<br/>
+** 如果超过了，就取序列中间(如果有两个中间的就取一个)的一个关键字，两侧的关键字分裂为两个新的节点接在选出的关键字两侧。把这个选出的关键字插入上一层节点中(调回执行Step 2)——如果之前的节点是根节点就把该关键字作为新的根节点。</li>
+</ul>
+
+<blockquote>
+<p>这是一个4阶B-Tree插入的例子，允许插入重复元素，动画来自 [[USFCA 数据结构可视化|<a href="https://www.cs.usfca.edu/%7Egalles/visualization/BTree.html%5D">https://www.cs.usfca.edu/~galles/visualization/BTree.html]</a>]<br/>
+：</p>
+
+<p><img src="media/15583364169947/201903171212166.gif" alt="201903171212166"/></p>
+</blockquote>
+
+<h3 id="toc_4">删除</h3>
+
+<p>删除关键字可能会破坏B-Tree的规则(节点容量小于下限)，解决方法是：&#39;&#39;向其兄弟结点借关键字&#39;&#39;、&#39;&#39;与子结点进行关键字交换&#39;&#39;或&#39;&#39;进行结点的合并&#39;&#39;。其中，和当前结点的孩子进行关键字交换的操作可以保证删除操作总是发生在终端结点上。网上所总结的调整方法过于复杂，这里使用一种简洁统一的方法：</p>
+
+<ul>
+<li>Step 0：如果这是一颗空树，或者没有找到要删除的值，返回。</li>
+<li>Step 1：删除节点(递归向下)
+<ul>
+<li>如果要删除的值在叶子节点，那么先直接删除：</li>
+<li>如果要删除的值在非叶子节点，那么：
+<ul>
+<li>如果该点左侧和右侧的分支，都没有达到最小容量下限，就拿左侧最大关键字或者右侧最小关键字(Y)来替换它(X)，然后再递归删除那一个最值关键字(Y)；</li>
+<li>如果该点左侧已达到下限而右侧没有，就用右侧最小替换然后递归删除；</li>
+<li>如果该点右侧已达到下限而左侧没有，同理；</li>
+<li>如果该点左右两侧分支都达到最小下限，就直接删除该关键字，并将右侧分支合并入左侧分支变成一个分支。</li>
+</ul></li>
+</ul></li>
+<li>Step 3：调整节点
+<ul>
+<li>如果删除之后该点的关键字数量不少于容量下限，不用作调整，完成删除。</li>
+<li>如果删除之后该点的关键字数量少于容量下限：
+<ul>
+<li>如果其右侧和左侧的兄弟节点的关键字数量都大于容量下限，取左侧兄弟节点与该节点之间的父节点关键字放入该节点，再取左侧兄弟节点的最大关键字替换父节点的关键字 &#39;&#39;(左旋)&#39;&#39; ，然后递归到删除左侧兄弟节点最大关键字；或者取右侧兄弟节点与该节点之间的父节点关键字放入该节点，再取右侧兄弟节点的最小关键字替换父节点的关键字 &#39;&#39;(右旋)&#39;&#39; ，然后递归到删除右侧兄弟节点最小关键字；</li>
+<li>如果其左侧兄弟节点的关键字数量大于容量下限，而右侧兄弟节点的关键字数量等于容量下限，那么只能用左边来做；</li>
+<li>如果其右侧兄弟节点的关键字数量大于容量下限，而左侧兄弟节点的关键字数量等于容量下限，反之；</li>
+<li>如果两侧兄弟节点的关键字数量都等于容量下限，那么把左侧节点的关键字、左侧和该节点之间父节点的关键字和该节点剩余的关键字合并到一起成为新的左侧兄弟节点，删除父节点对应关键字和该节点；或者拿右侧做(同理)；</li>
+</ul></li>
+</ul></li>
+<li>Step 4：递归向上，继续第三步调整</li>
+</ul>
+
+<p>这里有一个<a href="https://www.jb51.net/article/154166.htm">删除的例子</a>。</p>
+<br/>
+<p>以上算法的复杂度均为\(O\left(\log_{M-1}{N}\right)\sim O\left(\log_{M/2}{N}\right)\)。</p>
+
+<p>这种效率是很高的，对于N=6.2×10<sup>10</sup> 个节点，如果度为1024，则只需要小于4次即可定位到该节点，然后再采用二分查找即可找到要找的值。</p>
+
+<hr/>
+
+<h2 id="toc_5">参考</h2>
+
+<ul>
+<li><a href="https://www.jianshu.com/p/7dedb7ebe033">https://www.jianshu.com/p/7dedb7ebe033</a></li>
+<li><a href="http://www.cnblogs.com/vincently/p/4526560.html">http://www.cnblogs.com/vincently/p/4526560.html</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[动态查找树]]></title>
+    <link href="https://gk0wk.github.io/15583362803987.html"/>
+    <updated>2019-05-20T15:11:20+08:00</updated>
+    <id>https://gk0wk.github.io/15583362803987.html</id>
+    <content type="html"><![CDATA[
+<p>树是一种可用的查找结构。有很多种规则来构造一颗查找树。这其中，具有动态结构(增减节点时无需彻底重建树)的一类树叫做动态查找树。</p>
+
+<p>一般来讲，动态查找树的查找的复杂度在\(O\left(\log{N}\right)\)，最坏可以达到\(O\left(N\right)\)。一些结构在较差情况下复杂度增加较快(比如二叉查找树。</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<ul>
+<li>二叉查找树(Binary Search Tree)是实现方式简单的二叉查找结构，插入和删除比较容易，缺点就是容易失衡(比如树开始变得很偏甚至直接变成线性的，定义见下)而且失衡的时候查找复杂度很糟。</li>
+</ul>
+
+<p>在BST的基础上，为了一定程度上避免树结构失衡时对查找复杂度的影响，提出<code>平衡树(Balanced Tree)</code>的概念：</p>
+
+<blockquote>
+<p>平衡树是计算机科学中的一类改进的二叉查找树。一般的二叉查找树的查询复杂度是跟目标结点到树根的距离（即深度）有关，因此当结点的深度普遍较大时，查询的 [[摊还复杂度|摊还复杂度分析(Amortized Analysis)]] 会上升，为了更高效的查询，平衡树应运而生了。</p>
+
+<p>定义平衡：指所有叶子的深度趋于平衡，&#39;&#39;更广义的是指在树上所有可能查找的摊还复杂度偏低&#39;&#39;。</p>
+
+<p>也可以用<code>平均查找时间(Average Search Time)</code>来衡量一颗查找树的查找性能，和摊还复杂度不同（摊还复杂度涉及每个节点查找的概率，而平均查找时间中每个节点被查找的概率是均等的）：</p>
+
+<p>\[\overline{T}=\frac{1}{N}\underset{i=1}{\overset{N}{\sum}}h(V_i)\]</p>
+</blockquote>
+
+<p>常见平衡树有：</p>
+
+<ul>
+<li>平衡二叉查找树(AVL Tree)，经典平衡树, 所有操作的最坏复杂度都是 \(O\left(\log{N}\right) \)的。</li>
+<li>Treap，利用随机堆的期望深度来优化树的深度，达到较优的期望复杂度。</li>
+<li>伸展树(Splay Tree)，使得经常查找的结点深度较小，从而降低均摊复杂度。</li>
+<li>红黑树(Red-Black Trees)：在AVL树的基础上做出优化和妥协，一种高效的搜索树。</li>
+<li>加权平衡树。</li>
+<li>2-3树、2-3-4树：分别是度为2和度为3的B-tree|多路搜索树(B-Tree)的特例</li>
+<li>AA树</li>
+<li>替罪羊树</li>
+<li>节点大小平衡树</li>
+</ul>
+
+<hr/>
+
+<p>以上查找树都是二叉树，但是在实际的大规模索引(如文件系统的索引、数据库等)中，以2为底的指数增长速度还不够快，导致二叉树存储大量数据时往往变得很深：</p>
+
+<blockquote>
+<p>因为索引的加载不可能一次全部加载进内存，磁盘读取每次读取的长度为一个磁盘页的长度，所以数据库系统会将一个节点的大小设为等于一页，这样保证了数据库每个节点只需要一次 IO 就可以完全加载。</p>
+
+<p>每次新建节点，直接申请一个页的空间，计算机存储分配是按页对齐的，这样在物理上也保证了一个节点对应一页，保证一个节点只需要一次 IO。</p>
+</blockquote>
+
+<p>使用二叉查找树结构，由于树的深度过大而造成I/O读写过于频繁，进而导致查询效率低下。所以需要采用多叉树结构来降低树的高度。常见的多叉查找树有：</p>
+
+<ul>
+<li><a href="15583364169947.html">多路搜索树(B-Tree)</a></li>
+<li><a href="15583370060570.html">B+树(B+ Tree)</a>：B-Tree的变种。</li>
+<li><a href="15583369413094.html">B*树(B* Tree)</a>：B+ Tree的变种。</li>
+</ul>
+
+<hr/>
+
+<p>对于字符串的查找(如字典软件)，有专门的算法：</p>
+
+<ul>
+<li>Trie Tree</li>
+<li>KMP</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[摊还复杂度分析(Amortized Analysis)]]></title>
+    <link href="https://gk0wk.github.io/15583358377429.html"/>
+    <updated>2019-05-20T15:03:57+08:00</updated>
+    <id>https://gk0wk.github.io/15583358377429.html</id>
+    <content type="html"><![CDATA[
+<p>适用情况：一系列操作中，存在有个别到若干的最坏情况，每一个操作的耗时有一定的概率。这个操作序列中也许某一操作的代价很高，但因为还有其他操作，__所以这些操作的平均代价并没有那么高__。 </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>“摊还”与“平均”： <u><strong>摊还分析不涉及概率</strong></u> ，但是涉及了连续操作之间的关联性，所以和单纯的“平均情况时间复杂度”不一样。&#39;&#39;摊还分析针对的是一系列操作的平均值，平均情况时间复杂度针对的是某种概率分布下不同输入的平均值。&#39;&#39;</li>
+<li>“摊还”与“最坏”：这样的评价方式相比于最坏情况复杂度要更接近于实际情况，因为这个 “代价较高的操作” 往往不会经常发生。</li>
+</ul>
+
+<p>所以三者之间的关系通常为：<code>最坏情况时限(worst-case bound)</code> ≥ <code>摊还时限(amortized bound)</code> ≥ <code>平均情况时限(average-case bound)</code></p>
+
+<hr/>
+
+<p>我们通过一个例子来介绍三种摊还分析方法：</p>
+
+<blockquote>
+<h3 id="toc_0">例 1</h3>
+
+<p>在一个栈中，有<code>Pop()</code>、<code>Push(x)</code>两种原子操作，定义其时间开支分别为1。</p>
+
+<p>定义一个新的操作<code>MultiPop(k)</code>，连续推出k个元素(如果k≥n，就推出n个)，其C语言实现大致如下：</p>
+
+<pre><code class="language-cpp">void MultiPop(int k, Stack S)
+{
+    while (!IsEmpty(S) &amp;&amp; k &gt; 0) {
+        Pop(S);
+        k--;
+    } /* end while-loop */
+}
+</code></pre>
+
+<p>试分析栈上数据操作的时间复杂度。</p>
+</blockquote>
+
+<h2 id="toc_1">累计分析/聚合分析(Aggregate Analysis)</h2>
+
+<p>累计分析：<strong>直接 <u>考虑从空开始连续执行n次操作</u> (各种操作)的最坏情况的总时间 T(n) ，那么摊还时间就是</strong> \(\frac{T(n)}{n}\)。但是注意这个n不一定取整个数据结构的规模N，而取决于最坏情况。</p>
+
+<p>对例1，我们考虑最坏的总体情况：<code>Push</code>和<code>Pop</code>的复杂度都是\(O\left(1\right)\)，而<code>MultiPop</code>的复杂度取决于栈满空程度和弹出数量，是\(O\left(1\right)\sim O\left(N\right)\)都有可能的。在这样的情况下。如果执行n次，那么最坏的情况可能就是\(O\left(n\right)\sim O\left(nN\right)\)……</p>
+
+<p>但是我们换一个角度来考虑，不是只看一次的栈作，而看n次一系列的栈操作。__首先我们需要保证这一系列操作是从一个空栈开始的__，然后我们来想最糟的情况，<code>MultiPop</code>只能把已经入栈的元素出栈，所以最坏情况就是“前n-1次 <code>Push()</code>，最后一次 <code>MultiPop(n-1)</code>”，其他情况都没有这个糟。这样下来，复杂度就确认为\(O\left(N\right)\),在这种情况下，我们计算出例1的摊还时间是：</p>
+
+<p>\[T_{amortized}=O(n)/n=O(1).\]</p>
+
+<p>为什么会这样？我们可以看到对于例1，在一系列连续的操作中，先前的操作会影响到后面的操作，同时这一系列操作是有序的而不是相互独立可调换顺序的。所以摊还分析的结果与平均分析是不同的。</p>
+
+<ul>
+<li><p>累计分析中，我们只是单纯地将最坏情况中所有的开支加起来，然后再除以数据规模，把其中的每一个操作都看作相同的。在接下来的两种方法中，我们可能会对不同的操作赋以不同的摊还时间。</p></li>
+<li><p><strong>“起始情况是空栈”是一个十分重要的前提！</strong>没有这个前提则分析结果不成立。</p></li>
+</ul>
+
+<p>再来看一个例子：</p>
+
+<blockquote>
+<h3 id="toc_2">例 2</h3>
+
+<p>用一个N长度数组<code>a[N]</code>来存储一个N位10进制数字，<code>a[k]</code>存储第k位。有一个<code>Increase()</code>函数让这个数增加1(如果个位出现进位就要继续进到下一位，以此类推)。</p>
+
+<p>理论上来讲，一个<code>Increase()</code>的最糟复杂度为\(O\left(N\right)\)，这个情况出现在<code>999...9+1</code>的时候，这样算如果连续执行n次，那么最糟的总复杂度为\(O\left(nN\right)\)。但是考虑到连续n次不可能每次都让所有位变更，所以__从初始状态<code>000...0</code>出发__，连续执行n次的过程中，考虑每一位的变动次数都是可以计算的，所以总共的时间为：</p>
+
+<p>\[T(n)=\sum_{i=0}^{N-1}\left(\lfloor\frac{n}{10^i}\rfloor\cdot O\left(1\right)\right)=O\left(n\right)\]</p>
+
+<p>所以摊还时间为\(T_{amortized}=O(n)/n=O(1).\)</p>
+</blockquote>
+
+<h2 id="toc_3">核算法/会计法(Accounting Method)</h2>
+
+<p>在记账的时候，会出现”支出大于收入“的盈亏情况。核算法对每个不同类型的操作分别考虑成本，通过一种“收支盈亏”的会计学方法来分析摊还复杂度：</p>
+
+<ul>
+<li>定义 &#39;&#39;实际成本(Actual Cost)&#39;&#39;\(c_i\) 是某一个操作真正的时间开销；</li>
+<li>定义 &#39;&#39;摊还成本(Amortized Cost)&#39;&#39;\(\hat{c_i}\) 是我们为一个操作赋予的“开支”。</li>
+<li>当一个操作的 摊还成本 超出 实际成本 时，差额存入 &#39;&#39;信用额度(Credit)&#39;&#39;中；当 摊还成本 小于 实际成本 时，就可以 &#39;&#39;偿还(Pay)&#39;&#39;信用额度，和信用卡一个道理，这个信用额度可以定义为：</li>
+</ul>
+
+<p>\[\sum_{i=1}^n\left(\hat{c_i}-c_i\right)\]</p>
+
+<p>然后即可证明</p>
+
+<p>\[T(n)=\sum_{i=1}^nc_i\le\sum_{i=1}^n\hat{c_i}=O\left(\dots\right)\]</p>
+
+<blockquote>
+<h3 id="toc_4">关于摊还成本\(\hat{c_i}\)的选取</h3>
+
+<p>摊还成本的选取不是随意的，需要满足：</p>
+
+<p>操作序列的总摊还代价给出了序列总真实代价的上界，即数据结构所关联的信用必须一直非负值(\(\sum\hat{c_i}\ge\sum{c_i}\))，否则证明就是无效的。(不觉得很像比较判别法求级数极限吗)</p>
+</blockquote>
+
+<p>举一个例子：餐厅餐盘，拿取1元放回1元、或者拿取2元放回0元。前者是实际成本，后者是摊还成本。在考虑丢盘子的情况下，后者之和大于前者。用这个来证明 例1：</p>
+
+<ul>
+<li>\(c_i\) <code>Push(x)</code>是1，<code>Pop()</code>是1，<code>MultiPop(k)</code>是 min{sizeof(S),k}；</li>
+<li>\(\hat{c_i}\) <code>Push(x)</code>是2，<code>Pop()</code>是0，<code>MultiPop(k)</code>是0，因为先<code>Push</code>才能<code>Pop</code>，所以要求是满足的。</li>
+</ul>
+
+<p><u>从空栈算起</u> ，总的时间\(T(n)=\sum{c_i}\le\sum{\hat{c_i}}\)，而\(\sum{\hat{c_i}}\)最多是2n(n次<code>Push</code>)，所以</p>
+
+<p>\[T_{amortized}=O(n)/n=O(1).\]</p>
+
+<p>这种方法应用于例2：某一位进1的摊还成本是2，复位为0的成本是0，剩余过程同理。</p>
+
+<h2 id="toc_5">势能法(Potential Method)</h2>
+
+<p>势能法和核算法类似，可以理解为物理上的势能。__在全空的初始态下(为零势能面)__，定义势能函数\(\Phi\left(D_n\right)\)：</p>
+
+<p>\[\Phi\left(D_n\right)=\sum_{i=1}^n\left(\hat{c_i}-c_i\right),\quad\Phi\left(D_0\right)=0\]</p>
+
+<p>这样，核算法中的信用额度就可以写为</p>
+
+<p>\[\hat{c_i}-c_i=\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)\]</p>
+
+<p>进一步的</p>
+
+<p>\[O\left(\dots\right)=\sum_{i=1}^n\hat{c_i}=\sum_{i=1}^n\left(c_i+\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)\right)\\ =\sum_{i=1}^nc_i+\Phi\left(D_n\right)-\Phi\left(D_0\right)\ge\sum_{i=1}^nc_i=T(n)\]</p>
+
+<p>与核算法不同，势能应于整个数据结构而不是特定对象相关联，将势能释放即可用来支付未来操作的代价。</p>
+
+<blockquote>
+<h3 id="toc_6">势能函数\(\Phi\left(D_i\right)\)的选取</h3>
+
+<p>要求就是：任何时刻势能函数是非负值。</p>
+
+<p>我们可以取一个东西作为势能指标，如果没有思路可以思考一下：有什么指标，是一个操作会将其改变、同时会让另一些操作因此而增加工作量的？</p>
+
+<p>不同的势函数会产生不同的摊还代价，在选择势函数时，可以做出一定的权衡：是否使用最佳势函数依赖于对时间界的要求。</p>
+</blockquote>
+
+<p>用来证明 例1：把势能函数定义为栈中元素的个数。\(\Phi\left(D_0\right)=0\)，同时\(\Phi\left(D_i\right)\ge 0\)。</p>
+
+<ul>
+<li><code>Push(x)</code>：\(\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=1\)，\(\hat{c_i}=c_i+\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=2.\)</li>
+<li><code>Pop()</code>：\(\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=-1\)，\(\hat{c_i}=c_i+\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=0.\)</li>
+<li><code>MultiPop(k)</code>：\(\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=-k\)，\(\hat{c_i}=c_i+\Phi\left(D_i\right)-\Phi\left(D_{i-1}\right)=0.\)</li>
+</ul>
+
+<p>\[\therefore \sum_{i=1}^n\hat{c_i}=O\left(n\right)\ge\sum_{i=1}^nc_i\]</p>
+
+<p>\[\therefore T_{amortized}=O(n)/n=O(1).\]</p>
+
+<hr/>
+
+<h2 id="toc_7">三种方法的比较</h2>
+
+<ol>
+<li><p>聚合分析是简单地通过理解来得出一系列操作所需要的总代价，并由此得出每个操作的平均代价。核算法则是通过“精妙地设计每个操作的摊还代价”，来获得整体的摊还代价。势能法则与核算法相似，只不过是从整体考虑。</p></li>
+<li><p>从理解难度来讲，聚合分析&lt;核算法&lt;势能法；从经验要求度来说，聚合分析&gt;核算法&gt;势能法。</p>
+<ol>
+<li> 首先要掌握的是势能法（找到 “势能” 所对应的对象，再通过它来获得每个操作的摊还代价，最后得出 n 个操作的代价）；</li>
+<li>在熟练之后，我们可以直接根据经验得到每个操作的摊还代价，也就掌握了核算法；</li>
+<li>最后进一步熟练，我们就可以直接理解得到 n 个操作的代价了，也就是掌握了聚合分析。</li>
+</ol></li>
+</ol>
+
+<hr/>
+
+<h3 id="toc_8">引用</h3>
+
+<ul>
+<li><a href="https://blog.csdn.net/woolseyyy/article/details/51517446">https://blog.csdn.net/woolseyyy/article/details/51517446</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1.3 配置目录]]></title>
+    <link href="https://gk0wk.github.io/15439771752022.html"/>
+    <updated>2018-12-05T10:32:55+08:00</updated>
+    <id>https://gk0wk.github.io/15439771752022.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2.1 TiddlyWiki使用教程]]></title>
+    <link href="https://gk0wk.github.io/15438144922083.html"/>
+    <updated>2018-12-03T13:21:32+08:00</updated>
+    <id>https://gk0wk.github.io/15438144922083.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1.1 初步配置空模板]]></title>
+    <link href="https://gk0wk.github.io/15438144277084.html"/>
+    <updated>2018-12-03T13:20:27+08:00</updated>
+    <id>https://gk0wk.github.io/15438144277084.html</id>
+    <content type="html"><![CDATA[
+<p>一个干净的模板已经是一个健全的维基系统了，但是如果我们还需要更加丰富的功能，或者更换想要的主题的话，就可以添加一些东西。</p>
+
+<p>如果认为现在的空白模板已经够用，那么可以直接跳过看 <a href="15438144922083.html">2.1 TiddlyWiki使用教程</a>。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">简单设定</h2>
+
+<p>打开文档后，大概长这个样子(可能有些不一样，没关系)：</p>
+
+<p><img src="media/15438144277084/15438146117675.jpg" alt=""/></p>
+
+<p>TiddlyWiki是左右分栏设计，如果窗口够窄，侧栏就会跑到上面去(手机上往往会这样)。左边是词条(知识卡片)，右边呢主要是各种辅助功能和导航条等。</p>
+
+<p>先不用管 <code>GettingStarted</code> 页面，我们的任务是造一个足够满意的定制模板，以后使用这个模板就可以。</p>
+
+<h2 id="toc_1">侧栏和工具栏调整</h2>
+
+<p>点击右侧边栏的<code>Tools</code>，选中以下几项：</p>
+
+<ul>
+<li>home</li>
+<li>new tiddler</li>
+<li>import</li>
+<li>save changes</li>
+<li>more</li>
+</ul>
+
+<p>多选的项去掉，我感觉这样摆，放在外面的都是常用的，剩下的点击“更多”也能很方便的找到。</p>
+
+<hr/>
+
+<p>需要中文？点击 <code>more</code> 图标里面的 <code>open control panel</code> ，选择 <code>Plugins</code> - <code>Get more plugins</code> - <code>Open plugin library</code> - <code>languages</code>，找到 <code>Chinese (Simplified)</code>，安装。</p>
+
+<p><img src="media/15438144277084/15438154561672.jpg" alt=""/></p>
+
+<p>随后到这里：<br/>
+<img src="media/15438144277084/15438155207377.jpg" alt=""/></p>
+
+<p>下拉找到 <code>Hello! Current language:</code> 选择。</p>
+
+<p><img src="media/15438144277084/15438155006875.jpg" alt=""/></p>
+
+<p>按提示保存并刷新即可。</p>
+
+<p>TiddlyWiki 是一个“我写我自己”的网页，每次作出更改，需要保存更改，有时候需要刷新才能看到效果。</p>
+
+<h2 id="toc_2">视觉外观</h2>
+
+<p>之后的配置就不讲这么详细了，如何安装插件以及有哪些插件后面都会讲到，这里只说结果。</p>
+
+<h3 id="toc_3">调色板</h3>
+
+<p>改用 <code>Vanilla</code> ，自定义配色以后再说。</p>
+
+<h3 id="toc_4">工具栏</h3>
+
+<p>编辑器工具栏都选。</p>
+
+<p>查看工具栏勾选：</p>
+
+<ul>
+<li>更多</li>
+<li>信息</li>
+<li>导出此条目</li>
+<li>编辑</li>
+<li>关闭</li>
+</ul>
+
+<h3 id="toc_5">主题调整</h3>
+
+<p>侧边栏布局 选 <code>浮动故事，固定侧边栏</code><br/>
+代码字型添加<code>&quot;Source Code Pro&quot;,&quot;Source Code Pro for powerline&quot;</code></p>
+
+<h2 id="toc_6">保存</h2>
+
+<h3 id="toc_7">通用</h3>
+
+<p>设置自动保存。</p>
+
+<h3 id="toc_8">下载保存模块</h3>
+
+<p>允许。</p>
+
+<h3 id="toc_9">TiddlySpot</h3>
+
+<p>输入网址、密码。</p>
+
+<h2 id="toc_10">插件</h2>
+
+<p>安装：</p>
+
+<ul>
+<li>CodeMirror KeyMap: Sublime Text</li>
+<li>CodeMirror Mode: Markdown Highlighting</li>
+<li>Highlighting.js: syntax highlighting 语法高亮</li>
+<li>Markdown parser 让词条编辑可以使用 Markdown</li>
+<li><del>KaTeX: mathematical typography 数学公式输入和排版</del></li>
+<li><a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa">MathJax</a> 不必多说，<a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa#gistcomment-1885438">需要做一些小的修正才能更好使用</a></li>
+<li>tw5-checklist</li>
+<li>ToDoNow 很好的一个</li>
+<li>Listreveal ToDoNow依赖</li>
+<li>Reminders ToDoNow提醒</li>
+<li>EditorCounter &amp; Autosaver 为编辑器添加字数统计和一定字数更改后自动保存 (原生自带了条目修改确认和删除操作时自动保存功能，去设置里开启即可)</li>
+<li>TiddlyMap 这个必须装！记得按照官方的安装教程来，否则容易翻车。</li>
+</ul>
+
+<h2 id="toc_11">成果</h2>
+
+<p><a href="media/15438144277084/empty.html">点这里下载成果</a>，这是一个较大，用于单个胜任复杂工作。较为精简轻便的版本稍后放出。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1.0 搞到一个空模板并开始使用]]></title>
+    <link href="https://gk0wk.github.io/15438000016364.html"/>
+    <updated>2018-12-03T09:20:01+08:00</updated>
+    <id>https://gk0wk.github.io/15438000016364.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">下载</h2>
+
+<p>去官网下载一个空模板 <code>empty.html</code> 。emmmm没啥好说的。</p>
+
+<p>但是请注意一个普通的浏览器如Chrome，如果直接打开这个文件可能会出现一些js错误，而且在保存的时候会直接变成下载。所以需要使用一定的附加手段。具体有哪些手段，官方文档里有说。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">打开</h2>
+
+<p>我们在这里使用的是 <code>TiddlyDesktop.app</code> ，一款桌面端 TiddlyWiki 浏览器，内置 TiddlyWiki 服务。</p>
+
+<p>打开  <code>TiddlyDesktop</code> 图标如下，是一只小猫。 </p>
+
+<p><img src="media/15438000016364/15438087113949.jpg" alt="" class="mw_img_center" style="display: block; clear:both; margin: 0 auto;"/></p>
+
+<p>点击界面上的 <code>Add a TiddlyWiki file</code> 选择刚才的 <code>empty.html</code> 就成功添加了，现在这个界面应该长这样：</p>
+
+<p><img src="media/15438000016364/15438080984972.jpg" alt=""/></p>
+
+<p>对界面做一些说明：</p>
+
+<ul>
+<li><strong>Add a TiddlyWiki file</strong> 导入一个 TiddlyWiki 的文件。</li>
+<li><strong>Add a TiddlyWiki folder</strong> 添加一个包含 TiddlyWiki 的路径(库)，这个功能尚不稳定，大家可以自己试试看。</li>
+<li><strong>Settings</strong> 设置里可以设置备份路径，并且可以进入内部设置路径。</li>
+<li><strong>Help</strong> TiddlyDesktop 的帮助。里面告诉你这个软件内置了服务，可以通过修改配置的方法让网络上的计算机利用浏览器访问打开的 Wiki 文件(需要安装插件)。</li>
+<li><strong>Backstage</strong> TiddlyDesktop 本身也是基于 TiddlyWiki 的，这里可以进入 TiddlyDesktop 的后台进行 Hack 。</li>
+<li><strong>open</strong> 打开。</li>
+<li><strong>reveal</strong> 定位文件位置。</li>
+<li><strong>remove</strong> 删除，只是从库中删除，原文件还在。</li>
+<li><strong>advanced</strong> 高级选项，现在只有文件备份选项。</li>
+</ul>
+
+<p>为了方便管理，我把 <code>TiddlyDesktop</code> 的备份设置改为了</p>
+
+<pre><code class="language-plain">/Users/&lt;myUserName&gt;/Documents/TiddlyWiki_Backups⁩/$filename$_backup/
+</code></pre>
+
+<p>统一放在一块会显得更整齐一些(把 <code>&lt;myUserName&gt;</code> 改成自己的用户名，Windows和Linux上同理)。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[0.1 介绍下 TiddlyWiki]]></title>
+    <link href="https://gk0wk.github.io/15437998674113.html"/>
+    <updated>2018-12-03T09:17:47+08:00</updated>
+    <id>https://gk0wk.github.io/15437998674113.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>TiddlyWiki ，按官方说法是一个「非线性个人 Web 笔记本」。相比其他笔记和 Wiki 系统，其最大的特点之一是程序本体和数据全部都在一个单 html 文件内，与此同时仍然有着非常强大的功能和插件系统。在我看来，管理以文字、代码和数学公式为主的个人知识库， TiddlyWiki 可谓是最好的选择之一。<br/>
+—— <a href="http://im.dimpurr.com/">Dimpurr Cheny</a></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<p>暂时犯懒，不想写这一节了，干脆发一篇别人的博文吧：<br/>
+<a href="http://blog.dimpurr.com/tiddly-wiki/">http://blog.dimpurr.com/tiddly-wiki/</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[0.0 我所使用的个人 Wiki 系统]]></title>
+    <link href="https://gk0wk.github.io/15437986117902.html"/>
+    <updated>2018-12-03T08:56:51+08:00</updated>
+    <id>https://gk0wk.github.io/15437986117902.html</id>
+    <content type="html"><![CDATA[
+<p>从接触电子化知识管理体系开始，我陆续尝试过 OmniOutline+OmniGraffle 、 Evernote 、 OneNote 、 Youdao Note 、 Scrivener 、 MarginNote 、 Old M&amp;C System(MindNode+PDF Expert+Markdown) 、 Notability 、 Notion 等解决方案，但是总有一些不尽人意，而现在逐渐喜欢上了个人 Wiki 这样的解决方案。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>在使用以上的各种方式时遇到了很多问题(需求)：</p>
+
+<ul>
+<li>我需要一个能够稳定存储、同步方便、最好是跨平台编辑和查看的工具。
+<ul>
+<li>很多优秀的软件，虽然真的很牛，但是只在一两个平台上被支持， MarginNote 和 Scrivener 只支持苹果家，Old M&amp;C System 脱离了macOS 也会很不好使用(感觉 macOS 上对 PDF 和 MindMap 的编辑是最丝滑的)。</li>
+<li>一个很理想的解决方案是 OneNote ， 但是这款软件更适合作为课堂笔记本，最好买一个 iPad 或者 Surface 配合手写笔使用，能涂能画能打字能拍照能插文件，做前期的笔记收集，或者后期的媒体资料仓库。但是OneNote没有标签系统，分层也有限制，但最大的硬伤还是同步问题，不挂梯子只能等到天荒地老...</li>
+<li>Scrivener 是一款用于长期写作收集的软件，不是一款知识管理软件，而且只有苹果家。</li>
+<li>DEVONthink 听说很强但不大会用，而且只有苹果家。</li>
+</ul></li>
+<li>这个工具对知识的整理方式应当是多元的、可以相互联系的，可以运用链接、标签、搜索等快速相互关联和搜索，而不会在寻找上浪费时间。
+<ul>
+<li>OmniOutliner 组织方式太单一，有时候知识之间的关联真的不止“主干-分支”那么简单，这是多少层级都无法解决的问题。</li>
+<li>有道云笔记还是当成仓库和收件箱比较好，不吹不黑。</li>
+<li>Notability 最好还是当成一个课堂笔记的工具，还是要转移给别的软件做整理的。</li>
+</ul></li>
+<li>这个软件还需要能存储足够多的东西，形式不必太过丰富但至少能满足需求、具有一定的拓展性，可以定制、<strong>而且易于编辑和重新修改</strong>。
+<ul>
+<li>OmniOutline 是富文本格式，支持的知识形式不大丰富而且修改起来还是很繁琐的。当年写 LaTeX 公式，写错了只好重新打，后来只好把公式代码贴在备注上。更不要说什么思维导图、流程图、代码高亮一类的了，都是手动上色或者利用 OmniGraffle 续命的。其他几款类似于富文本的应用也同理。</li>
+<li>当年甚至还想过用 TeX 来记笔记，后来想想还是不要折磨自己了。同样 Markdown 也有很多不丰富不方便的地方，比如图片存哪的问题——存网上考虑离线使用不方便、存本地乱的一批、转成 base64 文件乱的一批。</li>
+<li>光用思维导图，根本没法做知识仓库，我认为思维导图还是不要去添加太多的文字内容，每一个节点就是一个关键词，这样才能发挥伯赞先生“联系、梳理”的初衷。但是这样，具体知识就只能放在每一个节点的备注里，而备注又是富文本格式，同上。</li>
+</ul></li>
+<li>方便、方便、方便 | 稳定、稳定、稳定</li>
+</ul>
+
+<blockquote>
+<p>在 Wiki 之前我做使用的方案是用 PDF 把每一个知识点做成知识卡片(强烈推荐 PDF Expert )，然后利用 macOS 的 <code>Automator</code> 创建一些工作流并在 <code>Alfred</code> 里增加快捷入口，能够一键以给定的时间戳格式新建知识卡片并存在 iCloud 指定的路径下(另外后来又新增加了 Markdown 格式的知识卡片)。</p>
+
+<p>然后复制这个时间戳到思维导图的对应知识点的备注里，然后用思维导图把每一个知识点关联起来做成一张网图(MindNode 允许一张图里有多个思维树根目录，所以可以被用作一个操作丝滑的节点拓扑联系图软件而不一定非是传统的思维导图)。</p>
+
+<p>这样的话，我看笔记会直接打开这张图看节点，哪个节点不明白就直接去复制时间戳利用 <code>Alfred</code> 快速打开对应的 PDF 知识卡片。</p>
+
+<p>这个思维导图+卡片的思路用起来还是很舒服的，基本上实现了我对知识管理的要求：多元、联系、直观。下面是一个我用这个方法做的微积分笔记的 Map :</p>
+
+<p><img src="media/15437986117902/15438111043191.jpg" alt=""/></p>
+
+<p>通过工作流就可以快速定位卡片：</p>
+
+<p><img src="media/15437986117902/15438113346742.jpg" alt=""/></p>
+</blockquote>
+
+<ul>
+<li>这虽然已经是一个很好很酷的方案了，但是还是有我不满意的地方——如果满意我就不会在寻找了。
+<ul>
+<li>这个方案能很好地解决“节点”的组织问题，而且它足够直观，而且理论上可以连接各种形式的文件(因为连接本身只是一个时间戳，我只需要修改工作流就好)所以足够丰富，而且这个方案利用 MindNode 画的图让我非常满意，<del>拿出去也很有逼格，</del>完成这样一个“艺术品”让我感觉的确对知识的整理和消化又提升了一个境界。</li>
+<li>但是，我没有办法很好的做到“方便”，从思维导图的一个节点到复制时间戳到打开工作流到预览总共需要四步，PDF的没有排版不支持丰富的媒体，修改用 LaTeX 写的公式依旧需要重新再写一遍，而 Markdown 也是同理。完成这样一份笔记还是会消耗很多额外的时间，有时候会显得不值。而在手机上，打开一张知识卡片的成本就更大了。</li>
+<li>我也没有做到“联系”，思维导图只能让我连一层，我没法给知识卡片贴上标签(局部的，不希望用 macOS 的标签，那样会破坏移植性和便携性)，也没办法做到像维基百科那样一个词能调到对应的词条去，顶多里面再放一下另一个卡片的时间戳，然后再做“那四步”。</li>
+<li>这样的体系实际上是臃肿的，实际使用过程中，像上面微积分这样的大型知识图已经变得卡顿，而且有时还会出现无法正常保存的bug。同时，由于数学公式和图表等只能转化成图片，所以体积又进一步增大。而大量的知识卡片也难于管理，同时其实 PDF 做出来的知识卡片，如果不加精修是很不美观的，但是我没有那个时间。</li>
+</ul></li>
+</ul>
+
+<p>基于以上这些原因，虽然这一套系统很让我满意，但是我要是觉得需要一个更好的方案，然后我找到了个人Wiki系统，满足了我的这些需求。</p>
+
+<h2 id="toc_0">比较与结果</h2>
+
+<p>在网上比较了众多的 Wiki 实现方式，最终纠结于以下三个：</p>
+
+<ul>
+<li>TiddlyWiki</li>
+<li>DokuWiki</li>
+<li>MediaWiki</li>
+</ul>
+
+<p>三者的功能都很强大，面向分别为个人-小团体-大群体，功能都很丰富，但是从部署难度和复杂度来讲逐渐增高，但越后者具有越好的协作编辑能力。</p>
+
+<p>其实说实话，如果 TiddlyWiki 不是单文件系统而是分页式的包、可以加载数据库；同时支持历史版本管理和多人协作，我就不必这么纠结了。毕竟 TiddlyWiki 有非常好的便携性、跨平台型和扩展性。但是这暂时是不可以兼得的，或许以后可以参与 TiddlyWiki 的开发。 <a href="https://github.com/Jermolene/TiddlyWiki5">TIddlyWiki5 在 GitHub 上的仓库</a></p>
+
+<p>在 <a href="https://www.wikimatrix.org/">https://www.wikimatrix.org/</a> 可以比较多种 Wiki 系统，找到合适自己的方案。</p>
+
+<p>经过对比和思想斗争之后，我决定暂时割舍 DokuWiki 和 MediaWiki ，先用 TiddlyWiki 构建个人的够我一个人用，以后等到成熟了、需要多人开发的时候去买服务器搭建 DokuWiki / MediaWiki 。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Hugo+Github Page 搭建个人静态博客]]></title>
+    <link href="https://gk0wk.github.io/15423706234911.html"/>
+    <updated>2018-11-16T20:17:03+08:00</updated>
+    <id>https://gk0wk.github.io/15423706234911.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 MWeb+GitHub Page 搭建静态博客 - 上]]></title>
+    <link href="https://gk0wk.github.io/15423704846032.html"/>
+    <updated>2018-11-16T20:14:44+08:00</updated>
+    <id>https://gk0wk.github.io/15423704846032.html</id>
+    <content type="html"><![CDATA[
+<p>之前使用Hugo搭建的博客，但是由于Hugo的模板都不太用的来，插件安装也出了问题，而Hugo本身对Markdown的支持以及对中文文件名的支持都有些奇怪，再加上不太喜欢这种太过零散的博客生成方式，想要一个一体化又易用的工具，所以就选择了MWeb。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>MWeb是2017年大一的时候入手的，当时只是当做一个Markdown编辑器用，后来就慢慢改用VSCode了。不过当时并没有想过建站，也对使用Markdown构建静态博客没有什么概念，所以并没有想过MWeb的真正功用，反而抱怨买的不值emmmmm。</p>
+
+<p>直到之前使用Hugo才对Markdown建站渐渐了解，回头来再看MWeb，真的是有一种“众里寻他千百度，蓦然回首，那人却在灯火阑珊处”的感觉。找了半天，还是回到了最初的地方啊。</p>
+
+<h2 id="toc_0">MWeb的基本使用</h2>
+
+<p>官方教程已经写得很清楚了，我这里在官方 Mweb 2 教程的基础上又加了一些整合成一篇更详(混)细(乱)的教程：</p>
+
+<p><a href="15090833160717.html">Markdown 语法和 MWeb 写作使用说明</a></p>
+
+<h2 id="toc_1">开始建站</h2>
+
+<h2 id="toc_2">首先我们需要一个GitHub Page，再首先我们需要GitHub账号，再再首先我们需要学会使用git。这些不在本文的讲述范围内，可以参考以下文章：</h2>
+
+<p><a href="https://blog.csdn.net/baidu_25464429/article/details/80805237">使用 github pages, 快速部署你的静态网页</a></p>
+
+<p>这篇文章，主要记录的是自己的静态网页搭建过程，供自己和他人参考，而更多的教程请参考官方。</p>
+
+<p>我们首先要在文档库模式下给博客建立一个文件夹</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[物理实验步骤]]></title>
+    <link href="https://gk0wk.github.io/15423332361636.html"/>
+    <updated>2018-11-16T09:53:56+08:00</updated>
+    <id>https://gk0wk.github.io/15423332361636.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">课前预习报告</h2>
+
+<ul>
+<li>写好实验目的、主要原理、公式（要注明式中各量的意义）、电路图或光路图及关键步骤。</li>
+<li>在草表一栏画好原始数据表格。</li>
+</ul>
+
+<blockquote>
+<p>预习报告要求字迹端正，简明扼要，重点明确，切忌照抄教材，未写预习报告者不能进行实验。</p>
+
+<blockquote>
+<p>预习报告成绩为20分，其中原理和内容占主要，原理10分，内容和其他10分。</p>
+
+<ol>
+<li>原理中缺少有关公式和说明扣5分；</li>
+<li>无主要的图示扣5分；</li>
+<li>全文抄袭教材扣5分；</li>
+<li>抄袭别人的内容分别不给分。</li>
+</ol>
+</blockquote>
+</blockquote>
+
+<p><span id="more"></span><!-- more --></p>
+
+<h2 id="toc_1">实验</h2>
+
+<p>到实验室在动手前先了解仪器的使用方法和规则 尤其是，人身和仪器的安全。实验中要仔细观察和记录。分析实验过程的合理性与规律。</p>
+
+<ul>
+<li>阅读有关资料、调整仪器、观察现象、记录数据。在此过程中要认真和事实求是地做好实验，重视自己的实验能力的培养。</li>
+<li>强调<strong>不可用铅笔记录数据</strong>。原始数据必须记录在草表内。数据完整、仪器还原后，经老师签字后方才有效。</li>
+</ul>
+
+<blockquote>
+<p>学生要认真作好实验的整体布局，仔细阅读有关仪器使用说明书，正确使用和调节仪器设备，操作规范、读数正确、实验结束后数据经老师签字、整理好仪器，方可离开实验室。</p>
+
+<blockquote>
+<p>实验操作分为30分</p>
+
+<ol>
+<li>违反操作规程。损坏仪器以至无法实验者30分不给；</li>
+<li>抄袭和伪造数据30分不给；</li>
+<li>操作中对仪器故障能自己排除，可适当加分；</li>
+<li>对仪器误差或缺陷有自己的见解和提出改进的意见可加分。</li>
+</ol>
+
+<p>上述两项加分不超过10分</p>
+</blockquote>
+</blockquote>
+
+<h2 id="toc_2">完成报告</h2>
+
+<p>认真写好实验报告。它是你这次实验的总结。要求字迹清楚、图表正确，完整、误差分析定量、有效数字正确等。</p>
+
+<blockquote>
+<p>评分办法：这部分总分50分。其中数据处理和结果30分，误差分析10分，实验心得及思考题解答10分。</p>
+
+<ol>
+<li>结果有效数字严重错误扣5分；</li>
+<li>不确定度计算及表示错误扣5分；</li>
+<li>结果计算错误或违背了理论值和公认值（非仪器本身引起的）扣20分；</li>
+<li>抄袭和伪造数据与结果者扣30分。</li>
+</ol>
+
+<p>下述情况可加分：</p>
+
+<ol>
+<li>对产生的误差分析合理，有独到的见解；</li>
+<li>对整个实验提出改进意见和合理人建议；</li>
+<li>报告整体规范，书写整洁、清楚。以上加分每次不超出10分。</li>
+</ol>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[数据处理]]></title>
+    <link href="https://gk0wk.github.io/15423332269346.html"/>
+    <updated>2018-11-16T09:53:46+08:00</updated>
+    <id>https://gk0wk.github.io/15423332269346.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">数据整理的重要步骤 —— 列表法</h2>
+
+<p>在原始数据记录以及整理数据时，都要进行正规列表。将各量的关系有序地排列成表格形式。既有利于一目了然地表示各物理量之间的关系，又便于发现实验中的问题。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">数据处理的表格法 —— 逐差法</h2>
+
+<p>在有些实验中，我们连续取得一些数据。如果依次相减，就会发现中间许多数据并未发挥作用，而影响到实验的可靠性。</p>
+
+<p>例如：金属杨氏弹性模量实验和等厚干涉的牛顿环实验。</p>
+
+<p>在金属杨氏弹性模量实验中，连续测量钢丝的伸长位置为： \(A_1, A_2, A_3, A_4, A_5, A_6, A_7, A_8, A_9, A_{10}\) 10个数据。若为求钢丝的伸长，依次相减，则伸长量\(\Delta A\)有：</p>
+
+<p>\[\Delta A=\frac{(A_2-A_1)+(A_3-A_2)+\cdots +(A_{10}-A_9)}{9}=\frac{A_{10}-A_1}{9}\]</p>
+
+<p>中间各次测量均未起到作用。为发挥多次测量的优越性，将数据分成前后两组：</p>
+
+<p>\[A_1, A_2, A_3, A_4, A_5\]<br/>
+\[A_6, A_7, A_8, A_9, A_{10}\]</p>
+
+<p>将这两组对应相减，得出5组，且每一组相减间距是原来临近间距的5倍，这样有：</p>
+
+<p>\[\Delta A=\frac{(A_6-A_1)+(A_7-A_2)+\cdots +(A_{10}-A_5)}{5\times 5}\]</p>
+
+<p>这种处理数据的方法称为 <strong>逐差法</strong>。此法的优点是充分利用所测的数据，有利于减少测量的随机误差和仪器带来的误差。是实验中常用的处理数据的方法。为了直观和便于处理，也常用列表格方法来表示。</p>
+
+<h2 id="toc_2">作图法</h2>
+
+<h3 id="toc_3">图示法</h3>
+
+<p>是用图形来表达物理量的变化。如静电场模拟实验中就是采用此法。</p>
+
+<p>从图示法中，有时也能得出定量的结果。</p>
+
+<h3 id="toc_4">图解法处理实验数据</h3>
+
+<p>图解法可形象、直观地显示出物理量之间的函数关系，也可用来求某些物理参数，因此它是一种重要的数据处理方法。作图时要<strong>先整理出数据表格</strong>，并要用<strong>坐标纸作图</strong>。</p>
+
+<p>作图六点要求：</p>
+
+<ol>
+<li>选择合适的坐标分度值，确定坐标纸的大小坐标分度值的选取应能反映测量值的有效位数，一般以 1～2mm对应于测量仪表的最小分度值或对应于测量值的次末位数）。</li>
+<li>标明坐标轴：用粗实线画坐标轴，用箭头标轴方向，标坐标轴的名称或符号、单位,再按顺序标出坐标轴整分格上的量值。</li>
+<li>标实验点：实验点可用“+”、“*”、“。”等符号标出（同一坐标系下不同曲线用不同的符号）。</li>
+<li>连成图线：用直尺、曲线板等把点连成直线、光滑曲线。一般不强求直线或曲线通过每个实验点，应使图线两边的实验点与图线最为接近且分布大体均匀。图线正穿过实验点时可以在点处断开。</li>
+<li>标出图线特征：在图上空白位置标明实验条件或从图上得出的某些参数。利用所绘直线可给出被测电阻R大小：从所绘直线上读取两点 A、B 的坐标就可求出 R 值。</li>
+<li>标出图名：在图线下方或空白位置写出图线的名称及某些必要的说明。</li>
+</ol>
+
+<p><img src="media/15423332269346/31.png" alt="31" style="width:500px;"/></p>
+
+<p>注意问题：</p>
+
+<ul>
+<li>曲线太粗，不均匀，不光滑。应该用直尺、曲线板等工具把实验点连成光滑、均匀的细实线。</li>
+<li>横轴坐标分度选取不当。横轴以3 cm 代表1 V，使作图和读图都很困难。实际在选择坐标分度值时，应既满足有效数字的要求又便于作图和读图，一般以1 mm 代表的量值是10的整数次幂或是其2倍或5倍。</li>
+<li>图纸使用不当。实际作图时，坐标原点的读数可以不从零开始。</li>
+</ul>
+
+<h3 id="toc_5">数据的直线拟合(最小二乘法)</h3>
+
+<p>设此两物理量 x、y 满足线性关系，且假定实验误差主要出现在\(y_i\)上，设拟合直线公式为 y =f(x)=a+bx，当所测各yi值与拟合直线上各估计值 \(f(x_i)=a+bx_i\)之间偏差的平方和最小，即</p>
+
+<p>\[s=\sum\left[y_i-f(x_i)\right]^2=\sum\left[y_i-(a+bx_i)\right]^2\rightarrow min\]</p>
+
+<p>时，所得拟合公式即为最佳经验公式。据此有</p>
+
+<p>\[\frac{\partial s}{\partial a}=-2\sum(y_i-a-bx_i)=0,\quad \frac{\partial s}{\partial b}=-2\sum(y_i-a-bx_i)x_i=0\]</p>
+
+<p>\[\therefore \quad a=\frac{\sum x_iy_i\sum x_i -\sum y_i\sum x_i^2}{(\sum x_i)^2-n\sum x_i^2},\quad b=\frac{\sum x_i\sum y_i -n\sum x_iy_i}{(\sum x_i)^2-n\sum x_i^2}\]</p>
+
+<p>相关系数r：最小二乘法处理数据除给出a、b外，还应给出相关系数r，r定义为:</p>
+
+<p>\[r\frac{\sum(x_i-\overline{x})-\sum(y_i-\overline{y})}{\sqrt{\sum(x_i-\overline{x})^2\sum(y_i-\overline{y})^2}},\qquad \overline{x}=\frac{\sum x_i}{n},\quad y=\frac{\sum y_i}{n}\]</p>
+
+<p>r表示两变量之间的函数关系与线性的符合程度，\(r\in[-1，1]\)。</p>
+
+<ul>
+<li>\(|r|\rightarrow 1\)，x、y间线性关系好;</li>
+<li>\(|r|\rightarrow 0\)，x、y间无线性关系，拟合无意义。</li>
+</ul>
+
+<p>物理实验中一般要求r绝对值达到0.999以上。</p>
+
+<blockquote>
+<p>用计算机Excel 程序中的 intercept、slope、correl 函数也可直接求得 a、b、r</p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[物理实验的误差和不确定度 - 下]]></title>
+    <link href="https://gk0wk.github.io/15423332157827.html"/>
+    <updated>2018-11-16T09:53:35+08:00</updated>
+    <id>https://gk0wk.github.io/15423332157827.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">直接测量的标准不确定度 \(u\) —— 测量工具读数方法</h2>
+
+<blockquote>
+<p>直接测量量（原始数据）的读数应反映仪器的精确度</p>
+</blockquote>
+
+<ul>
+<li>游标类器具(游标卡尺、分光计度盘、大气压计等)：读至游标最小分度的整数倍，即不需估读。</li>
+<li>数显仪表及有十进步式标度盘的仪表(电阻箱、电桥、电位差计、数字电压表等)：一般直接读取仪表的显示值。</li>
+<li>指针式仪表及其它器具(螺旋测微器、标尺等)，读数时估读到仪器最小分度的1/2～1/10，或使估读间隔不大于仪器基本误差限的1/5～1/3。</li>
+</ul>
+
+<p>注意：<strong>注意指针指在整刻度线上时读数的有效位数——末尾的0不可以省略！</strong></p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">间接测量的合成标准不确定度 \(u_C\)</h2>
+
+<blockquote>
+<p>间接测量是指利用某种已知的函数关系从直接测量量来得到待测量量的测量。</p>
+</blockquote>
+
+<p>设间接被测量量y与诸直接测量量 \(x_i (i=1,2,\dots ,n)\) 由函数f 来确定：\(y=f(x_1,x_2,\dots ,x_n)\)<br/>
+用诸不确定度\(u(x_i)\)代替微分\(dx_i\), 有<br/>
+\[u_C=\sqrt{\sum_{i=1}^n\left[\frac{\partial f}{\partial x_i}u(x_i)\right]^2}\]<br/>
+\[\frac{u_C}{y}=\sqrt{\sum_{i=1}^n\left[\frac{\partial \ln f}{\partial x_i}\right]^2\left[u(x_i)\right]^2}\]<br/>
+前者适用于和差形式的函数，后者适用于积商形式的函数。</p>
+
+<hr/>
+
+<p>例：</p>
+
+<blockquote>
+<p>设有一圆环，其外径为\(\phi_外=9.800\pm 0.005mm\)，内径为\(\phi_内=4.500\pm 0.005mm\)，高度\(h=5.000\pm 0.005mm\)，求环的体积V和不确定度。</p>
+</blockquote>
+
+<p>\[V=\frac{\pi}{4}(\phi_外^2-\phi_内^2)h=2.976\times 10^2 mm^3\]<br/>
+\[\frac{\partial \ln V}{\partial \phi_外}=\frac{2\times 9.800}{9.800^2 - 4.500^2}\]<br/>
+\[\frac{\partial \ln V}{\partial \phi_内}=\frac{2\times 4.500}{9.800^2 - 4.500^2}\]<br/>
+\[\frac{\partial \ln V}{\partial V}=\frac{1}{V}=\frac{1}{5.000}\]</p>
+
+<p>\[\frac{\Delta V}{V}=\sqrt{\left(\frac{\partial \ln V}{\partial \phi_外}\Delta\phi_外\right)^2+\left(\frac{\partial \ln V}{\partial \phi_内}\Delta\phi_内\right)^2+\left(\frac{\partial \ln V}{\partial V}\Delta h\right)^2}=0.55\%\]</p>
+
+<p>\[\Delta V=V\times \frac{\Delta V}{V}\approx 2 mm^3\]</p>
+
+<p>因此，环的体积为 \(V=(2.98\pm 0.02)\times 10^2 mm^3\)</p>
+
+<h2 id="toc_2">有效数字表示法及运算规则</h2>
+
+<p>在实验中我们所测的被测量都是含有不确定度的数值，对这些数值不能任意取舍，要正确地反映出测量值的准确度。所以在记录数据、计算以及书写测量结果时，应根据测量误差或实验结果的不确定度来确定究竟应取几位有效位数。</p>
+
+<ul>
+<li>作为一个通用规定，<strong>测量值只能写到也应该写到开始有误差的那一位到两位</strong>。其后的数字按“四舍六进五凑双”法则（即后面的数字是四及以下就舍掉，是六及以上就进一，遇五若前面是奇数就进一，最后一位就变成是偶数，若前面已是偶数，则舍掉）取舍。</li>
+<li>有效数字的位数多少直接反映测量的准确度。有效位数越多，表明测量的准确度越高。</li>
+<li>有效数值书写时应注意：有效数值的位数与小数点位置无关。也不因使用的单位不同而改变。<br/>
+例如：重力加速度某人测量值为\(980cm/s^2\), 改写单位为\(m/s^2\)，仍为三位有效数字，即\(9.80m/s^2(\neq 9.8m/s^2 注意0不可随意添减)\)。</li>
+<li>在运算过程中的有效数字取舍，一般遵循：<strong>加减运算的结果以参与运算的末位最高的数为准；乘除则以有效数字最少的数为准，有时可比其多取一位。</strong></li>
+</ul>
+
+<h2 id="toc_3">数值书写的要求</h2>
+
+<ul>
+<li>有效数字的 <strong>位数</strong>是由合成不确定度来确定。测量值的 <strong>最后一位应与不确定度的最后一位对齐</strong>。一般地，总不确定度只取一位或二位，不可多取。例如\(S=(2.35\pm 0.03)cm^2\)。</li>
+<li>为方便起见，对较大或较小的数值，常采用科学记数法，即使用\(10^n\)的形式，例如重力加速度可写成\(9.80\times 10^{-3}km/s^2\)；阿伏加德罗常数\(6.02214199\times 10^{23}/mol\)等等。</li>
+<li>结果是由 <strong>间接测量</strong>得到，其有效数字由算出结果的 <strong>不确定度</strong>来确定。在没有给出各数值的不确定度时，数值的四则运算，一般地由其中有效数字位数最少的决定。</li>
+<li>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
+\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</li>
+</ul>
+
+<blockquote>
+<ul>
+<li>E 是测量量</li>
+<li>1.89 是测量量值</li>
+<li>±0.08 是不确定度(误差)</li>
+<li>最后的是测量值单位</li>
+</ul>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[物理实验的误差和不确定度 - 上]]></title>
+    <link href="https://gk0wk.github.io/15423331812230.html"/>
+    <updated>2018-11-16T09:53:01+08:00</updated>
+    <id>https://gk0wk.github.io/15423331812230.html</id>
+    <content type="html"><![CDATA[
+<p>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
+\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</p>
+
+<ul>
+<li>E 是测量量</li>
+<li>1.89 是测量量值</li>
+<li>±0.08 是不确定度(误差)</li>
+<li>最后的是测量值单位</li>
+</ul>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h2 id="toc_0">误差和不确定度</h2>
+
+<p>不确定度是对测量结果的可靠性予以标度。测量不确定度表征被测量的真值所处量值范围的评定。它按某一置信概率给出真值可能落入的区间。它可以是标准差或其倍数，或是说明了置信水准的区间的半宽。它不是具体的真误差，它只是以参数形式定量表示了无法修正的那部分误差范围。它来源于偶然效应和系统效应的不完善修正，是用于表征合理赋予的被测量值的分散性参数。不确定度按其获得方法分为A、B两类评定分量。A类评定分量是通过观测列统计分析作出的不确定度评定，B类评定分量是依据经验或其他信息进行估计，并假定存在近似的“标准偏差”所表征的不确定度分量。</p>
+
+<p>测量不确定度是无符号的参数，用标准差或标准差的倍数或置信区间的半宽表示，由人们根据实验、资料、经验等信息进行评定，可以通过A，B两类评定方法定量确定;</p>
+
+<p>测量不确定度由人们经过分析和评定得到，因而与人们对被测量、影响量及测量过程的认识有关;</p>
+
+<p>“不确定度”一词本身隐含为一种可估计的值，它不是指具体的、确切的误差值，虽可估计，但却不能用以修正量值，只可在已修正测量结果的不确定度中考虑修正不完善而引入的不确定度;</p>
+
+<hr/>
+
+<p>误差多数情况下是指测量误差，<strong>它的传统定义是测量结果与被测量真值之差</strong>。通常可分为两类：系统误差和偶然误差。误差是客观存在的，它应该是一个确定的值，但由于在绝大多数情况下，真值是不知道的，所以真误差也无法准确知道。我们只是在特定的条件下寻求最佳的真值近似值，并称之为约定真值。</p>
+
+<p>测量误差为有正号或负号的量值，其值为测量结果减去被测量的真值，由于真值未知，往往不能准确得到，当用约定真值代替真值时，只可得到其估计值。</p>
+
+<p>测量误差是客观存在的，不受外界因素的影响，不以人的认识程度而改变;</p>
+
+<p>而系统误差的估计值如果已知则可以对测量结果进行修正，得到已修正的测量结果。</p>
+
+<h2 id="toc_1">误差：<em>测量值-真值</em></h2>
+
+<p>特点：普遍存在、小量<br/>
+分类：</p>
+
+<ul>
+<li>系统误差：对同一被测量多次测量的过程中，绝对值和符号保持恒定或以可预知方式变化的测量误差的分量
+<ul>
+<li>已定系统误差：例如：电表、读数显微镜的零位误差等此项可以也必须修正。</li>
+<li>未定系统误差：已知存在于某个范围，而不知具体数值的系统误差。例如：游标卡尺的允差。</li>
+</ul></li>
+<li>随机误差：对同一被测量多次测量的过程中，每次测量值相对于真值有一个无规则的涨落(大小、方向)的误差分量
+<ul>
+<li>特点一：小误差出现的概率比大误差出现的概率大</li>
+<li>特点二：多次测量时分布对称，具有抵偿性 —— <strong>多次测量取平均有利于消除随机误差</strong></li>
+</ul></li>
+<li>表示：
+<ul>
+<li>绝对误差：测量结果 - 被测量的真值(理论值)</li>
+<li>相对误差：\(E=\frac{绝对误差}{被测量的真值(理论值)}\times 100\%\)</li>
+</ul></li>
+<li>产生原因：仪器、方法、环境、个人主观、对象本身</li>
+</ul>
+
+<h3 id="toc_2">随机变量的统计规律——正态分布</h3>
+
+<p>\[\rho(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}},\ x\in R\]</p>
+
+<p>μ 表示 x 出现概率最大的值，消除系统误差后称为 <strong>数学期望值</strong>。通常就可以得到 x 的真值：</p>
+
+<p>\[ \mu =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i \]</p>
+
+<p>σ称为 <strong>标准差</strong>，决定了线型的宽窄。σ越大，正态曲线就越平坦它表征了测量值的分散程度:</p>
+
+<p>\[\sigma =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n}\sum_{i=1}^n\left(x_i-\mu\right)^2}\]</p>
+
+<h2 id="toc_3">不确定度</h2>
+
+<p>定义：不确定度表示由于测量误差存在而对被测量值不能确定的程度。不确定度是一定概率下的 <strong>误差限值</strong>。</p>
+
+<p>不确定度反映了可能存在的误差分布范围，即随误差分量和未定系统误差的联合分布范围。<br/>
+由于真值的不可知，误差一般是不能计算的，它可正、可负也可能十分接近零；而不确定度总是不为零的正值，是可以具体评定的。</p>
+
+<h3 id="toc_4">分类</h3>
+
+<ul>
+<li>由随机效应引入的不确定度分量 —— A类分量\(u_A\)，多次重复测量时与随机误差有关的分量；<br/>
+可用统计方法评定的不确定度部分</li>
+<li>由系统效应引入的不确定度分量 —— B类分量\(u_B\)，与未定系统误差有关的分量。<br/>
+要用其他方法（非统计方法）评定的不确定度部分</li>
+</ul>
+
+<p>这两类分量在相同置信概率下用方和根方法合成总不确定度：</p>
+
+<p>\[u=\sqrt{u_A^2+u_B^2}\]</p>
+
+<p>在具体使用中，测量不确定度又有三种不同的表述</p>
+
+<ul>
+<li>直接测量的标准不确定度u(standard ncertainty)</li>
+<li>间接测量的合成标准不确定度\(u_C\) (combined standard uncertainty)</li>
+<li>扩展不确定度U(expanded uncertainty)</li>
+</ul>
+
+<h2 id="toc_5">总结：测量结果的不确定性和误差分析</h2>
+
+<ol>
+<li>首先有一系列值 \(x_1 \sim x_n\)</li>
+<li>然后找一个最佳估计值\(\overline{x}\)：<br/>
+\[\overline{x} =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i\]</li>
+<li><p>按贝塞公式求出分散性\(s\)(<strong>单次测量的标准偏差</strong>)：<br/>
+\[s(x) =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p>
+<ul>
+<li>s大，表示测得值很分散，随机误差分布范围宽，测量的精密度低；</li>
+<li>s小，表示测得值很密集，随机误差分布范围窄，测量的精密度高；<br/>
+&gt; 其实可以发现，这里用\(\overline{x}\)取代真实值\(\mu\)，毕竟真值是测不出来的，所以上述公式其实并不是算误差，而是不确定度， <strong>不确定度是一个误差存在的范围</strong>。</li>
+</ul></li>
+<li><p>对算术平均值为结果时，<strong>平均值的标准偏差</strong>应为：<br/>
+\[s(\overline{x})=\frac{s(\overline{x})}{\sqrt{n}} =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p></li>
+<li><p>当 \(5 ＜ n\le 10\)，置信概率为95%时，可简化认为\(u_A\approx s\).<br/>
+根据使用仪器得出\(u_B=\Delta_仪\).<br/>
+由\(u_A\)、\(u_B\)合成总不确定度  \(u=\sqrt{u_A^2+u_B^2}\)</p></li>
+<li><p>给出直接测量的最后结果 \(x=\overline{x}\pm u\)</p></li>
+</ol>
+
+<hr/>
+
+<h3 id="toc_6">例</h3>
+
+<blockquote>
+<p>用螺旋测微计测某一钢丝的直径，6次测量值yi分别为：0.249,0.250, 0.247, 0.251, 0.253, 0.250; 同时读得螺旋测微计的零位x0为：0.004, 单位mm，已知螺旋测微计的仪器误差为Δ仪=0.004mm，请给出完整的测量结果。</p>
+</blockquote>
+
+<p>解：</p>
+
+<ul>
+<li>测得值的最佳估计值为<br/>
+\[x=\overline{x}-x_0=0.250-0.004=0.246mm\]</li>
+<li>测量列的标准偏差<br/>
+\[s(x)=\sqrt{\frac{1}{6-1}\left[\sum^6_{k=1}(x_k-\overline{x})^2\right]}=0.002mm\]</li>
+<li>测量次数n=6，可近似有<br/>
+\[u=\sqrt{u_A^2+u_B^2}\approx \sqrt{s(\overline{x})^2+\Delta_仪^2}=\sqrt{0.002^2+0.004^2}\approx 0.004mm\]</li>
+<li>测量结果为<br/>
+\[x=0.246\pm 0.004mm\]</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[虚拟内存机制和TLB]]></title>
+    <link href="https://gk0wk.github.io/15346760576204.html"/>
+    <updated>2018-08-19T18:54:17+08:00</updated>
+    <id>https://gk0wk.github.io/15346760576204.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>Assume: 32位操作系统，32位寻址总线宽度 → 4G线性空间</p>
+</blockquote>
+
+<h2 id="toc_0">地址转化</h2>
+
+<p>地址转化的全过程可以用以下这张图来概括：</p>
+
+<p><img src="media/15346760576204/OG.png" alt="OG"/></p>
+
+<p>以下是具体步骤介绍。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">1. 逻辑地址 → 线性地址 (段式内存管理，Intel早期策略的保留)</h2>
+
+<ul>
+<li><p>段内偏移地址(32位)</p></li>
+<li><p>段选择符：16位长的序列，是索引值，定位段描述符；结构：<br/>
+<img src="media/15346760576204/2.png" alt="#2"/></p>
+<ul>
+<li>高13位为表内索引号 —— 但注意由于GDT第一项留空，所以索引要先加1；</li>
+<li>而2位为TI表指示器，0是指GDT，1是指LDT；</li>
+<li>0、1位是RPL请求者特权级，00最高，11最低 —— 在x86保护模式下修改寄存器是系统之灵，必须有对应的权限才能修改(当前执行权限和段寄存器中(被修改的)的RPL均不低于目标段的RPL)</li>
+</ul></li>
+<li><p>段描述符：8x8=64位长的结构，用来描述一个段的各种属性。结构：<br/>
+<img src="media/15346760576204/1.png" alt="#1"/></p>
+<ul>
+<li>0、1字节+6字节低4位(20位) 段边界/段长度：最大1MB或者4G(看粒度位的单位)</li>
+<li>2、3、4、7字节(32位) 段基址：4G线性地址的任意位置(不一定非要被16整除)</li>
+<li>6、7字节的奇怪设计是为了兼容80286(24位地址总线)</li>
+<li>剩下的那些是段属性，详见<code>20180819143434</code></li>
+</ul></li>
+<li><p>段描述表：多任务操作系统中，含有多个任务，而每个人物都有多个段，其段描述符存于段描述表中。<br/>
+IA-32处理器有3个段描述表：GDT、LDT和IDT。</p>
+<ul>
+<li>GDT(Global Descripter Table) 全局段描述符表：一个系统一般只有一个GDT，含有每一个任务都可以访问的段；通常包含操作系统所使用的代码段、数据段和堆栈段，GDT同时包含各进程LDT数据段项，以及进程间通讯所需要的段。<br/>
+GDTR是CPU提供的寄存器，存储GDT的位置和边界；在32位模式下RGDT有48位长(高32位基地址+低16位边界)，在32e模式下有80位长(高64位基地址+低16位边界)。<br/>
+GDT的第一个表项留空不用，是空描述符，所以索引号要加1。<br/>
+GDT最多128项。</li>
+<li>LDT(Local Descripter Table) 局部段描述符表：16位长，属于某个进程。一个进程一个LDT，对应有RLDT寄存器，进程切换时RLDT改变。<br/>
+RLDT和RGDT不一样，RLDT是一个索引值而不是实际指向，指向GDT中某一个LDT描述项。所以如果要获取LDT中的某一项，先要访问GDT找到对应LDT，再找到LDT中的一项。<br/>
+编译程序时，程序内赋予了虚拟页号。在程序运行时，通过对应LDT转译成物理地址。故虚拟页号是局部性的、不同进程的页号会有冲突。<br/>
+LDT没有空选择子。</li>
+<li>IDT(Interrupt Descripter Table) 中断段描述符表；一个系统一般也只有一个。</li>
+<li>以下这个图能做一点解释：
+<img src="media/15346760576204/7.png" alt="#7"/></li>
+</ul></li>
+</ul>
+
+<h2 id="toc_2">2. 线性地址 → 物理地址 (页式内存管理)</h2>
+
+<p>这一步由CPU的页式管理单元来负责转换。——MMU(内存管理单元)。</p>
+
+<ul>
+<li><p>线性地址可以拆分为三部分(或者两部分)：<br/>
+<img src="media/15346760576204/3.png" alt="#3"/></p></li>
+<li><p>页(Page)：线性地址被划分为大小一致的若干内存区域，其对应映射到大小相同的与物理空间区域页框(Frame)上。这个映射不一定是连贯而有序的。</p></li>
+<li><p>CR3：页目录基址寄存器。对于每一个进程，CR3的内容不同(有点像RLDT)，页目录基址也不同，线性地址-物理地址的映射也不同。</p></li>
+<li><p>页目录：占用一个4kb的内存页，最多存储1024个页目录表项(PDE)，一个PDE有4字节。在没启用PAE时，有两种PDE，规格不同。</p></li>
+<li><p>页目录表项(PDE)：每个程序有多个页表，即拥有多个PDE。PDE的结构如下：<br/>
+<img src="media/15346760576204/4.png" alt="#4"/><br/>
+12~31位(20位)表示页表起始物理地址的高20位(页表基址低12位为0，即一定以4kb对齐)。</p></li>
+<li><p>页表：一个页表占4kb的内存页，最多存储1024个页表项(PTE)，一个PTE是4字节。页表的基址是4kb对齐的，低12位是0。</p></li>
+</ul>
+
+<p>采用对页表项的二级管理模式(也目录→页表→页)能够节约空间。因为不存在的页表就可以不分配空间，并且对于Windows来说只有一级页表才会存在主存中，二级可以存在辅存中——不过Linux中它们都常驻主存。</p>
+
+<p>一些CPU会提供更多级的架构，如三级、四级。Linux中，有对应的高层次抽象，提供了一个四层页管理架构：<br/>
+<img src="media/15346760576204/6.png" alt="#6"/><br/>
+把中间的某几个定为长度为0，就可以调整架构级数。如“四化二”：某地址0x08147258，对应的PUD、PMD里只有一个表项为PUD→PMD，PMD→PT；划分的时候，PGD=0000100000，PUD=PMD=0，PT=0101000111.</p>
+
+<h2 id="toc_3">3. TLB (转换检测缓冲区、快表、转译后被缓冲区)</h2>
+
+<p>处理器中，一个具有并行朝赵能力的特殊高速缓存器，存储最近访问过的一些页表项(时空局部性原理，减少页映射的内存访问次数)。</p>
+
+<p>TLB较贵，通常能够存放16~512个页表项。</p>
+
+<ul>
+<li>TLB命中：直接取出对应的页表项</li>
+<li><p>TLB缺失：先淘汰TLB中的某一项(TLB替换策略，一些算法，可以由硬件或软件来实现)</p>
+<ul>
+<li>硬件处理TLB Miss：CPU会遍历页表，找到正确的PTE；如果没有找到，CPU就会发起一个页错误并将控制权交给操作系统。</li>
+<li>软件处理TLB Miss：CPU直接发出未命中错误，让操作系统来处理。</li>
+</ul></li>
+<li><p>脏记录：当TLB中某个PTE项失效(如切换进程、进程退出、虚拟页换出到磁盘)，PTE标记为不存在，此时映射已经不成立了。<br/>
+操作系统要保证即时刷新掉这些脏记录，不同的CPU有不同的刷新TLB方法，但每次都完全刷新TLB会很慢，所以现在有一些策略，扩展对一个PTE的描述(如针对某个进程、空间的标识，如果目前进程与PTE相关，就会忽略掉)，这样可以让多个进程同时共存TLB</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Markdown 语法和 MWeb 写作使用说明]]></title>
+    <link href="https://gk0wk.github.io/15090833160717.html"/>
+    <updated>2017-10-27T13:48:36+08:00</updated>
+    <id>https://gk0wk.github.io/15090833160717.html</id>
+    <content type="html"><![CDATA[
+<p>本文在 <code>Mweb 2</code> 原有教程的基础上，又添加了其他教程的内容，结合形成了一个相对更全面(也更啰嗦)的 MWeb Markdown 使用教程/参考书。为的是可以让自己更好地使用 MWeb+Markdown 写博客。当然也可以单纯用来作为 Markdown 教程，只是一些功能只有 MWeb 能用就是了。</p>
+
+<span id="more"></span><!-- more -->
+
+<p><img src="media/15090833160717/15539307903780.jpg" alt="" class="mw_img_center" style="display: block; clear:both; margin: 0 auto;"/></p>
+
+<ul>
+<li>
+<a href="#toc_0">准备部分</a>
+<ul>
+<li>
+<a href="#toc_1">欢迎使用 MWeb</a>
+</li>
+<li>
+<a href="#toc_2">需要您重点注意的</a>
+</li>
+<li>
+<a href="#toc_3">Markdown 的设计哲学</a>
+<ul>
+<li>
+<a href="#toc_4">Markdown兼容HTML</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">本文约定</a>
+</li>
+<li>
+<a href="#toc_6">Cheatsheet</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">基础部分</a>
+<ul>
+<li>
+<a href="#toc_8">标题</a>
+</li>
+<li>
+<a href="#toc_9">强调</a>
+</li>
+<li>
+<a href="#toc_10">段落和换行</a>
+</li>
+<li>
+<a href="#toc_11">分隔线</a>
+</li>
+<li>
+<a href="#toc_12">列表</a>
+<ul>
+<li>
+<a href="#toc_13">无序列表</a>
+</li>
+<li>
+<a href="#toc_14">有序列表</a>
+</li>
+<li>
+<a href="#toc_15">列表的段落缩进</a>
+</li>
+<li>
+<a href="#toc_16">任务列表（Task lists）</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_17">图片</a>
+</li>
+<li>
+<a href="#toc_18">链接</a>
+</li>
+<li>
+<a href="#toc_19">自动链接</a>
+</li>
+<li>
+<a href="#toc_20">区块引用 Blockquotes</a>
+<ul>
+<li>
+<a href="#toc_22">代码</a>
+<ul>
+<li>
+<a href="#toc_23">行内代码</a>
+</li>
+<li>
+<a href="#toc_24">多行或者一段代码</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_25">实用模块</a>
+<ul>
+<li>
+<a href="#toc_26">顺序图或流程图</a>
+</li>
+<li>
+<a href="#toc_27">表格</a>
+</li>
+<li>
+<a href="#toc_28">MathJax</a>
+</li>
+<li>
+<a href="#toc_29">脚注（Footnote）</a>
+</li>
+<li>
+<a href="#toc_30">注释和阅读更多</a>
+</li>
+<li>
+<a href="#toc_31">TOC (目录)</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_32">进阶：Markdown 中使用 Html</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_33">区块标签</a>
+</li>
+<li>
+<a href="#toc_34">区段（行内）标签</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_35">特殊字符自动转换</a>
+</li>
+<li>
+<a href="#toc_36">反斜杠</a>
+</li>
+<li>
+<a href="#toc_37">实用的Markdown工具</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">准备部分</h2>
+
+<h3 id="toc_1">欢迎使用 MWeb</h3>
+
+<p>首先介绍一下 MWeb 是什么，MWeb 是专业的 Markdown 写作、记笔记、静态博客生成软件。MWeb 使用的是 Github Flavored Markdown 语法，在使用 MWeb 前，建议你一定要去 <a href="http://zh.mweb.im/">MWeb 官网首页</a> 看一下介绍视频，MWeb 官网也做了比较详细的帮助，建议你也看一下大概内容，帮助的网址为：<a href="http://zh.mweb.im/help.html">http://zh.mweb.im/help.html</a>。</p>
+
+<h3 id="toc_2">需要您重点注意的</h3>
+
+<p>MWeb 是有<strong>两种模式</strong>的：外部模式和文档库模式。MWeb 为了满足所有 Markdown 使用需求，设计了两种模式！外部模式用于打开和编辑所有本地 Markdown 文档。另外为了方便用 Markdown 记笔记，MWeb 设计了文档库模式，文档库中的文档也支持一键生成静态博客，以便于分享。关于两个模式的情况，还是建议您去看一下官网的视频和帮助。</p>
+
+<h3 id="toc_3">Markdown 的设计哲学</h3>
+
+<blockquote>
+<p>Markdown 的目标是实现“易读易写”。<br/>
+不过最需要强调的便是它的可读性。一份使用 Markdown 格式撰写的文件应该可以直接以纯文字发布，并且看起来不会像是由许多标签或是格式指令所构成。Markdown 语法受到一些既有 text-to-HTML 格式的影响，包括 Setext、atx、Textile、reStructuredText、Grutatext 和 EtText，而最大灵感来源其实是纯文本电子邮件的格式。<br/>
+Markdown 的语法有个主要的目的：用来作为一种网路内容的<em>写作</em>用语言。</p>
+</blockquote>
+
+<h4 id="toc_4">Markdown兼容HTML</h4>
+
+<p>Markdown 语法的目标是：成为一种适用于网络的书写语言。</p>
+
+<p>Markdown 不是想要取代 HTML，甚至也没有要和它相近，它的语法种类很少，只对应 HTML 标记的一小部分。Markdown 的构想不是要使得 HTML 文档更容易书写。在我看来， HTML 已经很容易写了。Markdown 的理念是，能让文档更容易读、写和随意改。HTML 是一种发布的格式，Markdown 是一种书写的格式。就这样，Markdown 的格式语法只涵盖纯文本可以涵盖的范围。</p>
+
+<p>不在 Markdown 涵盖范围之内的标签，都可以直接在文档里面用 HTML 撰写。不需要额外标注这是 HTML 或是 Markdown；只要直接加标签就可以了。</p>
+
+<h3 id="toc_5">本文约定</h3>
+
+<p>如果有写 <code>效果如下：</code>， 在 MWeb 编辑状态下只有用 <code>CMD + 4</code> 或 <code>CMD + R</code> 预览才可以看效果。</p>
+
+<h3 id="toc_6">Cheatsheet</h3>
+
+<p><img src="media/15090833160717/markdown-cheatsheet.png" alt="markdown-cheatsheet"/></p>
+
+<p><img src="media/15090833160717/1dcc00202cfe37df5e17.jpg" alt="1dcc00202cfe37df5e17"/></p>
+
+<h2 id="toc_7">基础部分</h2>
+
+<h3 id="toc_8">标题</h3>
+
+<p>Markdown 支持两种标题的语法，类 <strong>Setext</strong> 和类 <strong>atx</strong> 形式。</p>
+
+<p>类 Setext 形式是用底线的形式，利用 <code>=</code> （最高阶标题）和 <code>-</code> （第二阶标题），例如：</p>
+
+<pre><code class="language-markdown">This is an H1
+=============
+
+This is an H2
+-------------
+</code></pre>
+
+<p>任何数量的 <code>=</code> 和 <code>-</code> 都可以有效果。</p>
+
+<p>类 Atx 形式则是在行首插入 1 到 6 个 <code>#</code> ，对应到标题 1 到 6 阶，例如：</p>
+
+<pre><code class="language-markdown"># 第一级标题 `&lt;h1&gt;`
+## 第二级标题 `&lt;h2&gt;` 
+###### 第六级标题 `&lt;h6&gt;` 
+</code></pre>
+
+<p>你可以选择性地「闭合」类 atx 样式的标题，这纯粹只是美观用的，若是觉得这样看起来比较舒适，你就可以在行尾加上 #，而行尾的 # 数量也不用和开头一样（行首的井字符数量决定标题的阶数）：</p>
+
+<pre><code class="language-markdown"># 这是 H1 #
+
+## 这是 H2 ##
+
+### 这是 H3 ######
+</code></pre>
+
+<p>注意后面的<code>#</code>不会显示出来。</p>
+
+<h3 id="toc_9">强调</h3>
+
+<p>Markdown 使用星号（<code>*</code>）和底线（<code>_</code>）作为标记强调字词的符号，被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围，用两个 <code>*</code> 或 <code>_</code> 包起来的话，则会被转成 <code>&lt;strong&gt;</code>，例如：</p>
+
+<pre><code class="language-markdown">*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+</code></pre>
+
+<p>会转成：</p>
+
+<pre><code class="language-markup">&lt;em&gt;single asterisks&lt;/em&gt;
+
+&lt;em&gt;single underscores&lt;/em&gt;
+
+&lt;strong&gt;double asterisks&lt;/strong&gt;
+
+&lt;strong&gt;double underscores&lt;/strong&gt;
+</code></pre>
+
+<p>你可以随便用你喜欢的样式，唯一的限制是，你用什么符号开启标签，就要用什么符号结束。</p>
+
+<p>强调也可以直接插在文字中间：</p>
+
+<pre><code class="language-markdown">un*frigging*believable
+</code></pre>
+
+<p>但是如果你的 <code>*</code> 和 <code>_</code> 两边都有空白的话，它们就只会被当成普通的符号。</p>
+
+<p>如果要在文字前后直接插入普通的星号或底线，你可以用反斜线：</p>
+
+<pre><code class="language-markdown">\*this text is surrounded by literal asterisks\*
+</code></pre>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">*这些文字会生成`&lt;em&gt;`*
+_这些文字会生成`&lt;u&gt;`_
+
+**这些文字会生成`&lt;strong&gt;`**
+__这些文字会生成`&lt;strong&gt;`__
+
+~~这些文字会被加上删除线&lt;s&gt;~~
+</code></pre>
+
+<p>在 MWeb 中的快捷键为： <code>CMD + U</code>、<code>CMD + I</code>、<code>CMD + B</code><br/>
+效果如下：</p>
+
+<p><em>这些文字会生成斜体<code>&lt;em&gt;</code></em><br/>
+<u>这些文字会生成下划线<code>&lt;u&gt;</code></u></p>
+
+<p><strong>这些文字会生成粗体<code>&lt;strong&gt;</code></strong><br/>
+<strong>这些文字会生成粗体<code>&lt;strong&gt;</code></strong></p>
+
+<p><del>这些文字会被加上删除线<code>&lt;s&gt;</code></del></p>
+
+<p>如果既要粗体又要斜体，就可以写：</p>
+
+<pre><code class="language-markdown">***123***
+___123___
+</code></pre>
+
+<p>效果如下</p>
+
+<p><strong><em>123</em></strong><br/>
+<strong><em>123</em></strong></p>
+
+<p>如果要斜体+下划线，可以写：</p>
+
+<pre><code class="language-markdown">_*123*_     //*_123_*不可以
+</code></pre>
+
+<p>效果如下</p>
+
+<p><u><em>123</em></u></p>
+
+<p><strong>没有下划线+粗体!</strong></p>
+
+<h3 id="toc_10">段落和换行</h3>
+
+<p>一个 Markdown 段落是由一个或多个连续的文本行组成，它的前后要有一个以上的空行（空行的定义是显示上看起来像是空的，便会被视为空行。比方说，若某一行只包含空格和制表符，则该行也会被视为空行）。普通段落不该用空格或制表符来缩进。</p>
+
+<p>「由一个或多个连续的文本行组成」这句话其实暗示了 Markdown 允许段落内的强迫换行（插入换行符），这个特性和其他大部分的 text-to-HTML 格式不一样（包括 Movable Type 的「Convert Line Breaks」选项），其它的格式会把每个换行符都转成 <br /> 标签。</p>
+
+<p>如果你确实想要依赖 Markdown 来插入 <br /> 标签的话，在插入处先按入两个以上的空格然后回车。</p>
+
+<p>的确，需要多费点事（多加空格）来产生 <br /> ，但是简单地「每个换行都转换为 <br />」的方法在 Markdown 中并不适合， Markdown 中 email 式的 区块引用 和多段落的 列表 在使用换行来排版的时候，不但更好用，还更方便阅读。</p>
+
+<hr/>
+
+<p>MWeb中，四个及以上空格加回车。<br/>
+如果不想打这么多空格，只要回车就为换行，请勾选：<code>Preferences</code> - <code>Themes</code> - <code>Translate newlines to &lt;br&gt; tags</code></p>
+
+<h3 id="toc_11">分隔线</h3>
+
+<p>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线：</p>
+
+<pre><code class="language-markdown">* * *
+
+***
+
+*****
+
+- - -
+
+---------------------------------------
+</code></pre>
+
+<p>效果如下：</p>
+
+<hr/>
+
+<hr/>
+
+<hr/>
+
+<hr/>
+
+<hr/>
+
+<h3 id="toc_12">列表</h3>
+
+<p>Markdown 支持有序列表和无序列表。</p>
+
+<h4 id="toc_13">无序列表</h4>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">* 项目一 无序列表 `* + 空格键`
+* 项目二
+    * 项目二的子项目一 无序列表 `TAB + * + 空格键`
+    * 项目二的子项目二
+</code></pre>
+
+<p>在 MWeb 中的快捷键为： <code>Option + U</code><br/>
+效果如下：</p>
+
+<ul>
+<li>项目一 无序列表 <code>* + 空格键</code></li>
+<li>项目二
+<ul>
+<li>项目二的子项目一 无序列表 <code>TAB + * + 空格键</code></li>
+<li>项目二的子项目二</li>
+</ul></li>
+</ul>
+
+<p>各层样式：</p>
+
+<ul>
+<li>Layer 1
+<ul>
+<li>Layer 2
+<ul>
+<li>Layer 3
+<ul>
+<li>Layer 4
+<ul>
+<li>Layer 5
+<ul>
+<li>....</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>可以看到<code>实心圆--&gt;空心圆--&gt;实心块</code>的变化</p>
+
+<p>无序列表使用星号、加号或是减号都作为列表标记：</p>
+
+<pre><code class="language-markdown">* Red
+* Green
+* Blue
+</code></pre>
+
+<p>等同于：</p>
+
+<pre><code class="language-markdown">+ Red
++ Green
++ Blue
+</code></pre>
+
+<p>也等同于：</p>
+
+<pre><code class="language-markdown">- Red
+- Green
+- Blue
+</code></pre>
+
+<h4 id="toc_14">有序列表</h4>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">1. 项目一 有序列表 `数字 + . + 空格键`
+2. 项目二 
+3. 项目三
+    1. 项目三的子项目一 有序列表 `TAB + 数字 + . + 空格键`
+    2. 项目三的子项目二
+</code></pre>
+
+<p>效果如下：</p>
+
+<ol>
+<li>项目一 有序列表 <code>数字 + . + 空格键</code></li>
+<li>项目二 </li>
+<li>项目三
+<ol>
+<li>项目三的子项目一 有序列表 <code>TAB + 数字 + . + 空格键</code></li>
+<li>项目三的子项目二</li>
+</ol></li>
+</ol>
+
+<p>各层样式</p>
+
+<ol>
+<li>Layer 1
+<ol>
+<li>Layer 2
+<ol>
+<li>Layer 3
+<ol>
+<li>Layer 4
+<ol>
+<li>Layer 5
+<ol>
+<li>....<br/>
+可以看到`1--&gt;i--&gt;a的变化</li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+
+<p>有序列表则使用数字接着一个英文句点：</p>
+
+<pre><code class="language-markdown">1. Bird
+2. McHale
+3. Parish
+</code></pre>
+
+<p>很重要的一点是，你在列表标记上使用的数字并不会影响输出的 HTML 结果，上面的列表所产生的 HTML 标记为：</p>
+
+<pre><code class="language-markup">&lt;ol&gt;
+&lt;li&gt;Bird&lt;/li&gt;
+&lt;li&gt;McHale&lt;/li&gt;
+&lt;li&gt;Parish&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+
+<p>如果你的列表标记写成：</p>
+
+<pre><code class="language-markdown">1. Bird
+1. McHale
+1. Parish
+</code></pre>
+
+<p>或甚至是：</p>
+
+<pre><code class="language-markdown">3. Bird
+1. McHale
+8. Parish
+</code></pre>
+
+<p>你都会得到完全相同的 HTML 输出。重点在于，你可以让 Markdown 文件的列表数字和输出的结果相同，或是你懒一点，你可以完全不用在意数字的正确性。</p>
+
+<p>如果你使用懒惰的写法，建议第一个项目最好还是从 1. 开始，因为 Markdown 未来可能会支持有序列表的 start 属性。</p>
+
+<p>列表项目标记通常是放在最左边，但是其实也可以缩进，最多 3 个空格，项目标记后面则一定要接着至少一个空格或制表符。</p>
+
+<h4 id="toc_15">列表的段落缩进</h4>
+
+<p>要让列表看起来更漂亮，你可以把内容用固定的缩进整理好：</p>
+
+<pre><code class="language-markdown">* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+    viverra nec, fringilla in, laoreet vitae, risus.
+* Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+    Suspendisse id sem consectetuer libero luctus adipiscing.
+</code></pre>
+
+<p>但是如果你懒，那也行：</p>
+
+<pre><code class="language-markdown">* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+* Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+</code></pre>
+
+<p>Suspendisse id sem consectetuer libero luctus adipiscing.<br/>
+如果列表项目间用空行分开，在输出 HTML 时 Markdown 就会将项目内容用 <p> 标签包起来，举例来说：</p>
+
+<pre><code class="language-markdown">* Bird
+* Magic
+</code></pre>
+
+<p>会被转换为：</p>
+
+<pre><code class="language-markup">&lt;ul&gt;
+&lt;li&gt;Bird&lt;/li&gt;
+&lt;li&gt;Magic&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>但是这个：</p>
+
+<pre><code class="language-markdown">* Bird
+
+* Magic
+</code></pre>
+
+<p>会被转换为：</p>
+
+<pre><code class="language-markup">&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Bird&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Magic&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符：</p>
+
+<pre><code class="language-markdown">1.  This is a list item with two paragraphs. Lorem ipsum dolor
+    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+    mi posuere lectus.
+
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
+    sit amet velit.
+
+2.  Suspendisse id sem consectetuer libero luctus adipiscing.
+</code></pre>
+
+<p>如果你每行都有缩进，看起来会看好很多，当然，再次地，如果你很懒惰，Markdown 也允许：</p>
+
+<pre><code class="language-markdown">* This is a list item with two paragraphs.
+
+    This is the second paragraph in the list item. You&#39;re
+only required to indent the first line. Lorem ipsum dolor
+sit amet, consectetuer adipiscing elit.
+
+* Another item in the same list.
+</code></pre>
+
+<p>如果要在列表项目内放进引用，那 &gt; 就需要缩进：</p>
+
+<pre><code class="language-markdown">* A list item with a blockquote:
+
+    &gt; This is a blockquote
+    &gt; inside a list item.
+</code></pre>
+
+<p>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符：</p>
+
+<pre><code class="language-markdown">* 一列表项包含一个列表区块：
+
+        &lt;代码写在这&gt;
+</code></pre>
+
+<p>当然，项目列表很可能会不小心产生，像是下面这样的写法：</p>
+
+<pre><code class="language-markdown">1986. What a great season.
+</code></pre>
+
+<p>换句话说，也就是在行首出现 <u>数字-句点-空白</u> ，要避免这样的状况，你可以在句点前面加上反斜杠。</p>
+
+<pre><code class="language-markdown">1986\. What a great season.
+</code></pre>
+
+<h4 id="toc_16">任务列表（Task lists）</h4>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">- [ ] 任务一 未做任务 `- + 空格 + [ ]`
+- [x] 任务二 已做任务 `- + 空格 + [x]`
+</code></pre>
+
+<p>效果如下：</p>
+
+<ul>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> 任务一 未做任务 <code>- + 空格 + [ ]</code></li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked /> 任务二 已做任务 <code>- + 空格 + [x]</code></li>
+</ul>
+
+<h3 id="toc_17">图片</h3>
+
+<p>很明显地，要在纯文字应用中设计一个「自然」的语法来插入图片是有一定难度的。</p>
+
+<p>Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。</p>
+
+<p>行内式的图片语法看起来像是：</p>
+
+<pre><code class="language-markup">![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg &quot;Optional title&quot;)
+</code></pre>
+
+<p>详细叙述如下：</p>
+
+<ul>
+<li>一个惊叹号 !</li>
+<li>接着一个方括号，里面放上图片的替代文字</li>
+<li>接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上 选择性的 &#39;title&#39; 文字。</li>
+</ul>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">![GitHub set up](http://zh.mweb.im/asset/img/set-up-git.gif)
+格式: ![Alt Text](url)
+</code></pre>
+
+<p><code>Control + Shift + I</code> 可插入Markdown语法。<br/>
+如果是 MWeb 的文档库中的文档，还可以用拖放图片、<code>CMD + V</code> 粘贴、<code>CMD + Option + I</code> 导入这三种方式来增加图片。<br/>
+效果如下：</p>
+
+<p><img src="http://zh.mweb.im/asset/img/set-up-git.gif" alt="GitHub set up"/></p>
+
+<p>MWeb 引入的特别的语法来设置图片宽度，方法是在图片描述后加 <code>-w + 图片宽度</code> 即可，比如说要设置上面的图片的宽度为 140，语法如下：</p>
+
+<pre><code class="language-markdown">![GitHub set up-w140](http://zh.mweb.im/asset/img/set-up-git.gif)
+</code></pre>
+
+<p><img src="http://zh.mweb.im/asset/img/set-up-git.gif" alt="GitHub set up" style="width:140px;"/></p>
+
+<hr/>
+
+<p>参考式的图片语法则长得像这样：</p>
+
+<pre><code class="language-markdown">![Alt text][id]
+</code></pre>
+
+<p>「id」是图片参考的名称，图片参考的定义方式则和连结参考一样：</p>
+
+<pre><code class="language-markdown">[id]: url/to/image  &quot;Optional title attribute&quot;
+</code></pre>
+
+<p>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <code>&lt;img&gt;</code> 标签。</p>
+
+<h3 id="toc_18">链接</h3>
+
+<p>Markdown 支持两种形式的链接语法： <u>行内式</u> 和 <u>参考式</u> 两种形式。</p>
+
+<p>不管是哪一种，链接文字都是用 [方括号] 来标记。</p>
+
+<p>要建立一个行内式的链接，只要在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，例如：</p>
+
+<pre><code class="language-markdown">This is [an example](http://example.com/ &quot;Title&quot;) inline link.
+
+[This link](http://example.net/) has no title attribute.
+</code></pre>
+
+<p>会产生：</p>
+
+<pre><code class="language-markup">&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot; title=&quot;Title&quot;&gt;
+an example&lt;/a&gt; inline link.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://example.net/&quot;&gt;This link&lt;/a&gt; has no
+title attribute.&lt;/p&gt;
+</code></pre>
+
+<p>如果你是要链接到同样主机的资源，你可以使用相对路径：</p>
+
+<pre><code class="language-markdown">See my [About](/about/) page for details.
+</code></pre>
+
+<p>参考式的链接是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里面要填入用以辨识链接的标记：</p>
+
+<pre><code class="language-markdown">This is [an example][id] reference-style link.
+</code></pre>
+
+<p>你也可以选择性地在两个方括号中间加上一个空格：</p>
+
+<pre><code class="language-markdown">This is [an example] [id] reference-style link.
+</code></pre>
+
+<p>接着，在文件的任意处，你可以把这个标记的链接内容定义出来：</p>
+
+<pre><code class="language-markdown">[id]: http://example.com/  &quot;Optional Title Here&quot;
+</code></pre>
+
+<p>链接内容定义的形式为：</p>
+
+<ul>
+<li>方括号（前面可以选择性地加上至多三个空格来缩进），里面输入链接文字</li>
+<li>接着一个冒号</li>
+<li>接着一个以上的空格或制表符</li>
+<li>接着链接的网址</li>
+<li>选择性地接着 title 内容，可以用单引号、双引号或是括弧包着</li>
+</ul>
+
+<p>下面这三种链接的定义都是相同：</p>
+
+<pre><code class="language-markdown">[foo]: http://example.com/  &quot;Optional Title Here&quot;
+[foo]: http://example.com/  &#39;Optional Title Here&#39;
+[foo]: http://example.com/  (Optional Title Here)
+</code></pre>
+
+<p><strong>请注意：有一个已知的问题是 Markdown.pl 1.0.1 会忽略单引号包起来的链接 title。</strong></p>
+
+<p>链接网址也可以用方括号包起来：</p>
+
+<pre><code class="language-markdown">[id]: &lt;http://example.com/&gt;  &quot;Optional Title Here&quot;
+</code></pre>
+
+<p>你也可以把 title 属性放到下一行，也可以加一些缩进，若网址太长的话，这样会比较好看：</p>
+
+<pre><code class="language-markdown">[id]: http://example.com/longish/path/to/resource/here
+    &quot;Optional Title Here&quot;
+</code></pre>
+
+<p>网址定义只有在产生链接的时候用到，并不会直接出现在文件之中。</p>
+
+<p>链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的：</p>
+
+<pre><code class="language-markdown">[link text][a]
+[link text][A]
+</code></pre>
+
+<p>隐式链接标记功能让你可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号，如果你要让 &quot;Google&quot; 链接到 google.com，你可以简化成：</p>
+
+<pre><code class="language-markdown">[Google][]
+</code></pre>
+
+<p>然后定义链接内容：</p>
+
+<pre><code class="language-markdown">[Google]: http://google.com/
+</code></pre>
+
+<p>由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词：</p>
+
+<pre><code class="language-markdown">Visit [Daring Fireball][] for more information.
+</code></pre>
+
+<p>然后接着定义链接：</p>
+
+<pre><code class="language-markdown">[Daring Fireball]: http://daringfireball.net/
+</code></pre>
+
+<p>链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样。</p>
+
+<p>下面是一个参考式链接的范例：</p>
+
+<pre><code class="language-markdown">I get 10 times more traffic from [Google] [1] than from
+[Yahoo] [2] or [MSN] [3].
+
+  [1]: http://google.com/        &quot;Google&quot;
+  [2]: http://search.yahoo.com/  &quot;Yahoo Search&quot;
+  [3]: http://search.msn.com/    &quot;MSN Search&quot;
+</code></pre>
+
+<p>如果改成用链接名称的方式写：</p>
+
+<pre><code class="language-markdown">I get 10 times more traffic from [Google][] than from
+[Yahoo][] or [MSN][].
+
+  [google]: http://google.com/        &quot;Google&quot;
+  [yahoo]:  http://search.yahoo.com/  &quot;Yahoo Search&quot;
+  [msn]:    http://search.msn.com/    &quot;MSN Search&quot;
+</code></pre>
+
+<p>上面两种写法都会产生下面的 HTML。</p>
+
+<pre><code class="language-markup">&lt;p&gt;I get 10 times more traffic from &lt;a href=&quot;http://google.com/&quot;
+title=&quot;Google&quot;&gt;Google&lt;/a&gt; than from
+&lt;a href=&quot;http://search.yahoo.com/&quot; title=&quot;Yahoo Search&quot;&gt;Yahoo&lt;/a&gt;
+or &lt;a href=&quot;http://search.msn.com/&quot; title=&quot;MSN Search&quot;&gt;MSN&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+
+<p>下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：</p>
+
+<pre><code class="language-markdown">I get 10 times more traffic from [Google](http://google.com/ &quot;Google&quot;)
+than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or
+[MSN](http://search.msn.com/ &quot;MSN Search&quot;).
+</code></pre>
+
+<p>参考式的链接其实重点不在于它比较好写，而是它比较好读，比较一下上面的范例，使用参考式的文章本身只有 81 个字符，但是用行内形式的却会增加到 176 个字元，如果是用纯 HTML 格式来写，会有 234 个字元，在 HTML 格式中，标签比文本还要多。</p>
+
+<p>使用 Markdown 的参考式链接，可以让文件更像是浏览器最后产生的结果，让你可以把一些标记相关的元数据移到段落文字之外，你就可以增加链接而不让文章的阅读感觉被打断。</p>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">Email： &lt;example@example.com&gt;
+[连接标题Github网站](http://github.com)
+自动生成链接： &lt;http://www.github.com/&gt; 
+</code></pre>
+
+<p><code>Control + Shift + L</code> 可插入Markdown语法。<br/>
+如果是 MWeb 的文档库中的文档，拖放或<code>CMD + Option + I</code> 导入非图片时，会生成连接。<br/>
+效果如下：</p>
+
+<p>Email： <a href="mailto:example@example.com">example@example.com</a><br/>
+<a href="http://github.com">连接标题Github网站</a><br/>
+自动生成链接： <a href="http://www.github.com/">http://www.github.com/</a> </p>
+
+<h3 id="toc_19">自动链接</h3>
+
+<p>Markdown 支持以比较简短的自动链接形式来处理网址和电子邮件信箱，只要是用方括号包起来， Markdown 就会自动把它转成链接。一般网址的链接文字就和链接地址一样，例如：</p>
+
+<pre><code class="language-markdown">&lt;http://example.com/&gt;
+</code></pre>
+
+<p>Markdown 会转为：</p>
+
+<pre><code class="language-markup">&lt;a href=&quot;http://example.com/&quot;&gt;http://example.com/&lt;/a&gt;
+</code></pre>
+
+<p>邮址的自动链接也很类似，只是 Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人，例如：</p>
+
+<pre><code class="language-markdown">&lt;address@example.com&gt;
+</code></pre>
+
+<p>Markdown 会转成：</p>
+
+<pre><code class="language-markup">&lt;a href=&quot;&amp;#x6D;&amp;#x61;i&amp;#x6C;&amp;#x74;&amp;#x6F;:&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;
+&amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;&amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;
+&amp;#109;&quot;&gt;&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;&amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;
+&amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;
+</code></pre>
+
+<p>在浏览器里面，这段字串（其实是 <code>&lt;a href=&quot;mailto:address@example.com&quot;&gt;address@example.com&lt;/a&gt;</code>）会变成一个可以点击的「<a href="mailto:address@example.com">address@example.com</a>」链接。</p>
+
+<p>（这种作法虽然可以糊弄不少的机器人，但并不能全部挡下来，不过总比什么都不做好些。不管怎样，公开你的信箱终究会引来广告信件的。）</p>
+
+<h3 id="toc_20">区块引用 Blockquotes</h3>
+
+<p>Markdown 标记区块引用是使用类似 email 中用 &gt; 的引用方式。如果你还熟悉在 email 信件中的引言部分，你就知道怎么在 Markdown 文件中建立一个区块引用，那会看起来像是你自己先断好行，然后在每行的最前面加上 &gt; ：</p>
+
+<pre><code class="language-markdown">&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+&gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+&gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+&gt; 
+&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+&gt; id sem consectetuer libero luctus adipiscing.
+</code></pre>
+
+<p>Markdown 也允许你偷懒只在整个段落的第一行最前面加上 &gt; ：</p>
+
+<pre><code class="language-markdown">&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.
+</code></pre>
+
+<p>效果如下：</p>
+
+<blockquote>
+<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,<br/>
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.<br/>
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
+
+<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse<br/>
+id sem consectetuer libero luctus adipiscing.</p>
+</blockquote>
+
+<p>MWeb中使用 <code>CMD + Shift + B</code> 可插入Markdown语法。</p>
+
+<p>区块引用可以嵌套（例如：引用内的引用），只要根据层次加上不同数量的 &gt; ：</p>
+
+<pre><code class="language-markdown">&gt; 引用
+&gt;&gt; 引用的引用
+&gt;&gt;&gt; 引用的引用的引用
+</code></pre>
+
+<blockquote>
+<p>引用</p>
+
+<blockquote>
+<p>引用的引用</p>
+
+<blockquote>
+<p>引用的引用的引用</p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等：</p>
+
+<pre><code class="language-markdown">&gt; ## 这是一个标题。
+&gt; 
+&gt; 1.   这是第一行列表项。
+&gt; 2.   这是第二行列表项。
+&gt; 
+&gt; 给出一些例子代码：
+&gt; 
+&gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre>
+
+<p>效果:</p>
+
+<blockquote>
+<h2 id="toc_21">这是一个标题。</h2>
+
+<ol>
+<li>  这是第一行列表项。</li>
+<li>  这是第二行列表项。</li>
+</ol>
+
+<p>给出一些例子代码：</p>
+
+<pre><code class="language-text">return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre>
+</blockquote>
+
+<h3 id="toc_22">代码</h3>
+
+<p>和程序相关的写作或是标签语言原始码通常会有已经排版好的代码区块，通常这些区块我们并不希望它以一般段落文件的方式去排版，而是照原来的样子显示，Markdown 会用 <code>&lt;pre&gt;</code> 和 <code>&lt;code&gt;</code> 标签来把代码区块包起来。</p>
+
+<p>代码区块中，一般的 Markdown 语法不会被转换，像是星号便只是星号，这表示你可以很容易地以 Markdown 语法撰写 Markdown 语法相关的文件。</p>
+
+<h4 id="toc_23">行内代码</h4>
+
+<p>如果要标记一小段行内代码，你可以用反引号把它包起来（`），例如：</p>
+
+<pre><code class="language-markdown">Use the `printf()` function.
+</code></pre>
+
+<p>会产生：</p>
+
+<pre><code class="language-markup">&lt;p&gt;Use the &lt;code&gt;printf()&lt;/code&gt; function.&lt;/p&gt;
+</code></pre>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">像这样即可：`&lt;addr&gt;` `code`
+</code></pre>
+
+<p><code>CMD + K</code> 可插入Markdown语法。<br/>
+效果如下：</p>
+
+<p>像这样即可：<code>&lt;addr&gt;</code> <code>code</code></p>
+
+<h4 id="toc_24">多行或者一段代码</h4>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-javascript">function fancyAlert(arg) {
+    if(arg) {
+        $.facebox({div:&#39;#foo&#39;})
+    }
+}
+</code></pre>
+
+<p><code>CMD + Shift + K</code> 可插入Markdown语法。<br/>
+效果如下：</p>
+
+<pre><code class="language-javascript">function fancyAlert(arg) {
+    if(arg) {
+        $.facebox({div:&#39;#foo&#39;})
+    }
+}
+</code></pre>
+
+<p>要在 Markdown 中建立代码区块很简单，只要简单地缩进 4 个空格或是 1 个制表符就可以，例如，下面的输入：</p>
+
+<pre><code class="language-markdown">这是一个普通段落：
+
+    这是一个代码区块。
+</code></pre>
+
+<p>Markdown 会转换成：</p>
+
+<pre><code class="language-markup">&lt;p&gt;这是一个普通段落：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;这是一个代码区块。
+&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+<p>这个每行一阶的缩进（4 个空格或是 1 个制表符），都会被移除，例如：</p>
+
+<pre><code class="language-markdown">Here is an example of AppleScript:
+
+    tell application &quot;Foo&quot;
+        beep
+    end tell
+</code></pre>
+
+<p>会被转换为：</p>
+
+<pre><code class="language-markup">&lt;p&gt;Here is an example of AppleScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tell application &quot;Foo&quot;
+    beep
+end tell
+&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+<p>一个代码区块会一直持续到没有缩进的那一行（或是文件结尾）。</p>
+
+<p>在代码区块里面， <code>&amp;</code> 、 <code>&lt;</code> 和 <code>&gt;</code> 会自动转成 HTML 实体，这样的方式让你非常容易使用 Markdown 插入范例用的 HTML 原始码，只需要复制贴上，再加上缩进就可以了，剩下的 Markdown 都会帮你处理，例如：</p>
+
+<pre><code class="language-markup">    &lt;div class=&quot;footer&quot;&gt;
+        &amp;copy; 2004 Foo Corporation
+    &lt;/div&gt;
+</code></pre>
+
+<p>会被转换为：</p>
+
+<pre><code class="language-markup">&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;footer&quot;&amp;gt;
+    &amp;amp;copy; 2004 Foo Corporation
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+<p>如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段：</p>
+
+<pre><code class="language-markdown">``There is a literal backtick (`) here.``
+</code></pre>
+
+<p>这段语法会产生：</p>
+
+<pre><code class="language-markup">&lt;p&gt;&lt;code&gt;There is a literal backtick (`) here.&lt;/code&gt;&lt;/p&gt;
+</code></pre>
+
+<p>代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号：</p>
+
+<pre><code class="language-markdown">A single backtick in a code span: `` ` ``
+
+A backtick-delimited string in a code span: `` `foo` ``
+</code></pre>
+
+<p>会产生：</p>
+
+<pre><code class="language-markup">&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;A backtick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
+</code></pre>
+
+<p>在代码区段内，<code>&amp;</code> 和方括号都会被自动地转成 HTML 实体，这使得插入 HTML 原始码变得很容易，Markdown 会把下面这段：</p>
+
+<p>Please don&#39;t use any <code>&lt;blink&gt;</code> tags.<br/>
+转为：</p>
+
+<pre><code class="language-markup">&lt;p&gt;Please don&#39;t use any &lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
+</code></pre>
+
+<p>你也可以这样写：</p>
+
+<pre><code class="language-markdown">`&amp;#8212;` is the decimal-encoded equivalent of `&amp;mdash;`.
+</code></pre>
+
+<p>以产生：</p>
+
+<pre><code class="language-markup">&lt;p&gt;&lt;code&gt;&amp;amp;#8212;&lt;/code&gt; is the decimal-encoded
+equivalent of &lt;code&gt;&amp;amp;mdash;&lt;/code&gt;.&lt;/p&gt;
+</code></pre>
+
+<p>Markdown支持多种语言的语法高亮，在第一个 &quot; ``` &quot;后边写上语言的对应标识就可以显示对应语言的高亮；如果不写，系统会自动识别。<br/>
+表示符号如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>language</th>
+<th>language_key</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1C</td>
+<td>1c</td>
+</tr>
+<tr>
+<td>ActionScript</td>
+<td>actionscript</td>
+</tr>
+<tr>
+<td>Apache</td>
+<td>apache</td>
+</tr>
+<tr>
+<td>AppleScript</td>
+<td>a</td>
+</tr>
+<tr>
+<td>AsciiDoc</td>
+<td>asciidoc</td>
+</tr>
+<tr>
+<td>AspectJ</td>
+<td>asciidoc</td>
+</tr>
+<tr>
+<td>AutoHotkey</td>
+<td>autohotkey</td>
+</tr>
+<tr>
+<td>AVR Assembler</td>
+<td>avrasm</td>
+</tr>
+<tr>
+<td>Axapta</td>
+<td>axapta</td>
+</tr>
+<tr>
+<td>Bash</td>
+<td>bash</td>
+</tr>
+<tr>
+<td>BrainFuck</td>
+<td>brainfuck</td>
+</tr>
+<tr>
+<td>Cap&#39;n Proto</td>
+<td>capnproto</td>
+</tr>
+<tr>
+<td>Clojure REPL</td>
+<td>clojure</td>
+</tr>
+<tr>
+<td>Clojure</td>
+<td>clojure</td>
+</tr>
+<tr>
+<td>CMake</td>
+<td>cmake</td>
+</tr>
+<tr>
+<td>CoffeeScript</td>
+<td>coffeescript</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>cpp</td>
+</tr>
+<tr>
+<td>C#</td>
+<td>cs</td>
+</tr>
+<tr>
+<td>CSS</td>
+<td>css</td>
+</tr>
+<tr>
+<td>D</td>
+<td>d</td>
+</tr>
+<tr>
+<td>Dart</td>
+<td>d</td>
+</tr>
+<tr>
+<td>Delphi</td>
+<td>delphi</td>
+</tr>
+<tr>
+<td>Diff</td>
+<td>diff</td>
+</tr>
+<tr>
+<td>Django</td>
+<td>django</td>
+</tr>
+<tr>
+<td>DOS.bat</td>
+<td>dos</td>
+</tr>
+<tr>
+<td>Dust</td>
+<td>dust</td>
+</tr>
+<tr>
+<td>Elixir</td>
+<td>elixir</td>
+</tr>
+<tr>
+<td>ERB(Embedded Ruby)</td>
+<td>erb</td>
+</tr>
+<tr>
+<td>Erlang REPL</td>
+<td>erlang-repl</td>
+</tr>
+<tr>
+<td>Erlang</td>
+<td>erlang</td>
+</tr>
+<tr>
+<td>FIX</td>
+<td>fix</td>
+</tr>
+<tr>
+<td>F#</td>
+<td>fsharp</td>
+</tr>
+<tr>
+<td>G-code(ISO 6983)</td>
+<td>gcode</td>
+</tr>
+<tr>
+<td>Gherkin</td>
+<td>gherkin</td>
+</tr>
+<tr>
+<td>GLSL</td>
+<td>glsl</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>go</td>
+</tr>
+<tr>
+<td>Gradle</td>
+<td>gradle</td>
+</tr>
+<tr>
+<td>Groovy</td>
+<td>groovy</td>
+</tr>
+<tr>
+<td>Haml</td>
+<td>haml</td>
+</tr>
+<tr>
+<td>Handlebars</td>
+<td>handlebars</td>
+</tr>
+<tr>
+<td>Haskell</td>
+<td>haskell</td>
+</tr>
+<tr>
+<td>Haxe</td>
+<td>haxe</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>http</td>
+</tr>
+<tr>
+<td>Ini file</td>
+<td>ini</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>java</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>javascript</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>json</td>
+</tr>
+<tr>
+<td>Lasso</td>
+<td>lasso</td>
+</tr>
+<tr>
+<td>Less</td>
+<td>less</td>
+</tr>
+<tr>
+<td>Lisp</td>
+<td>lisp</td>
+</tr>
+<tr>
+<td>LiveCode</td>
+<td>livecodeserver</td>
+</tr>
+<tr>
+<td>LiveScript</td>
+<td>livescript</td>
+</tr>
+<tr>
+<td>Lua</td>
+<td>lua</td>
+</tr>
+<tr>
+<td>Makefile</td>
+<td>makefile</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>markdown</td>
+</tr>
+<tr>
+<td>Mathematica</td>
+<td>mathematica</td>
+</tr>
+<tr>
+<td>Matlab</td>
+<td>matlab</td>
+</tr>
+<tr>
+<td>MEL (Maya Embedded Language)</td>
+<td>mel</td>
+</tr>
+<tr>
+<td>Mercury</td>
+<td>mercury</td>
+</tr>
+<tr>
+<td>Mizar</td>
+<td>mizar</td>
+</tr>
+<tr>
+<td>Monkey</td>
+<td>monkey</td>
+</tr>
+<tr>
+<td>nginx</td>
+<td>nginx</td>
+</tr>
+<tr>
+<td>Nimrod</td>
+<td>nimrod</td>
+</tr>
+<tr>
+<td>Nix</td>
+<td>nix</td>
+</tr>
+<tr>
+<td>NSIS</td>
+<td>nsis</td>
+</tr>
+<tr>
+<td>Objective C</td>
+<td>objectivec</td>
+</tr>
+<tr>
+<td>OCaml</td>
+<td>ocaml</td>
+</tr>
+<tr>
+<td>Oxygene</td>
+<td>oxygene</td>
+</tr>
+<tr>
+<td>Parser 3</td>
+<td>parser3</td>
+</tr>
+<tr>
+<td>Perl</td>
+<td>perl</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>php</td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td>powershell</td>
+</tr>
+<tr>
+<td>Processing</td>
+<td>processing</td>
+</tr>
+<tr>
+<td>Python’s profiler output</td>
+<td>profile</td>
+</tr>
+<tr>
+<td>Protocol Buffers</td>
+<td>protobuf</td>
+</tr>
+<tr>
+<td>Puppet</td>
+<td>puppet</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>python</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>q</td>
+</tr>
+<tr>
+<td>R</td>
+<td>r</td>
+</tr>
+<tr>
+<td>RenderMan RIB</td>
+<td>rib</td>
+</tr>
+<tr>
+<td>Roboconf</td>
+<td>roboconf</td>
+</tr>
+<tr>
+<td>RenderMan RSL</td>
+<td>rsl</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>ruby</td>
+</tr>
+<tr>
+<td>Oracle Rules Language</td>
+<td>ruleslanguage</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>rust</td>
+</tr>
+<tr>
+<td>Scala</td>
+<td>scala</td>
+</tr>
+<tr>
+<td>Scheme</td>
+<td>scheme</td>
+</tr>
+<tr>
+<td>Scilab</td>
+<td>scilab</td>
+</tr>
+<tr>
+<td>SCSS</td>
+<td>scss</td>
+</tr>
+<tr>
+<td>Smali</td>
+<td>smali</td>
+</tr>
+<tr>
+<td>SmallTalk</td>
+<td>smalltalk</td>
+</tr>
+<tr>
+<td>SML</td>
+<td>sml</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>sql</td>
+</tr>
+<tr>
+<td>Stata</td>
+<td>stata</td>
+</tr>
+<tr>
+<td>STEP Part21(ISO 10303-21)</td>
+<td>step21</td>
+</tr>
+<tr>
+<td>Stylus</td>
+<td>stylus</td>
+</tr>
+<tr>
+<td>Swift</td>
+<td>swift</td>
+</tr>
+<tr>
+<td>Tcl</td>
+<td>tcl</td>
+</tr>
+<tr>
+<td>Tex</td>
+<td>tex</td>
+</tr>
+<tr>
+<td>Thrift</td>
+<td>thrift</td>
+</tr>
+<tr>
+<td>Twig</td>
+<td>twig</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>typescript</td>
+</tr>
+<tr>
+<td>Vala</td>
+<td>vala</td>
+</tr>
+<tr>
+<td>VB.NET</td>
+<td>vbnet</td>
+</tr>
+<tr>
+<td>VBScript in HTML</td>
+<td>vbscript-html</td>
+</tr>
+<tr>
+<td>VBScript</td>
+<td>vbscript</td>
+</tr>
+<tr>
+<td>Verilog</td>
+<td>verilog</td>
+</tr>
+<tr>
+<td>VHDL</td>
+<td>vhdl</td>
+</tr>
+<tr>
+<td>Vim Script</td>
+<td>vim</td>
+</tr>
+<tr>
+<td>Intel x86 Assembly</td>
+<td>x86asm</td>
+</tr>
+<tr>
+<td>XL</td>
+<td>xl</td>
+</tr>
+<tr>
+<td>XML,HTML</td>
+<td>xml</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_25">实用模块</h2>
+
+<h3 id="toc_26">顺序图或流程图</h3>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-text">```sequence
+张三-&gt;李四: 嘿，小四儿, 写博客了没?
+Note right of 李四: 李四愣了一下，说：
+李四--&gt;张三: 忙得吐血，哪有时间写。
+```
+
+```flow
+st=&gt;start: 开始
+e=&gt;end: 结束
+op=&gt;operation: 我的操作
+cond=&gt;condition: 确认？
+
+st-&gt;op-&gt;cond
+cond(yes)-&gt;e
+cond(no)-&gt;op
+```
+</code></pre>
+
+<p>效果如下（ <code>Preferences</code> - <code>Themes</code> - <code>Enable sequence &amp; flow chart</code> 才会看到效果 ）：</p>
+
+<pre><code class="language-sequence">    张三-&gt;李四: 嘿，小四儿, 写博客了没?
+    Note right of 李四: 李四愣了一下，说：
+    李四-&gt;张三: 忙得吐血，哪有时间写。
+</code></pre>
+
+<pre><code class="language-flow">st=&gt;start: 开始
+e=&gt;end: 结束
+op=&gt;operation: 我的操作
+cond=&gt;condition: 确认？
+
+st-&gt;op-&gt;cond
+cond(yes)-&gt;e
+cond(no)-&gt;op
+</code></pre>
+
+<p>更多请参考：<a href="http://bramp.github.io/js-sequence-diagrams/">http://bramp.github.io/js-sequence-diagrams/</a>, <a href="http://adrai.github.io/flowchart.js/">http://adrai.github.io/flowchart.js/</a></p>
+
+<h3 id="toc_27">表格</h3>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-txt">第一格表头 | 第二格表头
+------------- | -------------
+内容单元格 第一列第一格 | 内容单元格第二列第一格
+内容单元格 第一列第二格 多加文字 | 内容单元格第二列第二格
+</code></pre>
+
+<p>效果如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>第一格表头</th>
+<th>第二格表头</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>内容单元格 第一列第一格</td>
+<td>内容单元格第二列第一格</td>
+</tr>
+<tr>
+<td>内容单元格 第一列第二格 多加文字</td>
+<td>内容单元格第二列第二格</td>
+</tr>
+</tbody>
+</table>
+
+<p>第二行的每一列，是用来控制对其方向的，例如以下的例子：</p>
+
+<pre><code class="language-markdown">| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+</code></pre>
+
+<p>分别是靠左、居中和靠右，效果如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align: center">Are</th>
+<th style="text-align: right">Cool</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align: center">right-aligned</td>
+<td style="text-align: right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align: center">centered</td>
+<td style="text-align: right">$12</td>
+</tr>
+<tr>
+<td>zebra stripes</td>
+<td style="text-align: center">are neat</td>
+<td style="text-align: right">$1</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="toc_28">MathJax</h3>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">块级公式：
+$$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
+
+\\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =
+1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
+{1+\frac{e^{-8\pi}} {1+\ldots} } } } \\]
+
+行内公式： $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$
+</code></pre>
+
+<p>效果如下（<code>Preferences</code> - <code>Themes</code> - <code>Enable MathJax</code> 才会看到效果）：</p>
+
+<p>块级公式：<br/>
+\[  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} \]</p>
+
+<p>\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =<br/>
+1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}<br/>
+{1+\frac{e^{-8\pi}} {1+\&lt;!-- more --&gt;ldots} } } } \]</p>
+
+<p>行内公式： \(\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N\)</p>
+
+<h3 id="toc_29">脚注（Footnote）</h3>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">这是一个脚注：[^sample_footnote]
+</code></pre>
+
+<p>效果如下：</p>
+
+<p>这是一个脚注：<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup></p>
+
+<h3 id="toc_30">注释和阅读更多</h3>
+
+<!-- comment -->
+
+<!-- more -->
+
+<p>Actions-&gt;Insert Read More Comment <em>或者</em> <code>Command + .</code><br/>
+<strong>注</strong> 阅读更多的功能只用在生成网站或博客时，插入时注意要后空一行。</p>
+
+<h3 id="toc_31">TOC (目录)</h3>
+
+<p>Markdown 语法：</p>
+
+<pre><code class="language-markdown">[TOC]
+</code></pre>
+
+<p>效果如下：</p>
+
+<ul>
+<li>
+<a href="#toc_0">准备部分</a>
+<ul>
+<li>
+<a href="#toc_1">欢迎使用 MWeb</a>
+</li>
+<li>
+<a href="#toc_2">需要您重点注意的</a>
+</li>
+<li>
+<a href="#toc_3">Markdown 的设计哲学</a>
+<ul>
+<li>
+<a href="#toc_4">Markdown兼容HTML</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">本文约定</a>
+</li>
+<li>
+<a href="#toc_6">Cheatsheet</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">基础部分</a>
+<ul>
+<li>
+<a href="#toc_8">标题</a>
+</li>
+<li>
+<a href="#toc_9">强调</a>
+</li>
+<li>
+<a href="#toc_10">段落和换行</a>
+</li>
+<li>
+<a href="#toc_11">分隔线</a>
+</li>
+<li>
+<a href="#toc_12">列表</a>
+<ul>
+<li>
+<a href="#toc_13">无序列表</a>
+</li>
+<li>
+<a href="#toc_14">有序列表</a>
+</li>
+<li>
+<a href="#toc_15">列表的段落缩进</a>
+</li>
+<li>
+<a href="#toc_16">任务列表（Task lists）</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_17">图片</a>
+</li>
+<li>
+<a href="#toc_18">链接</a>
+</li>
+<li>
+<a href="#toc_19">自动链接</a>
+</li>
+<li>
+<a href="#toc_20">区块引用 Blockquotes</a>
+<ul>
+<li>
+<a href="#toc_22">代码</a>
+<ul>
+<li>
+<a href="#toc_23">行内代码</a>
+</li>
+<li>
+<a href="#toc_24">多行或者一段代码</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_25">实用模块</a>
+<ul>
+<li>
+<a href="#toc_26">顺序图或流程图</a>
+</li>
+<li>
+<a href="#toc_27">表格</a>
+</li>
+<li>
+<a href="#toc_28">MathJax</a>
+</li>
+<li>
+<a href="#toc_29">脚注（Footnote）</a>
+</li>
+<li>
+<a href="#toc_30">注释和阅读更多</a>
+</li>
+<li>
+<a href="#toc_31">TOC (目录)</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_32">进阶：Markdown 中使用 Html</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_33">区块标签</a>
+</li>
+<li>
+<a href="#toc_34">区段（行内）标签</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_35">特殊字符自动转换</a>
+</li>
+<li>
+<a href="#toc_36">反斜杠</a>
+</li>
+<li>
+<a href="#toc_37">实用的Markdown工具</a>
+</li>
+</ul>
+
+
+<h2 id="toc_32">进阶：Markdown 中使用 Html</h2>
+
+<h4 id="toc_33">区块标签</h4>
+
+<p>要制约的只有一些 HTML 区块元素――比如 <code>&lt;div&gt;</code>、<code>&lt;table&gt;</code>、<code>&lt;pre&gt;</code>、<code>&lt;p&gt;</code> 等标签，必须在前后加上空行与其它内容区隔开，还要求它们的开始标签与结尾标签不能用制表符或空格来缩进。Markdown 的生成器有足够智能，不会在 HTML 区块标签外加上不必要的 <code>&lt;p&gt;</code> 标签。</p>
+
+<p>例子如下，在 Markdown 文件里加上一段 HTML 表格：</p>
+
+<pre><code class="language-markup">这是一个普通段落。
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Foo&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+这是另一个普通段落。
+</code></pre>
+
+<p>效果：</p>
+
+<p>这是一个普通段落。</p>
+
+<table>
+    <tr>
+        <td>Foo</td>
+    </tr>
+</table>
+
+<p>这是另一个普通段落。</p>
+
+<p>请注意，在 HTML 区块标签间的 Markdown 格式语法将不会被处理。比如，你在 HTML 区块内使用 Markdown 样式的<code>*强调*</code>会没有效果。</p>
+
+<h4 id="toc_34">区段（行内）标签</h4>
+
+<p>HTML 的区段（行内）标签如 <code>&lt;span&gt;</code>、<code>&lt;cite&gt;</code>、<code>&lt;del&gt;</code>可以在 Markdown 的段落、列表或是标题里随意使用。依照个人习惯，甚至可以不用 Markdown 格式，而直接采用 HTML 标签来格式化。举例说明：如果比较喜欢 HTML 的 <code>&lt;a&gt;</code> 或 <code>&lt;img&gt;</code> 标签，可以直接使用这些标签，而不用 Markdown 提供的链接或是图像标签语法。</p>
+
+<p>和处在 HTML 区块标签间不同，Markdown 语法在 HTML 区段标签间是有效的。</p>
+
+<h2 id="toc_35">特殊字符自动转换</h2>
+
+<p>在 HTML 文件中，有两个字符需要特殊处理： <code>&lt;</code> 和 <code>&amp;</code> 。 <code>&lt;</code> 符号用于起始标签，<code>&amp;</code> 符号则用于标记 HTML 实体，如果你只是想要显示这些字符的原型，你必须要使用实体的形式，像是 <code>&amp;lt;</code> 和 <code>&amp;amp;</code>。</p>
+
+<p>&amp; 字符尤其让网络文档编写者受折磨，如果你要打 AT&amp;T  ，你必须要写成 <code>AT&amp;amp;T</code> 。而网址中的 <code>&amp;</code> 字符也要转换。比如你要链接到：</p>
+
+<blockquote>
+<p><a href="http://images.google.com/images?num=30&amp;q=larry+bird">http://images.google.com/images?num=30&amp;q=larry+bird</a></p>
+</blockquote>
+
+<p>你必须要把网址转换写为：</p>
+
+<blockquote>
+<p><a href="http://images.google.com/images?num=30&amp;amp;q=larry+bird">http://images.google.com/images?num=30&amp;amp;q=larry+bird</a></p>
+</blockquote>
+
+<p>才能放到链接标签的 <code>href</code> 属性里。不用说也知道这很容易忽略，这也可能是 HTML 标准检验所检查到的错误中，数量最多的。</p>
+
+<p>Markdown 让你可以自然地书写字符，需要转换的由它来处理好了。如果你使用的 &amp; 字符是 HTML 字符实体的一部分，它会保留原状，否则它会被转换成 <code>&amp;amp;</code>。</p>
+
+<p>所以你如果要在文档中插入一个版权符号 <code>©</code>，你可以这样写：</p>
+
+<p><code>&amp;copy;</code><br/>
+Markdown 会保留它不动。而若你写：</p>
+
+<p><code>AT&amp;T</code><br/>
+Markdown 就会将它转为：</p>
+
+<p><code>AT&amp;amp;T</code><br/>
+类似的状况也会发生在 <code>&lt;</code> 符号上，因为 Markdown 允许 <strong>兼容 HTML</strong> ，如果你是把 <code>&lt;</code> 符号作为 HTML 标签的定界符使用，那 Markdown 也不会对它做任何转换，但是如果你写：</p>
+
+<p><code>4 &lt; 5</code></p>
+
+<p>Markdown 将会把它转换为：</p>
+
+<p><code>4 &amp;lt; 5</code></p>
+
+<p>不过需要注意的是，code 范围内，不论是行内还是区块， <code>&lt;</code> 和 <code>&amp;</code> 两个符号都一定会被转换成 HTML 实体，这项特性让你可以很容易地用 Markdown 写 HTML code （和 HTML 相对而言， HTML 语法中，你要把所有的 <code>&lt;</code> 和 <code>&amp;</code> 都转换为 HTML 实体，才能在 HTML 文件里面写出 HTML code。）</p>
+
+<h2 id="toc_36">反斜杠</h2>
+
+<p>Markdown 可以利用反斜杠来插入一些在语法中有其它意义的符号，例如：如果你想要用星号加在文字旁边的方式来做出强调效果（但不用 <code>&lt;em&gt;</code> 标签），你可以在星号的前面加上反斜杠：</p>
+
+<pre><code class="language-markdown">\*literal asterisks\*
+</code></pre>
+
+<p>Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
+
+<pre><code class="language-txt">\   反斜线
+`   反引号
+*   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre>
+
+<h2 id="toc_37">实用的Markdown工具</h2>
+
+<ul>
+<li><p>Html-&gt;Markdown在线工具</p>
+<ul>
+<li><a href="https://www.bejson.com/convert/html2markdown/">https://www.bejson.com/convert/html2markdown/</a></li>
+<li><a href="http://tinyambition.com/h2m/">http://tinyambition.com/h2m/</a></li>
+</ul></li>
+<li><p>在线Markdown编辑</p>
+<ul>
+<li><a href="https://www.madoko.net/">https://www.madoko.net/</a> 强推这款，甚至可以使用LaTeX+Markdown混合输出Document和Beamer，把二者的优势结合起来了。</li>
+</ul></li>
+</ul>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p>这里是脚注信息&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

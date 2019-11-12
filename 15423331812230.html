@@ -1,0 +1,506 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  物理实验的误差和不确定度 - 上 - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>物理实验的误差和不确定度 - 上</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/11/16 9:53 AM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='PhyLab.html'>PhyLab</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>物理实验最后应给出一个完整的 <strong>测量结果表达式</strong>：<br/>
+\[E = \left(1.89 \pm 0.08\right) \times 10^{11}\ \left(N/m^2\right)\]</p>
+
+<ul>
+<li>E 是测量量</li>
+<li>1.89 是测量量值</li>
+<li>±0.08 是不确定度(误差)</li>
+<li>最后的是测量值单位</li>
+</ul>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h2 id="toc_0">误差和不确定度</h2>
+
+<p>不确定度是对测量结果的可靠性予以标度。测量不确定度表征被测量的真值所处量值范围的评定。它按某一置信概率给出真值可能落入的区间。它可以是标准差或其倍数，或是说明了置信水准的区间的半宽。它不是具体的真误差，它只是以参数形式定量表示了无法修正的那部分误差范围。它来源于偶然效应和系统效应的不完善修正，是用于表征合理赋予的被测量值的分散性参数。不确定度按其获得方法分为A、B两类评定分量。A类评定分量是通过观测列统计分析作出的不确定度评定，B类评定分量是依据经验或其他信息进行估计，并假定存在近似的“标准偏差”所表征的不确定度分量。</p>
+
+<p>测量不确定度是无符号的参数，用标准差或标准差的倍数或置信区间的半宽表示，由人们根据实验、资料、经验等信息进行评定，可以通过A，B两类评定方法定量确定;</p>
+
+<p>测量不确定度由人们经过分析和评定得到，因而与人们对被测量、影响量及测量过程的认识有关;</p>
+
+<p>“不确定度”一词本身隐含为一种可估计的值，它不是指具体的、确切的误差值，虽可估计，但却不能用以修正量值，只可在已修正测量结果的不确定度中考虑修正不完善而引入的不确定度;</p>
+
+<hr/>
+
+<p>误差多数情况下是指测量误差，<strong>它的传统定义是测量结果与被测量真值之差</strong>。通常可分为两类：系统误差和偶然误差。误差是客观存在的，它应该是一个确定的值，但由于在绝大多数情况下，真值是不知道的，所以真误差也无法准确知道。我们只是在特定的条件下寻求最佳的真值近似值，并称之为约定真值。</p>
+
+<p>测量误差为有正号或负号的量值，其值为测量结果减去被测量的真值，由于真值未知，往往不能准确得到，当用约定真值代替真值时，只可得到其估计值。</p>
+
+<p>测量误差是客观存在的，不受外界因素的影响，不以人的认识程度而改变;</p>
+
+<p>而系统误差的估计值如果已知则可以对测量结果进行修正，得到已修正的测量结果。</p>
+
+<h2 id="toc_1">误差：<em>测量值-真值</em></h2>
+
+<p>特点：普遍存在、小量<br/>
+分类：</p>
+
+<ul>
+<li>系统误差：对同一被测量多次测量的过程中，绝对值和符号保持恒定或以可预知方式变化的测量误差的分量
+<ul>
+<li>已定系统误差：例如：电表、读数显微镜的零位误差等此项可以也必须修正。</li>
+<li>未定系统误差：已知存在于某个范围，而不知具体数值的系统误差。例如：游标卡尺的允差。</li>
+</ul></li>
+<li>随机误差：对同一被测量多次测量的过程中，每次测量值相对于真值有一个无规则的涨落(大小、方向)的误差分量
+<ul>
+<li>特点一：小误差出现的概率比大误差出现的概率大</li>
+<li>特点二：多次测量时分布对称，具有抵偿性 —— <strong>多次测量取平均有利于消除随机误差</strong></li>
+</ul></li>
+<li>表示：
+<ul>
+<li>绝对误差：测量结果 - 被测量的真值(理论值)</li>
+<li>相对误差：\(E=\frac{绝对误差}{被测量的真值(理论值)}\times 100\%\)</li>
+</ul></li>
+<li>产生原因：仪器、方法、环境、个人主观、对象本身</li>
+</ul>
+
+<h3 id="toc_2">随机变量的统计规律——正态分布</h3>
+
+<p>\[\rho(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}},\ x\in R\]</p>
+
+<p>μ 表示 x 出现概率最大的值，消除系统误差后称为 <strong>数学期望值</strong>。通常就可以得到 x 的真值：</p>
+
+<p>\[ \mu =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i \]</p>
+
+<p>σ称为 <strong>标准差</strong>，决定了线型的宽窄。σ越大，正态曲线就越平坦它表征了测量值的分散程度:</p>
+
+<p>\[\sigma =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n}\sum_{i=1}^n\left(x_i-\mu\right)^2}\]</p>
+
+<h2 id="toc_3">不确定度</h2>
+
+<p>定义：不确定度表示由于测量误差存在而对被测量值不能确定的程度。不确定度是一定概率下的 <strong>误差限值</strong>。</p>
+
+<p>不确定度反映了可能存在的误差分布范围，即随误差分量和未定系统误差的联合分布范围。<br/>
+由于真值的不可知，误差一般是不能计算的，它可正、可负也可能十分接近零；而不确定度总是不为零的正值，是可以具体评定的。</p>
+
+<h3 id="toc_4">分类</h3>
+
+<ul>
+<li>由随机效应引入的不确定度分量 —— A类分量\(u_A\)，多次重复测量时与随机误差有关的分量；<br/>
+可用统计方法评定的不确定度部分</li>
+<li>由系统效应引入的不确定度分量 —— B类分量\(u_B\)，与未定系统误差有关的分量。<br/>
+要用其他方法（非统计方法）评定的不确定度部分</li>
+</ul>
+
+<p>这两类分量在相同置信概率下用方和根方法合成总不确定度：</p>
+
+<p>\[u=\sqrt{u_A^2+u_B^2}\]</p>
+
+<p>在具体使用中，测量不确定度又有三种不同的表述</p>
+
+<ul>
+<li>直接测量的标准不确定度u(standard ncertainty)</li>
+<li>间接测量的合成标准不确定度\(u_C\) (combined standard uncertainty)</li>
+<li>扩展不确定度U(expanded uncertainty)</li>
+</ul>
+
+<h2 id="toc_5">总结：测量结果的不确定性和误差分析</h2>
+
+<ol>
+<li>首先有一系列值 \(x_1 \sim x_n\)</li>
+<li>然后找一个最佳估计值\(\overline{x}\)：<br/>
+\[\overline{x} =\lim_{x\rightarrow \infty}\frac{1}{n}\sum_{i=1}^nx_i\]</li>
+<li><p>按贝塞公式求出分散性\(s\)(<strong>单次测量的标准偏差</strong>)：<br/>
+\[s(x) =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p>
+<ul>
+<li>s大，表示测得值很分散，随机误差分布范围宽，测量的精密度低；</li>
+<li>s小，表示测得值很密集，随机误差分布范围窄，测量的精密度高；<br/>
+&gt; 其实可以发现，这里用\(\overline{x}\)取代真实值\(\mu\)，毕竟真值是测不出来的，所以上述公式其实并不是算误差，而是不确定度， <strong>不确定度是一个误差存在的范围</strong>。</li>
+</ul></li>
+<li><p>对算术平均值为结果时，<strong>平均值的标准偏差</strong>应为：<br/>
+\[s(\overline{x})=\frac{s(\overline{x})}{\sqrt{n}} =\lim_{x\rightarrow \infty}\sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n\left(x_i-\overline{x}\right)^2}\]</p></li>
+<li><p>当 \(5 ＜ n\le 10\)，置信概率为95%时，可简化认为\(u_A\approx s\).<br/>
+根据使用仪器得出\(u_B=\Delta_仪\).<br/>
+由\(u_A\)、\(u_B\)合成总不确定度  \(u=\sqrt{u_A^2+u_B^2}\)</p></li>
+<li><p>给出直接测量的最后结果 \(x=\overline{x}\pm u\)</p></li>
+</ol>
+
+<hr/>
+
+<h3 id="toc_6">例</h3>
+
+<blockquote>
+<p>用螺旋测微计测某一钢丝的直径，6次测量值yi分别为：0.249,0.250, 0.247, 0.251, 0.253, 0.250; 同时读得螺旋测微计的零位x0为：0.004, 单位mm，已知螺旋测微计的仪器误差为Δ仪=0.004mm，请给出完整的测量结果。</p>
+</blockquote>
+
+<p>解：</p>
+
+<ul>
+<li>测得值的最佳估计值为<br/>
+\[x=\overline{x}-x_0=0.250-0.004=0.246mm\]</li>
+<li>测量列的标准偏差<br/>
+\[s(x)=\sqrt{\frac{1}{6-1}\left[\sum^6_{k=1}(x_k-\overline{x})^2\right]}=0.002mm\]</li>
+<li>测量次数n=6，可近似有<br/>
+\[u=\sqrt{u_A^2+u_B^2}\approx \sqrt{s(\overline{x})^2+\Delta_仪^2}=\sqrt{0.002^2+0.004^2}\approx 0.004mm\]</li>
+<li>测量结果为<br/>
+\[x=0.246\pm 0.004mm\]</li>
+</ul>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15423332157827.html" 
+          title="Previous Post: 物理实验的误差和不确定度 - 下">&laquo; 物理实验的误差和不确定度 - 下</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15346760576204.html" 
+          title="Next Post: 虚拟内存机制和TLB">虚拟内存机制和TLB &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

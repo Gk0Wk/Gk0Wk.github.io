@@ -1,0 +1,455 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  虚拟内存机制和TLB - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>虚拟内存机制和TLB</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/8/19 18:54 PM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Computer%20Science.html'>Computer Science</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <blockquote>
+<p>Assume: 32位操作系统，32位寻址总线宽度 → 4G线性空间</p>
+</blockquote>
+
+<h2 id="toc_0">地址转化</h2>
+
+<p>地址转化的全过程可以用以下这张图来概括：</p>
+
+<p><img src="media/15346760576204/OG.png" alt="OG"/></p>
+
+<p>以下是具体步骤介绍。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">1. 逻辑地址 → 线性地址 (段式内存管理，Intel早期策略的保留)</h2>
+
+<ul>
+<li><p>段内偏移地址(32位)</p></li>
+<li><p>段选择符：16位长的序列，是索引值，定位段描述符；结构：<br/>
+<img src="media/15346760576204/2.png" alt="#2"/></p>
+<ul>
+<li>高13位为表内索引号 —— 但注意由于GDT第一项留空，所以索引要先加1；</li>
+<li>而2位为TI表指示器，0是指GDT，1是指LDT；</li>
+<li>0、1位是RPL请求者特权级，00最高，11最低 —— 在x86保护模式下修改寄存器是系统之灵，必须有对应的权限才能修改(当前执行权限和段寄存器中(被修改的)的RPL均不低于目标段的RPL)</li>
+</ul></li>
+<li><p>段描述符：8x8=64位长的结构，用来描述一个段的各种属性。结构：<br/>
+<img src="media/15346760576204/1.png" alt="#1"/></p>
+<ul>
+<li>0、1字节+6字节低4位(20位) 段边界/段长度：最大1MB或者4G(看粒度位的单位)</li>
+<li>2、3、4、7字节(32位) 段基址：4G线性地址的任意位置(不一定非要被16整除)</li>
+<li>6、7字节的奇怪设计是为了兼容80286(24位地址总线)</li>
+<li>剩下的那些是段属性，详见<code>20180819143434</code></li>
+</ul></li>
+<li><p>段描述表：多任务操作系统中，含有多个任务，而每个人物都有多个段，其段描述符存于段描述表中。<br/>
+IA-32处理器有3个段描述表：GDT、LDT和IDT。</p>
+<ul>
+<li>GDT(Global Descripter Table) 全局段描述符表：一个系统一般只有一个GDT，含有每一个任务都可以访问的段；通常包含操作系统所使用的代码段、数据段和堆栈段，GDT同时包含各进程LDT数据段项，以及进程间通讯所需要的段。<br/>
+GDTR是CPU提供的寄存器，存储GDT的位置和边界；在32位模式下RGDT有48位长(高32位基地址+低16位边界)，在32e模式下有80位长(高64位基地址+低16位边界)。<br/>
+GDT的第一个表项留空不用，是空描述符，所以索引号要加1。<br/>
+GDT最多128项。</li>
+<li>LDT(Local Descripter Table) 局部段描述符表：16位长，属于某个进程。一个进程一个LDT，对应有RLDT寄存器，进程切换时RLDT改变。<br/>
+RLDT和RGDT不一样，RLDT是一个索引值而不是实际指向，指向GDT中某一个LDT描述项。所以如果要获取LDT中的某一项，先要访问GDT找到对应LDT，再找到LDT中的一项。<br/>
+编译程序时，程序内赋予了虚拟页号。在程序运行时，通过对应LDT转译成物理地址。故虚拟页号是局部性的、不同进程的页号会有冲突。<br/>
+LDT没有空选择子。</li>
+<li>IDT(Interrupt Descripter Table) 中断段描述符表；一个系统一般也只有一个。</li>
+<li>以下这个图能做一点解释：
+<img src="media/15346760576204/7.png" alt="#7"/></li>
+</ul></li>
+</ul>
+
+<h2 id="toc_2">2. 线性地址 → 物理地址 (页式内存管理)</h2>
+
+<p>这一步由CPU的页式管理单元来负责转换。——MMU(内存管理单元)。</p>
+
+<ul>
+<li><p>线性地址可以拆分为三部分(或者两部分)：<br/>
+<img src="media/15346760576204/3.png" alt="#3"/></p></li>
+<li><p>页(Page)：线性地址被划分为大小一致的若干内存区域，其对应映射到大小相同的与物理空间区域页框(Frame)上。这个映射不一定是连贯而有序的。</p></li>
+<li><p>CR3：页目录基址寄存器。对于每一个进程，CR3的内容不同(有点像RLDT)，页目录基址也不同，线性地址-物理地址的映射也不同。</p></li>
+<li><p>页目录：占用一个4kb的内存页，最多存储1024个页目录表项(PDE)，一个PDE有4字节。在没启用PAE时，有两种PDE，规格不同。</p></li>
+<li><p>页目录表项(PDE)：每个程序有多个页表，即拥有多个PDE。PDE的结构如下：<br/>
+<img src="media/15346760576204/4.png" alt="#4"/><br/>
+12~31位(20位)表示页表起始物理地址的高20位(页表基址低12位为0，即一定以4kb对齐)。</p></li>
+<li><p>页表：一个页表占4kb的内存页，最多存储1024个页表项(PTE)，一个PTE是4字节。页表的基址是4kb对齐的，低12位是0。</p></li>
+</ul>
+
+<p>采用对页表项的二级管理模式(也目录→页表→页)能够节约空间。因为不存在的页表就可以不分配空间，并且对于Windows来说只有一级页表才会存在主存中，二级可以存在辅存中——不过Linux中它们都常驻主存。</p>
+
+<p>一些CPU会提供更多级的架构，如三级、四级。Linux中，有对应的高层次抽象，提供了一个四层页管理架构：<br/>
+<img src="media/15346760576204/6.png" alt="#6"/><br/>
+把中间的某几个定为长度为0，就可以调整架构级数。如“四化二”：某地址0x08147258，对应的PUD、PMD里只有一个表项为PUD→PMD，PMD→PT；划分的时候，PGD=0000100000，PUD=PMD=0，PT=0101000111.</p>
+
+<h2 id="toc_3">3. TLB (转换检测缓冲区、快表、转译后被缓冲区)</h2>
+
+<p>处理器中，一个具有并行朝赵能力的特殊高速缓存器，存储最近访问过的一些页表项(时空局部性原理，减少页映射的内存访问次数)。</p>
+
+<p>TLB较贵，通常能够存放16~512个页表项。</p>
+
+<ul>
+<li>TLB命中：直接取出对应的页表项</li>
+<li><p>TLB缺失：先淘汰TLB中的某一项(TLB替换策略，一些算法，可以由硬件或软件来实现)</p>
+<ul>
+<li>硬件处理TLB Miss：CPU会遍历页表，找到正确的PTE；如果没有找到，CPU就会发起一个页错误并将控制权交给操作系统。</li>
+<li>软件处理TLB Miss：CPU直接发出未命中错误，让操作系统来处理。</li>
+</ul></li>
+<li><p>脏记录：当TLB中某个PTE项失效(如切换进程、进程退出、虚拟页换出到磁盘)，PTE标记为不存在，此时映射已经不成立了。<br/>
+操作系统要保证即时刷新掉这些脏记录，不同的CPU有不同的刷新TLB方法，但每次都完全刷新TLB会很慢，所以现在有一些策略，扩展对一个PTE的描述(如针对某个进程、空间的标识，如果目前进程与PTE相关，就会忽略掉)，这样可以让多个进程同时共存TLB</p></li>
+</ul>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15423331812230.html" 
+          title="Previous Post: 物理实验的误差和不确定度 - 上">&laquo; 物理实验的误差和不确定度 - 上</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15090833160717.html" 
+          title="Next Post: Markdown 语法和 MWeb 写作使用说明">Markdown 语法和 MWeb 写作使用说明 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>

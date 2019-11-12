@@ -1,0 +1,479 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  1.1 初步配置空模板 - Sttot Stack
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Sttot Stack" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:gk0wk.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="_self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Sttot Stack</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="_self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li><a target="_self" href="about.html">About</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="DataStructure%20&%20Algorithm.html">DataStructure & Algorithm</a></li>
+        
+            <li><a href="SiteStory.html">建站那些事</a></li>
+        
+            <li><a href="Personal_Wiki.html">个人维基构建</a></li>
+        
+            <li><a href="PhyLab.html">PhyLab</a></li>
+        
+            <li><a href="Computer%20Science.html">Computer Science</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+              <div class="f-img"><img src="media/15438144277084/15438146117675.jpg" /></div>
+          
+          <h1>1.1 初步配置空模板</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/12/3 13:20 PM</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Personal_Wiki.html'>个人维基构建</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>一个干净的模板已经是一个健全的维基系统了，但是如果我们还需要更加丰富的功能，或者更换想要的主题的话，就可以添加一些东西。</p>
+
+<p>如果认为现在的空白模板已经够用，那么可以直接跳过看 <a href="15438144922083.html">2.1 TiddlyWiki使用教程</a>。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">简单设定</h2>
+
+<p>打开文档后，大概长这个样子(可能有些不一样，没关系)：</p>
+
+<p><img src="media/15438144277084/15438146117675.jpg" alt=""/></p>
+
+<p>TiddlyWiki是左右分栏设计，如果窗口够窄，侧栏就会跑到上面去(手机上往往会这样)。左边是词条(知识卡片)，右边呢主要是各种辅助功能和导航条等。</p>
+
+<p>先不用管 <code>GettingStarted</code> 页面，我们的任务是造一个足够满意的定制模板，以后使用这个模板就可以。</p>
+
+<h2 id="toc_1">侧栏和工具栏调整</h2>
+
+<p>点击右侧边栏的<code>Tools</code>，选中以下几项：</p>
+
+<ul>
+<li>home</li>
+<li>new tiddler</li>
+<li>import</li>
+<li>save changes</li>
+<li>more</li>
+</ul>
+
+<p>多选的项去掉，我感觉这样摆，放在外面的都是常用的，剩下的点击“更多”也能很方便的找到。</p>
+
+<hr/>
+
+<p>需要中文？点击 <code>more</code> 图标里面的 <code>open control panel</code> ，选择 <code>Plugins</code> - <code>Get more plugins</code> - <code>Open plugin library</code> - <code>languages</code>，找到 <code>Chinese (Simplified)</code>，安装。</p>
+
+<p><img src="media/15438144277084/15438154561672.jpg" alt=""/></p>
+
+<p>随后到这里：<br/>
+<img src="media/15438144277084/15438155207377.jpg" alt=""/></p>
+
+<p>下拉找到 <code>Hello! Current language:</code> 选择。</p>
+
+<p><img src="media/15438144277084/15438155006875.jpg" alt=""/></p>
+
+<p>按提示保存并刷新即可。</p>
+
+<p>TiddlyWiki 是一个“我写我自己”的网页，每次作出更改，需要保存更改，有时候需要刷新才能看到效果。</p>
+
+<h2 id="toc_2">视觉外观</h2>
+
+<p>之后的配置就不讲这么详细了，如何安装插件以及有哪些插件后面都会讲到，这里只说结果。</p>
+
+<h3 id="toc_3">调色板</h3>
+
+<p>改用 <code>Vanilla</code> ，自定义配色以后再说。</p>
+
+<h3 id="toc_4">工具栏</h3>
+
+<p>编辑器工具栏都选。</p>
+
+<p>查看工具栏勾选：</p>
+
+<ul>
+<li>更多</li>
+<li>信息</li>
+<li>导出此条目</li>
+<li>编辑</li>
+<li>关闭</li>
+</ul>
+
+<h3 id="toc_5">主题调整</h3>
+
+<p>侧边栏布局 选 <code>浮动故事，固定侧边栏</code><br/>
+代码字型添加<code>&quot;Source Code Pro&quot;,&quot;Source Code Pro for powerline&quot;</code></p>
+
+<h2 id="toc_6">保存</h2>
+
+<h3 id="toc_7">通用</h3>
+
+<p>设置自动保存。</p>
+
+<h3 id="toc_8">下载保存模块</h3>
+
+<p>允许。</p>
+
+<h3 id="toc_9">TiddlySpot</h3>
+
+<p>输入网址、密码。</p>
+
+<h2 id="toc_10">插件</h2>
+
+<p>安装：</p>
+
+<ul>
+<li>CodeMirror KeyMap: Sublime Text</li>
+<li>CodeMirror Mode: Markdown Highlighting</li>
+<li>Highlighting.js: syntax highlighting 语法高亮</li>
+<li>Markdown parser 让词条编辑可以使用 Markdown</li>
+<li><del>KaTeX: mathematical typography 数学公式输入和排版</del></li>
+<li><a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa">MathJax</a> 不必多说，<a href="https://gist.github.com/kpe/cc0547b318e6f8d4ddaa#gistcomment-1885438">需要做一些小的修正才能更好使用</a></li>
+<li>tw5-checklist</li>
+<li>ToDoNow 很好的一个</li>
+<li>Listreveal ToDoNow依赖</li>
+<li>Reminders ToDoNow提醒</li>
+<li>EditorCounter &amp; Autosaver 为编辑器添加字数统计和一定字数更改后自动保存 (原生自带了条目修改确认和删除操作时自动保存功能，去设置里开启即可)</li>
+<li>TiddlyMap 这个必须装！记得按照官方的安装教程来，否则容易翻车。</li>
+</ul>
+
+<h2 id="toc_11">成果</h2>
+
+<p><a href="media/15438144277084/empty.html">点这里下载成果</a>，这是一个较大，用于单个胜任复杂工作。较为精简轻便的版本稍后放出。</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15438144922083.html" 
+          title="Previous Post: 2.1 TiddlyWiki使用教程">&laquo; 2.1 TiddlyWiki使用教程</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15438000016364.html" 
+          title="Next Post: 1.0 搞到一个空模板并开始使用">1.0 搞到一个空模板并开始使用 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+	this.page.url = 'https://gk0wk.github.com/';  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = 'Sttot_Stack'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://sttot-stack.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="asset/img/icon.jpg" /></div>
+            
+                <h1>Sttot Stack</h1>
+                <div class="site-des"></div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Gk0Wk/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:nmg_wk@yeah.net" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="DataStructure%20&%20Algorithm.html"><strong>DataStructure & Algorithm</strong></a>
+        
+            <a href="SiteStory.html"><strong>建站那些事</strong></a>
+        
+            <a href="Personal_Wiki.html"><strong>个人维基构建</strong></a>
+        
+            <a href="PhyLab.html"><strong>PhyLab</strong></a>
+        
+            <a href="Computer%20Science.html"><strong>Computer Science</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15583370060570.html">B+树(B+ Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583369413094.html">B* 树(B* Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583364169947.html">多路搜索树(B-Tree)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583362803987.html">动态查找树</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15583358377429.html">摊还复杂度分析(Amortized Analysis)</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+<!--换成KaTeX渲染-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+<script>
+    renderMathInElement(document.body,
+   {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+		  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+		  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+  );
+</script>
+
+<!--待增加-->
+
+  </body>
+</html>
